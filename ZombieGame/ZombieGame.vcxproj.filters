@@ -1,0 +1,124 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Source Files">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;c++;cppm;ixx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="Header Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;h++;hm;inl;inc;ipp;xsd</Extensions>
+    </Filter>
+    <Filter Include="Resource Files">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Resource Files\assets">
+      <UniqueIdentifier>{c7fd62ec-e95f-4c07-bb95-545df579f001}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\images">
+      <UniqueIdentifier>{068f5c04-d56f-402b-bed6-5784962f45f4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\fonts">
+      <UniqueIdentifier>{aa77166e-ddd7-4643-9a7c-8debd1a277fa}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\images\character">
+      <UniqueIdentifier>{13bd227f-fd09-41f9-9abe-274b99dfefba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Source Files\src">
+      <UniqueIdentifier>{5241e428-ce25-4fa6-94e4-abd376b380c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="include">
+      <UniqueIdentifier>{e4457b7c-c4e8-48c9-8a75-dca0b684128e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Resource Files\assets\images\map">
+      <UniqueIdentifier>{71b320ee-6050-4e3b-9fa4-508726f4ca3b}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="Source.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Button.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Game.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainGame.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\MainMenu.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Player.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\States.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\TextureManager.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\WorldMap.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Entity.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\PauseMenu.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="assets\images\map\background_menu.png">
+      <Filter>Resource Files\assets\images\map</Filter>
+    </Image>
+    <Image Include="assets\images\map\try1.png">
+      <Filter>Resource Files\assets\images\map</Filter>
+    </Image>
+    <Image Include="assets\images\character\Idle.png">
+      <Filter>Resource Files\assets\images\character</Filter>
+    </Image>
+    <Image Include="assets\images\character\Walk.png">
+      <Filter>Resource Files\assets\images\character</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="include\Button.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Game.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MainGame.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\MainMenu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Player.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\States.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\TextureManager.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\WorldMap.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Entity.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\PauseMenu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Font Include="assets\fonts\arial.ttf">
+      <Filter>Resource Files\assets\fonts</Filter>
+    </Font>
+  </ItemGroup>
+</Project>
