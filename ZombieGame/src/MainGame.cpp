@@ -15,7 +15,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     float yfloat = (float)game->getWindowHeight()/2;
     player.setpos(2955, 1705);
   
-    map.givepath("assets/images/map/try1.png");
+    map.givepath("assets/images/map/try1.png");//choose image for the main map
    
  
   this->game->view.setCenter(1955, 1705); 

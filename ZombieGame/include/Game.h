@@ -53,7 +53,7 @@ public:
 };
 
 static int maxn = 9999;
-
+static bool isfullscreen = 0;
 
 
 

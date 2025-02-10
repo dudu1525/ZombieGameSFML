@@ -22,11 +22,20 @@ public:
 	virtual void handleInputs(sf::Event& event);
 
 private:
-	sf::RectangleShape background;
-	sf::RectangleShape middlerect;
+	sf::RectangleShape background; //transparentish black rectangle over what was on the screen
+	sf::RectangleShape middlerect;	//middle element
 
-	sf::Texture backgroundTextureimage;
-	sf::Sprite backgroundSprite;
+	sf::View pauseview;
+
+	sf::Texture backgroundTextureimage; //texture that takes the window's image at one point
+	sf::Sprite backgroundSprite; //sprite that ues the backgroundtextureimage
+
+	sf::Texture middlerecttext;
+
+	Button backbtn;
+	Button startbtn;
+	Button optionsbtn;
+
 	
 
 };

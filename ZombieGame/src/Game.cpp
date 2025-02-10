@@ -11,8 +11,9 @@ Game::Game() //constructor
 {
 	window.setView(view);
 	
-	this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
 	
+		this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
+		
 	//this->window.setFramerateLimit(60);
 
 	this->pushState(new MainMenu(this)); //push the main menu state with this as the parameter of the MainMenu constructor
@@ -83,6 +84,22 @@ void Game::processevents()
 		if (peekState() != nullptr) {
 			peekState()->handleInputs(evnt);
 		}
+		if (evnt.type == sf::Event::KeyPressed && evnt.key.code == sf::Keyboard::F11)
+		{
+			if (isfullscreen == 0)
+			{
+				isfullscreen = 1;
+				this->window.create(sf::VideoMode(1920, 1080), "ZombieGame", sf::Style::Fullscreen);
+			}
+			else
+			{
+				isfullscreen = 0;
+				this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
+
+			}
+
+		}
+
 
 		//if (evnt.type == sf::Event::KeyPressed && evnt.key.code == sf::Keyboard::Escape)
 			
