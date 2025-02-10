@@ -21,6 +21,11 @@ public:
 	virtual void handleResizing(sf::Event& event);
 	virtual void handleInputs(sf::Event& event);
 
+	void PressedBack();
+
+	void PressedMenu();
+
+
 private:
 	sf::RectangleShape background; //transparentish black rectangle over what was on the screen
 	sf::RectangleShape middlerect;	//middle element

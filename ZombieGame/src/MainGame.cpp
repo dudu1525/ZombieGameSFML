@@ -13,12 +13,12 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     
     float xfloat = (float)game->getWindowWidth()/2;
     float yfloat = (float)game->getWindowHeight()/2;
-    player.setpos(2955, 1705);
+    player.setpos(3100, 1705);
   
     map.givepath("assets/images/map/try1.png");//choose image for the main map
    
  
-  this->game->view.setCenter(1955, 1705); 
+  //this->game->view.setCenter(1955, 1705); 
 
     this->game->view.zoom(0.3); 
    
@@ -49,7 +49,12 @@ void MainGame::update(sf::Time timePerFrame)
 {
 
     sf::Vector2f playerPosition = player.getentity().getPosition();
-    this->game->view.setCenter(playerPosition);//set view to player position
+    sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
+
+    this->game->view.setCenter(playerCenter);//set view to player position
+    
+    //this causes the misalignment,check what gpt did to fix
+   
     handlemapedges();
     //enter updating the char image
 }
@@ -118,24 +123,35 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
     player.setcharacter(direction,deltaTime.asSeconds());//animations
 
 }
-
 void MainGame::handlemapedges()
 {
-    float mapWidth = 250 * 32;  
+    float mapWidth = 250 * 32; 
     float mapHeight = 150 * 32; 
 
-   
+    // Get the current size of the view
     sf::Vector2f viewSize = this->game->view.getSize();
-  
-    sf::Vector2f playerPosition = player.getentity().getPosition();
-    sf::Vector2f halfViewSize = viewSize / 2.0f;
-    //to restrict, just take the maximum between the position in coordonates of the view and the position of the player
-    float clampedX = std::max(halfViewSize.x, std::min(playerPosition.x, mapWidth - halfViewSize.x));
-    float clampedY = std::max(halfViewSize.y, std::min(playerPosition.y, mapHeight - halfViewSize.y));
-    //update center of view
-    this->game->view.setCenter(clampedX, clampedY);
 
+    // Get the player's current position and bounds
+    sf::Vector2f playerPosition = player.getentity().getPosition();
+    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+
+    // Calculate the player's center position
+    sf::Vector2f playerCenter = sf::Vector2f(
+        playerPosition.x + playerBounds.width / 2,
+        playerPosition.y + playerBounds.height / 2
+    );
+
+    // Get half of the view size for clamping
+    sf::Vector2f halfViewSize = viewSize / 2.0f;
+
+    // Clamp the view center so it doesn't go out of bounds
+    float clampedX = std::max(halfViewSize.x, std::min(playerCenter.x, mapWidth - halfViewSize.x));
+    float clampedY = std::max(halfViewSize.y, std::min(playerCenter.y, mapHeight - halfViewSize.y));
+
+    // Update the view's center
+    this->game->view.setCenter(clampedX, clampedY);
 }
+
 
 void MainGame::handleplayeredges()
 {

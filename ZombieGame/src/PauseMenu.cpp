@@ -101,9 +101,9 @@ void PauseMenu::update(sf::Time timePerFrame)
 	//set button positions
 	float xPos = viewCenter.x  - backbtn.getShape().getGlobalBounds().width / 2;
 	float yPos = viewCenter.y + viewSize.y /2 * 0.058;
-	backbtn.set_position(xPos, yPos);
-	startbtn.set_position(xPos, yPos + 120);
-	optionsbtn.set_position(xPos, yPos - 120);
+	backbtn.set_position(xPos, yPos-250);
+	startbtn.set_position(xPos, yPos-100 );
+	optionsbtn.set_position(xPos, yPos + 170);
 	
 		
 	
@@ -111,6 +111,8 @@ void PauseMenu::update(sf::Time timePerFrame)
 
 void PauseMenu::handleInput()
 {
+	//PressedBack();
+	PressedMenu();
 	
 }
 
@@ -127,6 +129,41 @@ void PauseMenu::handleInputs(sf::Event& event)
 		this->game->popState();
 		
 	}
+
+	if (event.type == sf::Event::MouseButtonPressed && backbtn.isMouseIn(this->game->window))
+	{
+		this->game->ispaused = 0;
+		this->game->popState();
+
+	}
+
+	if (event.type == sf::Event::MouseButtonPressed && startbtn.isMouseIn(this->game->window))
+	{//2 states need to be popped, add static member to main game called popfrompause, and see what to do, need a refference to the class
+		this->game->ispaused = 0;
+		this->game->popState();
+
+	}
+
 }
 
 
+void PauseMenu::PressedBack()
+{//if play pressed, push state
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && backbtn.isMouseIn(this->game->window))
+	{
+		this->game->ispaused = 0;
+		this->game->popState();
+	}
+
+
+}
+void PauseMenu::PressedMenu()
+{//if play pressed, push state
+
+	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && startbtn.isMouseIn(this->game->window))
+	{
+	}
+
+
+}

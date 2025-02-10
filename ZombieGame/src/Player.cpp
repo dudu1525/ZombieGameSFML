@@ -58,7 +58,7 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 	{
 		animationTime -= frameDuration; // Reset for the next frame
 		
-		if (dir.x == 0 && dir.y == 0)
+		if (dir.x == 0 && dir.y == 0)//if idle
 		{
 			if (idleTime >= idleFrameDuration)
 			{
@@ -73,7 +73,7 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 				spriteentity.setTextureRect(sf::IntRect(xidle * 32, 0, 32, 32));
 			}
 		}
-		else
+		else//if moving, set directions
 		{
 			xwalk = (xwalk + 1) % 4;
 			if (dir.x > 0)

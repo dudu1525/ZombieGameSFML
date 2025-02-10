@@ -61,7 +61,7 @@ void MainMenu::handleInput()
    
 
 
-    PressedPlay();
+   PressedPlay();
     PressedExit();
 
 }
@@ -142,5 +142,12 @@ void MainMenu::handleResizing(sf::Event& event) {
 
 void MainMenu::handleInputs(sf::Event& event)
 {
+
+    //if (event.type == sf::Event::MouseButtonPressed && playbtn.isMouseIn(this->game->window))
+    //{
+  //      game->pushState(new MainGame(game));//push the main game as the current state, with the constructor that has as parameter a Game class
+
+
+//    }
 }
 
