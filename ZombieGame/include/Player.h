@@ -12,10 +12,14 @@ class Player:public Entity
 	void setyidle(int y);
 	int getxidle();
 	int getyidle();
+
+	
+
 private:
 	void updateentity(sf::Vector2f dir,float deltaTime);
 	int xidle;
 	 int yidle;
+	 
 
 	 int xwalk=0, ywalk=0;
 };

@@ -1,6 +1,5 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
-
 MainGame::~MainGame()
 {
 }
@@ -13,8 +12,14 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     
     float xfloat = (float)game->getWindowWidth()/2;
     float yfloat = (float)game->getWindowHeight()/2;
-    player.setpos(3100, 1705);
+
+    int v[2] = { 0,0 };
+    this->game->dm.queryData(v);
+    player.setpos((float)v[0],(float) v[1]);
+
+  //  player.setpos(3100, 1700);//instead of this get the pos from the database
   
+
     map.givepath("assets/images/map/try1.png");//choose image for the main map
    
  
@@ -50,11 +55,11 @@ void MainGame::update(sf::Time timePerFrame)
 {
 
     sf::Vector2f playerPosition = player.getentity().getPosition();
+    this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
     this->game->view.setCenter(playerCenter);//set view to player position
     
-    //this causes the misalignment,check what gpt did to fix
    
     handlemapedges();
     //enter updating the char image

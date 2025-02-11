@@ -156,7 +156,10 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Source.cpp" />
+    <ClCompile Include="sqlite\shell.c" />
+    <ClCompile Include="sqlite\sqlite3.c" />
     <ClCompile Include="src\Button.cpp" />
+    <ClCompile Include="src\DBManager.cpp" />
     <ClCompile Include="src\Entity.cpp" />
     <ClCompile Include="src\Game.cpp" />
     <ClCompile Include="src\MainGame.cpp" />
@@ -175,6 +178,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Button.h" />
+    <ClInclude Include="include\DBManager.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\Game.h" />
     <ClInclude Include="include\MainGame.h" />
@@ -184,6 +188,8 @@
     <ClInclude Include="include\States.h" />
     <ClInclude Include="include\TextureManager.h" />
     <ClInclude Include="include\WorldMap.h" />
+    <ClInclude Include="sqlite\sqlite3.h" />
+    <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>
   <ItemGroup>
     <Font Include="assets\fonts\arial.ttf" />

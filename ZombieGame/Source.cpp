@@ -1,9 +1,24 @@
 #include <SFML/Graphics.hpp>
 #include <iostream>
 #include "include/Game.h"
+#include "include/DBManager.h"
+
 int main()
 {
     Game game;
+   // DatabaseManager dm("gamedb.db");
+    //if (!dm.createTable()) {
+       // std::cerr << "Failed to create table!" << std::endl;
+      //  return -1;
+    //}
+
+    // Step 3: Insert data into the table
+   // if (!dm.insertData(3100, 1700)) {
+      //  std::cerr << "Failed to insert data!" << std::endl;
+     //   return -1;
+    //}
+   // dm.queryData();
+
     
     game.mainloop();
     

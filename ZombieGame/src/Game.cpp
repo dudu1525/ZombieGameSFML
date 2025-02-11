@@ -6,9 +6,10 @@
 #include "../include/PauseMenu.h"
 
 Game::Game() //constructor
-	:view(sf::FloatRect(0, 0,1920, 1080))
+	:view(sf::FloatRect(0, 0,1920, 1080)), dm("gamedb.db")
 {
 	window.setView(view);
+	//dm.queryData();
 	
 	
 		this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");

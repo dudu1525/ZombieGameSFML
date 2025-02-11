@@ -27,6 +27,16 @@ void Entity::setpos(float x, float y)
 
 }
 
+int Entity::getposx()
+{
+	return posx;
+}
+
+int Entity::getposy()
+{
+	return posy;
+}
+
 void Entity::setspeed(float x)
 {
 	speed = x;

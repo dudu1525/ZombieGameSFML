@@ -69,6 +69,15 @@
     <ClCompile Include="src\PauseMenu.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="sqlite\shell.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="sqlite\sqlite3.c">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\DBManager.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\map\background_menu.png">
@@ -113,6 +122,15 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\PauseMenu.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="sqlite\sqlite3ext.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\DBManager.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>
