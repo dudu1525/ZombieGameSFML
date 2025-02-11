@@ -8,7 +8,7 @@
 #include "Button.h"
 #include "WorldMap.h"
 #include "Player.h"
-
+//view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
 	~MainGame();
@@ -21,9 +21,12 @@ public:
 	virtual void handleResizing(sf::Event& event);
 	virtual void handleInputs(sf::Event& event);
 
+	void setfrompause();
+
 private:
 	WorldMap map;  //map used for the game
 	Player player;
+	sf::View gameview;
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();
@@ -32,6 +35,7 @@ private:
 };
 
 
+	static bool frompause = 0;
 
 
 #endif

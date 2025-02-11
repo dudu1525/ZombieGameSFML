@@ -4,7 +4,7 @@
 #include <SFML/Graphics.hpp>
 #include <stack>
 #include "TextureManager.h"
-
+//view here, has zoom 1, set to 0,0, size 1920, 1080
 
 class States;
 

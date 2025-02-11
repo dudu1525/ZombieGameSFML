@@ -1,7 +1,6 @@
 #include "../include/Game.h"
 #include <SFML/Graphics.hpp>
 #include "../include/States.h"
-//even if they are private, they can be accessed in the 
 #include "../include/MainMenu.h"
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
@@ -14,7 +13,6 @@ Game::Game() //constructor
 	
 		this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
 		
-	//this->window.setFramerateLimit(60);
 
 	this->pushState(new MainMenu(this)); //push the main menu state with this as the parameter of the MainMenu constructor
 	this->loadTextures();
@@ -49,16 +47,11 @@ void Game:: mainloop()//this happens for every state of the game, so the mainmen
 			peekState()->update(timePerFrame);  
 		}
 		
-		//if the pause as it is inter
-		//this->window.clear(sf::Color::Blue);
 		
 		peekState()->draw(); 
 		
-		//window.setView(view); maybe not needed?
+		
 
-		//peekState()->update(timePerFrame);
-
-		//if (ispaused != 1)//for the pause so nothing else is displayed outside the last drawn element
 		this->window.display();
 		
 		

@@ -9,7 +9,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 {
 
 	this->game = game;
-	printf("main game constructor done");
+	printf(" main game constructor done");
     
     float xfloat = (float)game->getWindowWidth()/2;
     float yfloat = (float)game->getWindowHeight()/2;
@@ -18,9 +18,9 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     map.givepath("assets/images/map/try1.png");//choose image for the main map
    
  
-  //this->game->view.setCenter(1955, 1705); 
-
+        
     this->game->view.zoom(0.3); 
+   // gameview = this->game->window.getView();
    
 
 
@@ -34,10 +34,11 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
 void MainGame::draw()
 {
-   
-   // this->game->window.clear(sf::Color::Black);
-
+    
     this->game->window.setView(this->game->view);
+
+
+   // this->game->window.setView(gameview);
    //draw map,player
     this->game->window.draw(map.getmap());
    this->game->window.draw(player.getentity());
@@ -57,6 +58,13 @@ void MainGame::update(sf::Time timePerFrame)
    
     handlemapedges();
     //enter updating the char image
+    if (frompause == 1)
+    {
+        
+        frompause = 0;
+        this->game->popState();
+
+    }
 }
 
 void MainGame::handleInput()
@@ -85,9 +93,14 @@ void MainGame::handleInputs(sf::Event& event)
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
         this->game->ispaused = 0;
-        this->game->pushState(new PauseMenu(this->game));
+        this->game->pushState(new PauseMenu(this->game,this));
     }
 
+}
+
+void MainGame::setfrompause()
+{
+    frompause = 1;
 }
 
 

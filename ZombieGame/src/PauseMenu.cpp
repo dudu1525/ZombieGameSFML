@@ -4,10 +4,11 @@
 PauseMenu::~PauseMenu()
 {
 }
-//get the current view with what it has, draw it then draw the black screen?
+//got zoomed in view, reset by setting to 3.3 view and send it forward
+//when popping the view, it gets updated to the x0.3 one
 
-PauseMenu::PauseMenu(Game* game)
-	:backbtn(200, 50, "Back to Game", 25, sf::Color::Green),  startbtn(200, 50, "Options", 25, sf::Color::Green), optionsbtn(200, 50, "Main Menu", 25, sf::Color::Green)
+PauseMenu::PauseMenu(Game* game, MainGame* mg)
+	:backbtn(200, 50, "Back to Game", 25, sf::Color::Green),  startbtn(200, 50, "Main Menu", 25, sf::Color::Green), optionsbtn(200, 50, "Options", 25, sf::Color::Green)
 {
 	printf("\nconstructor of pause menu: done\n");
 	this->game = game;
@@ -32,7 +33,8 @@ PauseMenu::PauseMenu(Game* game)
 		//create a scaling component into button
 	//and for button border
 
-	
+	//set main game
+	this->setMGref(mg);
 }
 
 void PauseMenu::draw()
@@ -102,8 +104,8 @@ void PauseMenu::update(sf::Time timePerFrame)
 	float xPos = viewCenter.x  - backbtn.getShape().getGlobalBounds().width / 2;
 	float yPos = viewCenter.y + viewSize.y /2 * 0.058;
 	backbtn.set_position(xPos, yPos-250);
-	startbtn.set_position(xPos, yPos-100 );
-	optionsbtn.set_position(xPos, yPos + 170);
+	startbtn.set_position(xPos, yPos+170 );
+	optionsbtn.set_position(xPos, yPos - 100);
 	
 		
 	
@@ -112,7 +114,7 @@ void PauseMenu::update(sf::Time timePerFrame)
 void PauseMenu::handleInput()
 {
 	//PressedBack();
-	PressedMenu();
+	//PressedMenu();
 	
 }
 
@@ -136,14 +138,21 @@ void PauseMenu::handleInputs(sf::Event& event)
 		this->game->popState();
 
 	}
-
+	else
 	if (event.type == sf::Event::MouseButtonPressed && startbtn.isMouseIn(this->game->window))
-	{//2 states need to be popped, add static member to main game called popfrompause, and see what to do, need a refference to the class
+	{
 		this->game->ispaused = 0;
+		mgrefference->setfrompause();
+
 		this->game->popState();
 
 	}
 
+}
+
+void PauseMenu::setMGref(MainGame* ref)
+{
+	this->mgrefference = ref;
 }
 
 

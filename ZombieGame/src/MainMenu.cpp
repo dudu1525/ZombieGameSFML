@@ -35,20 +35,20 @@ MainMenu::MainMenu(Game* game)
 
     this->set_text(); //set main menu text
 
-  
+    
     
 }
 void MainMenu::draw()
-{
-    
-
-    this->game->window.clear(sf::Color::Red);
+{           
+   
+    init();
+        
     this->game->window.draw(this->game->backgroundSprite);
     this->game->window.draw(MenuText);
     
     exitbtn.draw_button(this->game->window);
     playbtn.draw_button(this->game->window);
-    return;
+    
 }
 
 void MainMenu::update(sf::Time timePerFrame)
@@ -67,7 +67,13 @@ void MainMenu::handleInput()
 }
 
 
-
+void MainMenu::init()
+{//reset view to initial
+   this->game->view.reset(sf::FloatRect(0,0,1920,1080));
+    menuview.setSize(1920, 1080);
+    menuview.setCenter(1920 / 2, 1080 / 2);
+    this->game->window.setView(menuview);
+}
 void MainMenu::set_text()
 {
     

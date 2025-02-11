@@ -6,20 +6,22 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Button.h"
-
+#include "MainGame.h"
 
 
 class PauseMenu :public States {
 
 	~PauseMenu();
 public:
-	PauseMenu(Game* game);
+	PauseMenu(Game* game, MainGame* mg);
 
 	virtual void draw();
 	virtual void update(sf::Time timePerFrame);
 	virtual void handleInput();
 	virtual void handleResizing(sf::Event& event);
 	virtual void handleInputs(sf::Event& event);
+
+	void setMGref(MainGame* ref);
 
 	void PressedBack();
 
@@ -41,7 +43,7 @@ private:
 	Button startbtn;
 	Button optionsbtn;
 
-	
+	MainGame* mgrefference;
 
 };
 
