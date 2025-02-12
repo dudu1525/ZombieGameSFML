@@ -58,7 +58,7 @@ void Player::updatestamina(bool sprint,float deltaTime)
 				this->stamina -= depletionrate;
 			else if (this->stamina == 0)
 			{		
-				sprintedto0 = true;
+				
 				this->stamina = -10;
 			}
 			

@@ -20,7 +20,7 @@ class Player:public Entity
 	int stamina=100;
 	int health;
 	bool moving;
-	bool sprintedto0;
+
 private:
 	void updateentity(sf::Vector2f dir,float deltaTime);
 	int xidle;

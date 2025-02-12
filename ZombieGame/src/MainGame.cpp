@@ -55,7 +55,7 @@ void MainGame::draw()
    sf::RenderStates rs;
      UIMainGame   e(uiview);
    // e.draw(this->game->window,rs);
-    e.changestamina(100, player.stamina, this->game->window, rs);
+    e.changestamina(100, player.stamina, this->game->window, rs,this->game->window);
    
    //this->game->window.draw(ui.elements);
 
