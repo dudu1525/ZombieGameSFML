@@ -50,15 +50,15 @@ void MainGame::draw()
    this->game->window.draw(player.getentity());
 
 
-   //draw gui stuff , works.
+   //draw gui stuff.
    this->game->window.setView(uiview);
    sf::RenderStates rs;
      UIMainGame   e(uiview);
-    e.draw(this->game->window,rs);
+   // e.draw(this->game->window,rs);
+    e.changestamina(100, player.stamina, this->game->window, rs);
    
    //this->game->window.draw(ui.elements);
 
-    return;
 }
 
 void MainGame::update(sf::Time timePerFrame)
@@ -88,11 +88,17 @@ void MainGame::handleInput()
 
     moveplayerinput(timePerFrame);
 
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift))
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && player.stamina>=0  && player.moving==true)
+    {
+        player.updatestamina(true, timePerFrame.asSeconds());
         player.setspeed(200);
-    else
+    }
+    else 
+    {
+        player.updatestamina(false, timePerFrame.asSeconds());
         player.setspeed(150);
-
+    }
+    
    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
       //  this->game->pushState(new PauseMenu(this->game));
     

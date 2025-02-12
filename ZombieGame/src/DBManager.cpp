@@ -25,14 +25,22 @@ bool DatabaseManager::createTable() {
     std::string sql = "CREATE TABLE IF NOT EXISTS player ("
         "ID INTEGER PRIMARY KEY AUTOINCREMENT, "
         "POSX INT NOT NULL, "
-        "POSY INT NOT NULL);";
+        "POSY INT NOT NULL, "
+        "HEALTH INT NOT NULL,"
+        "LEVEL INT NOT NULL,"
+        "EXP INT NOT NULL);";
 
     return executeQuery(sql);
 }
 
 // Insert data into the table
-bool DatabaseManager::insertData(int posx, int posy) {
-    std::string sql = "INSERT INTO player (POSX, POSY) VALUES ('" +std::to_string(posx) + "', " + std::to_string(posy) + ");";
+bool DatabaseManager::insertData(int posx, int posy,int health,int level,int exp) {
+    std::string sql = "INSERT INTO player (POSX, POSY, HEALTH, LEVEL, EXP) VALUES ("
+        + std::to_string(posx) + ", "
+        + std::to_string(posy) + ", "
+        + std::to_string(health) + ", "
+        + std::to_string(level) + ", "
+        + std::to_string(exp) + ");";
 
     return executeQuery(sql);
 }
@@ -62,6 +70,27 @@ void DatabaseManager::queryData(int v[2]) {
     sqlite3_finalize(stmt);
 }
 
+int DatabaseManager::gethealthdb()
+{
+    int health=0;
+    sqlite3_stmt* stmt;
+    std::string query = "SELECT HEALTH  FROM player;";
+    int exit = sqlite3_prepare_v2(db, query.c_str(), -1, &stmt, NULL);
+    if (exit == SQLITE_OK) {
+        std::cout << "Querying data..." << std::endl;
+        while (sqlite3_step(stmt) == SQLITE_ROW) {
+             health = sqlite3_column_int(stmt, 0);
+            
+        }
+    }
+    else {
+        std::cerr << "Failed to execute query health: " << sqlite3_errmsg(db) << std::endl;
+    }
+
+    sqlite3_finalize(stmt);
+    return health;
+}
+
 bool DatabaseManager::updatePosition(int posX, int posY)
 {
     std::string sql = "UPDATE player SET POSX = " + std::to_string(posX) +
@@ -70,6 +99,12 @@ bool DatabaseManager::updatePosition(int posX, int posY)
     // Execute the query
     return executeQuery(sql);
     return false;
+}
+void DatabaseManager::updateHealthdb(int new_health)
+{
+    std::string sql = "UPDATE player SET HEALTH = " + std::to_string(new_health) + ";";
+    
+  executeQuery(sql);
 }
 
 // Internal method to execute a SQL command (CREATE, INSERT, etc.)

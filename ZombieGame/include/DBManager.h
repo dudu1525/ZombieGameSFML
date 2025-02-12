@@ -14,11 +14,15 @@ public:
 
     // Public Methods
     bool createTable();
-    bool insertData(int posx, int posy);
+    bool insertData(int posx, int posy, int health, int level, int exp);
     void queryData(int v[2]);
+
+    int gethealthdb();
 
 
     bool updatePosition(int posX, int posY);  // New method to update player position
+
+    void updateHealthdb(int new_health);
 
 
 private:

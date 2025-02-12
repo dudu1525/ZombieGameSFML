@@ -43,6 +43,47 @@ int Player::getyidle()
 	return yidle;
 }
 
+void Player::updatestamina(bool sprint,float deltaTime)
+{
+	static float updatetime = 0.f;
+	const float framedur = 0.1f;
+
+	updatetime += deltaTime;
+	if (updatetime>=framedur)
+	{
+		updatetime -= framedur;
+		if (sprint == true)//if sprinting, decrease stamina
+		{
+			if (this->stamina > 0 )
+				this->stamina -= depletionrate;
+			else if (this->stamina == 0)
+			{		
+				sprintedto0 = true;
+				this->stamina = -10;
+			}
+			
+
+		}
+		else
+		{
+			if (stamina <= 98)
+				this->stamina += depletionrate;
+				else
+			{
+				this->stamina = 100;
+
+					}
+
+		}
+	}
+
+}
+
+int Player::getdepletion()
+{
+	return depletionrate;
+}
+
 void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images of the character
 {
 	static float animationTime = 0.f; // Accumulate animation time, initialized only once 
@@ -60,6 +101,7 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 		
 		if (dir.x == 0 && dir.y == 0)//if idle
 		{
+			moving = 0;
 			if (idleTime >= idleFrameDuration)
 			{
 				idleTime -= idleFrameDuration; // Reset idle time
@@ -75,6 +117,7 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 		}
 		else//if moving, set directions
 		{
+			moving = 1;
 			xwalk = (xwalk + 1) % 4;
 			if (dir.x > 0)
 				ywalk = 2;

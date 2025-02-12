@@ -10,13 +10,16 @@ public:
 	
 	
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
-	
+	void changestamina(int stamina,int currentstamina, sf::RenderTarget& target, sf::RenderStates states);
 
 	
 	sf::View view;
 	void setview(sf::View view);
 private:
 	sf::RectangleShape rec1;
+
+	sf::RectangleShape staminatop;
+	sf::RectangleShape staminabottom;
 	
 
 		

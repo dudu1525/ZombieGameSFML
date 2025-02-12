@@ -13,15 +13,24 @@ class Player:public Entity
 	int getxidle();
 	int getyidle();
 
-	
+	void updatehealthvalue(int damage);
+	void updatestamina(bool sprint,float deltaTime);
+	int getdepletion();
 
+	int stamina=100;
+	int health;
+	bool moving;
+	bool sprintedto0;
 private:
 	void updateentity(sf::Vector2f dir,float deltaTime);
 	int xidle;
 	 int yidle;
 	 
+	 
+	 
 
 	 int xwalk=0, ywalk=0;
 };
-
+static int depletionrate=2;
+static int invincibility;
 #endif
