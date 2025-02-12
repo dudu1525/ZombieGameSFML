@@ -17,16 +17,18 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     this->game->dm.queryData(v);
     player.setpos((float)v[0],(float) v[1]);
 
-  //  player.setpos(3100, 1700);//instead of this get the pos from the database
   
 
     map.givepath("assets/images/map/try1.png");//choose image for the main map
    
  
         
-    this->game->view.zoom(0.3); 
-   // gameview = this->game->window.getView();
-   
+    //this->game->view.zoom(0.3); 
+    
+    gameview = this->game->window.getView();
+        
+   // uiview = this->game->window.getView();
+    gameview.zoom(0.3);
 
 
     
@@ -40,13 +42,21 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 void MainGame::draw()
 {
     
-    this->game->window.setView(this->game->view);
+    this->game->window.setView(gameview);
 
 
-   // this->game->window.setView(gameview);
-   //draw map,player
+   //draw map,player, gameview parts
     this->game->window.draw(map.getmap());
    this->game->window.draw(player.getentity());
+
+
+   //draw gui stuff , works.
+   this->game->window.setView(uiview);
+   sf::RenderStates rs;
+     UIMainGame   e(uiview);
+    e.draw(this->game->window,rs);
+   
+   //this->game->window.draw(ui.elements);
 
     return;
 }
@@ -58,7 +68,7 @@ void MainGame::update(sf::Time timePerFrame)
     this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
-    this->game->view.setCenter(playerCenter);//set view to player position
+    gameview.setCenter(playerCenter);//set view to player position
     
    
     handlemapedges();
@@ -97,6 +107,7 @@ void MainGame::handleInputs(sf::Event& event)
 {
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
+        this->game->window.setView(gameview);
         this->game->ispaused = 0;
         this->game->pushState(new PauseMenu(this->game,this));
     }
@@ -147,7 +158,7 @@ void MainGame::handlemapedges()
     float mapHeight = 150 * 32; 
 
     // Get the current size of the view
-    sf::Vector2f viewSize = this->game->view.getSize();
+    sf::Vector2f viewSize = gameview.getSize();
 
     // Get the player's current position and bounds
     sf::Vector2f playerPosition = player.getentity().getPosition();
@@ -167,7 +178,7 @@ void MainGame::handlemapedges()
     float clampedY = std::max(halfViewSize.y, std::min(playerCenter.y, mapHeight - halfViewSize.y));
 
     // Update the view's center
-    this->game->view.setCenter(clampedX, clampedY);
+    gameview.setCenter(clampedX, clampedY);
 }
 
 

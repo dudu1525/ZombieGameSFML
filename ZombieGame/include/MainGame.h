@@ -8,6 +8,7 @@
 #include "Button.h"
 #include "WorldMap.h"
 #include "Player.h"
+#include "UiMainGame.h"
 //view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
@@ -27,6 +28,8 @@ private:
 	WorldMap map;  //map used for the game
 	Player player;
 	sf::View gameview;
+	sf::View uiview;
+	//UIMainGame ui;
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();

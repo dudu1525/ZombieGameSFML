@@ -168,6 +168,7 @@
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\States.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
+    <ClCompile Include="src\UIMainGame.cpp" />
     <ClCompile Include="src\WorldMap.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -187,6 +188,7 @@
     <ClInclude Include="include\Player.h" />
     <ClInclude Include="include\States.h" />
     <ClInclude Include="include\TextureManager.h" />
+    <ClInclude Include="include\UiMainGame.h" />
     <ClInclude Include="include\WorldMap.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
