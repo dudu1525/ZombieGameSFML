@@ -166,6 +166,7 @@
     <ClCompile Include="src\MainMenu.cpp" />
     <ClCompile Include="src\PauseMenu.cpp" />
     <ClCompile Include="src\Player.cpp" />
+    <ClCompile Include="src\Projectiles.cpp" />
     <ClCompile Include="src\States.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIMainGame.cpp" />
@@ -186,6 +187,7 @@
     <ClInclude Include="include\MainMenu.h" />
     <ClInclude Include="include\PauseMenu.h" />
     <ClInclude Include="include\Player.h" />
+    <ClInclude Include="include\Projectiles.h" />
     <ClInclude Include="include\States.h" />
     <ClInclude Include="include\TextureManager.h" />
     <ClInclude Include="include\UiMainGame.h" />

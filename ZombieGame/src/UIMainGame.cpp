@@ -18,11 +18,11 @@ UIMainGame::UIMainGame(sf::View view)
 
 	//item slots-rectangles
 	slot1.setPosition(view.getCenter() + sf::Vector2f(15, 330));
-	slot1.setFillColor(sf::Color::Black);
+	slot1.setFillColor(sf::Color(128,128,128));
 	slot1.setSize(sf::Vector2f(40, 50));
 	
 	slot2.setPosition(view.getCenter() + sf::Vector2f(-55, 330));
-	slot2.setFillColor(sf::Color::Black);
+	slot2.setFillColor(sf::Color(128, 128, 128));
 	slot2.setSize(sf::Vector2f(40, 50));
 	//item slots-images
 	slot1img.setPosition(view.getCenter() + sf::Vector2f(19, 334));
@@ -63,26 +63,36 @@ void UIMainGame::changestamina(int stamina,int currentstamina, sf::RenderTarget&
 		finallenstamina = 0;
 
 	staminatop.setSize(sf::Vector2f(finallenstamina, 30));
-	hoverimg(window);
+	detectslots(window);
 	draw(target, states);
 	
 
 }
-void UIMainGame::hoverimg(sf::RenderWindow& window)
+void UIMainGame::detectslots(sf::RenderWindow& window)//function responsible for managing weapons ui
 {
-	sf::Vector2i bounds = sf::Mouse::getPosition(window); //get the bounds of the mouse
-	sf::Vector2f boundsf(static_cast<float>(bounds.x), static_cast<float>(bounds.y));
-	sf::Vector2f worldMousePos = window.mapPixelToCoords(bounds);
-
-	sf::Vector2f bsize = slot1.getSize(); //get size of button rectangle
-	sf::Vector2f bpos = slot1.getPosition();//get position of button rectangle
-	if (worldMousePos.x >= bpos.x && worldMousePos.x <= bpos.x + bsize.x && worldMousePos.y >= bpos.y && worldMousePos.y <= bpos.y + bsize.y)
+	if (selected1 == 0 && selected2 == 0)
+	{
 		slot1.setFillColor(sf::Color::White);
-	else {
-		slot1.setFillColor(sf::Color::Black); // Reset button color when not hovered
+		slot2.setFillColor(sf::Color::White);
+	}
+	else if (selected1 == 1 && selected2 == 0)
+	{
+		slot1.setFillColor(sf::Color::Black);
+		slot2.setFillColor(sf::Color::White);
+
+	}
+	else if (selected1 == 0 && selected2 == 1)
+	{
+		slot1.setFillColor(sf::Color::White);
+		slot2.setFillColor(sf::Color::Black);
+
 	}
 
+
+
 }
+
+
 void UIMainGame::setview(sf::View view)
 {
 	this->view = view;

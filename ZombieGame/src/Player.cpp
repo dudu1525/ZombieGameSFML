@@ -1,5 +1,5 @@
 #include "../include/Player.h"
-
+#include <iostream>
 
 
 Player::Player(std::string imagepath)
@@ -84,6 +84,16 @@ int Player::getdepletion()
 	return depletionrate;
 }
 
+int Player::getselectedweap()
+{
+	return selectedweap;
+}
+
+void Player::setselectedweap(int id)
+{
+	selectedweap = id;
+}
+
 void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images of the character
 {
 	static float animationTime = 0.f; // Accumulate animation time, initialized only once 
@@ -144,3 +154,4 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 
 
 }
+

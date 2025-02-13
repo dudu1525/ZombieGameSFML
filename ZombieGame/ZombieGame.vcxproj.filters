@@ -81,6 +81,9 @@
     <ClCompile Include="src\UIMainGame.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
+    <ClCompile Include="src\Projectiles.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\map\background_menu.png">
@@ -137,6 +140,9 @@
       <Filter>include</Filter>
     </ClInclude>
     <ClInclude Include="include\UiMainGame.h">
+      <Filter>include</Filter>
+    </ClInclude>
+    <ClInclude Include="include\Projectiles.h">
       <Filter>include</Filter>
     </ClInclude>
   </ItemGroup>

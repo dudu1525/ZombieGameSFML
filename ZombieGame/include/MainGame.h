@@ -9,6 +9,7 @@
 #include "WorldMap.h"
 #include "Player.h"
 #include "UiMainGame.h"
+#include "Projectiles.h"
 //view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
@@ -28,15 +29,15 @@ private:
 	WorldMap map;  //map used for the game
 	Player player;
 	sf::View gameview;
-	sf::View uiview;
-	//UIMainGame ui;
+	Projectile proj;	
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();
 	void handleplayeredges();
 
 };
-
+static sf::View uiview;
+static UIMainGame   e(uiview);
 
 	static bool frompause = 0;
 

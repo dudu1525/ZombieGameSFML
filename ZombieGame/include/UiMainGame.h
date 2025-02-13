@@ -12,26 +12,28 @@ public:
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void changestamina(int stamina,int currentstamina, sf::RenderTarget& target, sf::RenderStates states, sf::RenderWindow& window);
 
-	void hoverimg(sf::RenderWindow& window);
+	void detectslots(sf::RenderWindow& window);
 
 	
 	sf::View view;
 	void setview(sf::View view);
+	bool selected1 = 0;
+	bool selected2 = 0;
+	sf::RectangleShape slot1;
+	sf::RectangleShape slot2;
 private:
 	sf::RectangleShape rec1;
 
 	sf::RectangleShape staminatop;
 	sf::RectangleShape staminabottom;
 
-	sf::RectangleShape slot1;
-	sf::RectangleShape slot2;
+
 	sf::RectangleShape slot1img;
 	sf::RectangleShape slot2img;
 	sf::Texture tx1;
 	sf::Texture tx2;
 
-	bool selected1 = 0;
-	bool selected2 = 0;
+	
 	
 
 		

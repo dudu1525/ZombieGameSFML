@@ -5,6 +5,7 @@ MainGame::~MainGame()
 }
 
 MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
+    
 {
 
 	this->game = game;
@@ -19,24 +20,15 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
   
 
-    map.givepath("assets/images/map/try1.png");//choose image for the main map
-   
- 
-        
-    //this->game->view.zoom(0.3); 
-    
+    map.givepath("assets/images/map/try1.png");//choose image for the main map    
     gameview = this->game->window.getView();
         
-   // uiview = this->game->window.getView();
     gameview.zoom(0.3);
 
 
     
 
 
-    //generated
-    //if (!map.load("maptiles.png", sf::Vector2u(32, 32), 250, 150))
-      //  return ;
 }
 
 void MainGame::draw()
@@ -44,35 +36,43 @@ void MainGame::draw()
     
     this->game->window.setView(gameview);
 
-
-   //draw map,player, gameview parts
+   //draw map,player, etc
     this->game->window.draw(map.getmap());
    this->game->window.draw(player.getentity());
+    
+   
+   for (int i = 0; i < proj.getbullets().size(); i++)
+   {
+       this->game->window.draw(proj.getbullets()[i].getbullet());
+       proj.getbullets()[i].getbullet().move(proj.getspeed() * cos(proj.getangle()[i]), proj.getspeed() * sin(proj.getangle()[i]));
+   }
 
+
+    
 
    //draw gui stuff.
    this->game->window.setView(uiview);
    sf::RenderStates rs;
-     UIMainGame   e(uiview);
+   //  UIMainGame   e(uiview);
    // e.draw(this->game->window,rs);
     e.changestamina(100, player.stamina, this->game->window, rs,this->game->window);
    
-   //this->game->window.draw(ui.elements);
 
 }
 
 void MainGame::update(sf::Time timePerFrame)
 {
-
+    //update player position based on arrows pressed
     sf::Vector2f playerPosition = player.getentity().getPosition();
     this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
-    gameview.setCenter(playerCenter);//set view to player position
+    gameview.setCenter(playerCenter);//set view to player center position
     
    
     handlemapedges();
-    //enter updating the char image
+    
+
     if (frompause == 1)
     {
         
@@ -98,11 +98,17 @@ void MainGame::handleInput()
         player.updatestamina(false, timePerFrame.asSeconds());
         player.setspeed(150);
     }
+
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player.getselectedweap() == 2)
+    {
+        proj.shoot(player,this->game->window,gameview);
+    }
     
    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
       //  this->game->pushState(new PauseMenu(this->game));
+   
+
     
- 
 }
 
 void MainGame::handleResizing(sf::Event& event)
@@ -116,6 +122,33 @@ void MainGame::handleInputs(sf::Event& event)
         this->game->window.setView(gameview);
         this->game->ispaused = 0;
         this->game->pushState(new PauseMenu(this->game,this));
+    }
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num2)//crossbow
+    {
+        e.selected1 = !e.selected1;
+        e.selected2 = 0;
+        if (e.selected1 == 1)
+            player.setselectedweap(2);
+        else if (e.selected2 == 0 && e.selected1 == 0)
+            player.setselectedweap(0);
+
+    }
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num1)//sword
+    {
+        e.selected2 = !e.selected2;
+        e.selected1 = 0;
+        if (e.selected2 == 1)
+            player.setselectedweap(1);
+        else if (e.selected2 == 0 && e.selected1 == 0)
+            player.setselectedweap(0);
+
+    }
+
+    if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::R)
+    {
+       proj.deallocatebullets(gameview);
+        proj.setbullets();
     }
 
 }
