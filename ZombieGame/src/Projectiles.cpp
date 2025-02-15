@@ -1,6 +1,7 @@
 #include "../include/Projectiles.h"
 #include <iostream>
 
+#define PI 3.14159265
 
 Projectile::Projectile()
 {
@@ -8,7 +9,7 @@ Projectile::Projectile()
 
 }
 
-void Projectile::shoot(Player player, sf::RenderWindow& window, sf::View view)
+void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 {
 	sf::Time frame = sf::seconds(1.0f / 60.0f);
 	float time = frame.asSeconds();
@@ -46,13 +47,54 @@ void Projectile::shoot(Player player, sf::RenderWindow& window, sf::View view)
 
 		angles.push_back(atan2(posmousey - playerposy,
 			posmousex - playerposx));
+		float degrees = angles.back() * 180 / PI;
 		//add character animation> based on the angles intervals, change its image when shooting, also the position like before, set player texture also
-	
+		if (degrees <= 45 && degrees > -45)//right
+		{
+			player.yshoot = 2;
+			printf("%d ", player.yshoot);
+			bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2+10,
+				player.getentity().getGlobalBounds().height / 2));
+			bool& temp = player.getshooting();
+			temp = true;
+			}
+		else if (degrees <= -45 && degrees > -135)//up
+		{
+			player.yshoot = 1;
+			bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2 ,
+				player.getentity().getGlobalBounds().height / 2-10));
+			bool& temp = player.getshooting();
+			temp = true;
+
+		}
+		else if (degrees > 45 && degrees <= 135)//down
+		{
+			player.yshoot = 0;
+			bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
+				player.getentity().getGlobalBounds().height / 2 +10));
+			bool& temp = player.getshooting();
+			temp = true;
+
+		}
+		else//left
+		{
+			player.yshoot = 3;
+			bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2 -10,
+				player.getentity().getGlobalBounds().height / 2 ));
+			bool& temp = player.getshooting();
+			temp = true;
+
+		}
+
+
+
 
 		
 	}
 	else if (currentbullets == 0)
 	{
+		bool& temp = player.getshooting();
+		temp = false;
 		animationTime =0;
 	}
 

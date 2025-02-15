@@ -22,7 +22,7 @@ class Projectile
 public:
 	Projectile();
 
-	void shoot(Player player, sf::RenderWindow& window, sf::View view);//method used to generate bullets and then shoot them in a desired direction
+	void shoot(Player& player, sf::RenderWindow& window, sf::View view);//method used to generate bullets and then shoot them in a desired direction
 
 	std::vector<Bullet>& getbullets();
 	std::vector<float>& getangle(); //angle of each bullet's direction relative to OX

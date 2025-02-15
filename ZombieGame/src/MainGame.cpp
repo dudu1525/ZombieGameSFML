@@ -107,9 +107,13 @@ void MainGame::handleInput()
         temp2.setString(st);
 
     }
+    else
+    {
+        bool& isshootingtemp = player.getshooting();
+        isshootingtemp = false;
+    }
     
-   // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
-      //  this->game->pushState(new PauseMenu(this->game));
+  
    
 
     

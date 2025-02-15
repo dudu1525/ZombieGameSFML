@@ -94,8 +94,31 @@ void Player::setselectedweap(int id)
 	selectedweap = id;
 }
 
+void Player::setshooting(float deltaTime)
+{
+	static float animationTime = 0.f; 
+	const float frameDuration = 0.05f;
+	animationTime += deltaTime;
+	if (animationTime>=frameDuration)
+	{
+		animationTime = 0;
+		xshoot = (xshoot + 1) % 4;
+		textureentity.loadFromFile("assets/images/character/Shoot.png");
+		spriteentity.setTexture(textureentity);
+		spriteentity.setTextureRect(sf::IntRect(xshoot * 32, yshoot*32, 32, 32));//last 2 are width, first is the column, second is the row
+		
+	}
+}
+
+bool& Player::getshooting()
+{
+	return isshooting;
+}
+
 void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images of the character
 {
+	
+
 	static float animationTime = 0.f; // Accumulate animation time, initialized only once 
 	const float frameDuration = 0.1f; // 0.1 seconds per frame (10 FPS)
 
@@ -105,6 +128,15 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 
 	animationTime += deltaTime;//add 1 frame each time
 	idleTime += deltaTime;
+
+	if (isshooting)
+	{
+		animationTime = 0.0f;
+		
+		idleTime = 0.0f;
+		setshooting(deltaTime);
+	}
+	else
 	if (animationTime >= frameDuration)
 	{
 		animationTime -= frameDuration; // Reset for the next frame
