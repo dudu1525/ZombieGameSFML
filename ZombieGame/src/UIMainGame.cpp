@@ -4,9 +4,6 @@ UIMainGame::UIMainGame(sf::View view)
 {//add elements of the gui
 	setview(view);
 
-	rec1.setPosition(view.getCenter());
-	rec1.setFillColor(sf::Color::Red);
-	rec1.setSize(sf::Vector2f(100, 150));;
 
 	//stamina rectangles
 	staminabottom.setPosition(view.getCenter() - sf::Vector2f(view.getSize().x / 2-20, view.getSize().y / 2-80));
@@ -35,10 +32,25 @@ UIMainGame::UIMainGame(sf::View view)
 	slot2img.setTexture(&tx2);
 	slot2img.setSize(sf::Vector2f(32, 42));
 
+
+	//bullets
+	bulletstext.loadFromFile("assets/images/Apocalypse Character Pack/bullets.png");
+	bullets.setTexture(&bulletstext);
+	bullets.setSize(sf::Vector2f(96, 50));
+	bullets.setPosition(view.getCenter() + sf::Vector2f(490 - 120, -445));
+	bulletsbox.setSize(sf::Vector2f(120, 60));
+	bulletsbox.setPosition(view.getCenter()+sf::Vector2f(500-120,-450));
+	bulletsbox.setFillColor(sf::Color::Black);
+	bulletsnum.setString("18/18");
+	bulletsnum.setPosition(view.getCenter() + sf::Vector2f(565 - 120, -432));
+	bulletsnum.setCharacterSize(18);
+	font.loadFromFile("assets/fonts/arial.ttf");
+	bulletsnum.setFont(font);
 }
 
 void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
-{	
+{
+	
 		
 
 	target.draw(staminabottom);
@@ -48,6 +60,13 @@ void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 	target.draw(slot2);
 	target.draw(slot1img);
 	target.draw(slot2img);
+	if (isbulletsvisible)
+	{
+		target.draw(bulletsbox);
+		target.draw(bullets);
+		target.draw(bulletsnum);
+	}
+	
 		
 }
 
@@ -90,6 +109,21 @@ void UIMainGame::detectslots(sf::RenderWindow& window)//function responsible for
 
 
 
+}
+
+void UIMainGame::setbulletsvisible()
+{
+	isbulletsvisible = !isbulletsvisible;
+}
+
+bool& UIMainGame::getbulletsvisib()
+{
+	return isbulletsvisible;
+}
+
+sf::Text& UIMainGame::getbulletstext()
+{
+	return this->bulletsnum;
 }
 
 

@@ -19,7 +19,7 @@ void Projectile::shoot(Player player, sf::RenderWindow& window, sf::View view)
 	animationTime += time;
 
 	if (animationTime >= delay && currentbullets > 0)
-	{//add character animation>???
+	{
 	
 		currentbullets--;
 		animationTime -= delay;
@@ -42,13 +42,14 @@ void Projectile::shoot(Player player, sf::RenderWindow& window, sf::View view)
 		float playerposy = player.getentity().getPosition().y + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
 			player.getentity().getGlobalBounds().height / 2).y;
 
-		//see how to delete bullets
+	
 
 		angles.push_back(atan2(posmousey - playerposy,
 			posmousex - playerposx));
+		//add character animation> based on the angles intervals, change its image when shooting, also the position like before, set player texture also
 	
 
-		//printf("%d \n", bullets.size());
+		
 	}
 	else if (currentbullets == 0)
 	{

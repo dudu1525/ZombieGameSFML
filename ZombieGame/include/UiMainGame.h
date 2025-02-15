@@ -14,6 +14,9 @@ public:
 
 	void detectslots(sf::RenderWindow& window);
 
+	void setbulletsvisible();
+	bool& getbulletsvisib();
+	sf::Text& getbulletstext();
 	
 	sf::View view;
 	void setview(sf::View view);
@@ -22,7 +25,12 @@ public:
 	sf::RectangleShape slot1;
 	sf::RectangleShape slot2;
 private:
-	sf::RectangleShape rec1;
+	sf::RectangleShape bullets;
+	sf::RectangleShape bulletsbox;
+	bool isbulletsvisible = false;
+	sf::Texture bulletstext;
+	sf::Text bulletsnum;
+	sf::Font font;
 
 	sf::RectangleShape staminatop;
 	sf::RectangleShape staminabottom;

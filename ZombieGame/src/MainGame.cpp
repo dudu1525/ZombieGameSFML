@@ -102,6 +102,10 @@ void MainGame::handleInput()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player.getselectedweap() == 2)
     {
         proj.shoot(player,this->game->window,gameview);
+        sf::Text& temp2 = e.getbulletstext();
+        std::string st = std::to_string(proj.getcurrentbullets()) + "/18";
+        temp2.setString(st);
+
     }
     
    // if (sf::Keyboard::isKeyPressed(sf::Keyboard::Escape))
@@ -129,9 +133,20 @@ void MainGame::handleInputs(sf::Event& event)
         e.selected1 = !e.selected1;
         e.selected2 = 0;
         if (e.selected1 == 1)
+        {
             player.setselectedweap(2);
+            bool& temp = e.getbulletsvisib();
+            sf::Text& temp2 = e.getbulletstext();
+            std::string st = std::to_string(proj.getcurrentbullets()) + "/18";
+            temp2.setString(st);
+           temp = 1;
+        }
         else if (e.selected2 == 0 && e.selected1 == 0)
+        {
             player.setselectedweap(0);
+            bool& temp = e.getbulletsvisib();
+            temp = 0;
+        }
 
     }
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Num1)//sword
@@ -139,9 +154,19 @@ void MainGame::handleInputs(sf::Event& event)
         e.selected2 = !e.selected2;
         e.selected1 = 0;
         if (e.selected2 == 1)
+        {
             player.setselectedweap(1);
+            bool& temp = e.getbulletsvisib();
+            sf::Text& temp2 = e.getbulletstext();
+            temp2.setString("  inf");
+            temp = 1;
+        }
         else if (e.selected2 == 0 && e.selected1 == 0)
+        {
             player.setselectedweap(0);
+            bool& temp = e.getbulletsvisib();
+            temp = 0;
+        }
 
     }
 
@@ -149,6 +174,9 @@ void MainGame::handleInputs(sf::Event& event)
     {
        proj.deallocatebullets(gameview);
         proj.setbullets();
+        sf::Text& temp2 = e.getbulletstext();
+        std::string st = std::to_string(proj.getcurrentbullets()) + "/18";
+        temp2.setString(st);
     }
 
 }
