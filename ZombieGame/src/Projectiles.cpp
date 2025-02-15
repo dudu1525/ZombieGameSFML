@@ -52,7 +52,6 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 		if (degrees <= 45 && degrees > -45)//right
 		{
 			player.yshoot = 2;
-			printf("%d ", player.yshoot);
 			bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2+10,
 				player.getentity().getGlobalBounds().height / 2));
 			bool& temp = player.getshooting();

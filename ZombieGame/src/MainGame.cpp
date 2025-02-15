@@ -17,8 +17,8 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     int v[2] = { 0,0 };
     this->game->dm.queryData(v);
     player.setpos((float)v[0],(float) v[1]);
-    player.setpos2((float)v[0], (float)v[1]);
-    player.setpos3((float)v[0], (float)v[1]+26);
+    //player.setpos2((float)v[0], (float)v[1]);
+    //player.setpos3((float)v[0], (float)v[1]);
 
     map.givepath("assets/images/map/try1.png");//choose image for the main map    
     gameview = this->game->window.getView();
@@ -38,8 +38,10 @@ void MainGame::draw()
 
    //draw map,player, etc
     this->game->window.draw(map.getmap());
+
   // this->game->window.draw(player.getentity());
-    if (player.getshooting() == true)
+   // if (player.getshooting() == true)
+
    this->game->window.draw(player.getentity2());
    this->game->window.draw(player.getentity3());
     
@@ -287,14 +289,15 @@ void MainGame::handleplayeredges()
     }
     float posx = playerPosition.x;
     float posy = playerPosition.y + 26;
+    sf::Vector2f playerpos2(posx, posy);
 
     //update position
     player.getentity().setPosition(playerPosition);
+    //update sprites
     player.getentity2().setPosition(playerPosition);
     //if (player.getshooting() == false)
     //    player.getentity3().setPosition(playerPosition);
   //  else
-        player.setpos3(posx, posy);
-
+    player.getentity3().setPosition(playerpos2);
 
 }

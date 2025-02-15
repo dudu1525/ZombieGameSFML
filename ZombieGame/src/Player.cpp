@@ -8,8 +8,8 @@ Player::Player(std::string imagepath)
 	textureentity.loadFromFile(imagepath);
 	actiontexture.loadFromFile(imagepath);
 	sf::Sprite sprite(textureentity, sf::IntRect(0, 0, 32, 32));
-	sf::Sprite sprite2(actiontexture, sf::IntRect(0, 0, 32, 32));
-	sf::Sprite sprite3(actiontexture, sf::IntRect(0, 0, 32, 32));
+	sf::Sprite sprite2(actiontexture, sf::IntRect(0, 0, 32, 26));
+	sf::Sprite sprite3(actiontexture, sf::IntRect(0, 0, 32, 6));
 
 	spriteentity = sprite;
 	actionentity = sprite2;
@@ -104,15 +104,15 @@ void Player::setshooting(float deltaTime)
 	static float animationTime = 0.f; 
 	const float frameDuration = 0.05f;
 	animationTime += deltaTime;
-	if (animationTime>=frameDuration)
-	{
-		animationTime = 0;
+//	if (animationTime>=frameDuration)
+	//{
+		//animationTime = 0;
 		xshoot = (xshoot + 1) % 4;
 		actiontexture.loadFromFile("assets/images/character/Shoot.png");
 		actionentity.setTexture(actiontexture);
 		actionentity.setTextureRect(sf::IntRect(xshoot * 32, yshoot*32, 32, 26));//last 2 are width, first is the column, second is the row
 		
-	}
+	//}
 }
 
 bool& Player::getshooting()
@@ -125,35 +125,25 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 	
 
 	static float animationTime = 0.f; // Accumulate animation time, initialized only once 
-	const float frameDuration = 0.1f; // 0.1 seconds per frame (10 FPS)
+	 float frameDuration = 0.15f; // 0.1 seconds per frame (10 FPS)
 
 	static float idleTime = 0.f; // Accumulate animation time for idle
-	const float idleFrameDuration = 0.6f;
+	 float idleFrameDuration = 0.4f;
 
 
 	animationTime += deltaTime;//add 1 frame each time
 	idleTime += deltaTime;
 
-	int extrapixels = 0;
+	int extrapixels = 26;
 
-	if (isshooting)
-	{
-		//variable that holds some info about scaling smth down
-		
-		extrapixels = -26;
-		setshooting(deltaTime);
-	}
-	
 
-	if (animationTime >= frameDuration)
-	{
-		animationTime -= frameDuration; // Reset for the next frame
 		
 		if (dir.x == 0 && dir.y == 0)//if idle
 		{
 			moving = 0;
 			if (idleTime >= idleFrameDuration)
 			{
+				animationTime = 0;
 				idleTime -= idleFrameDuration; // Reset idle time
 				if (xidle == 0)
 					xidle = 1;
@@ -161,32 +151,65 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 					xidle = 0;
 				basetexture.loadFromFile("assets/images/character/Idle.png");
 				baseentity.setTexture(basetexture);
-				
-				baseentity.setTextureRect(sf::IntRect(xidle * 32, 0-extrapixels, 32, 32+extrapixels));
+				baseentity.setTextureRect(sf::IntRect(xidle * 32, 26, 32, 6));
+
+				if (isshooting)
+				{
+					idleFrameDuration = 0.05f;
+					setshooting(deltaTime);
+				}
+				else
+				{
+					idleFrameDuration = 0.4f;
+					actiontexture.loadFromFile("assets/images/character/Idle.png");
+					actionentity.setTexture(actiontexture);
+					actionentity.setTextureRect(sf::IntRect(xidle * 32, 0, 32, 26));
+
+				}
+
+
+
 			}
 		}
 		else//if moving, set directions
-		{
-			moving = 1;
-			xwalk = (xwalk + 1) % 4;
-			if (dir.x > 0)
-				ywalk = 2;
-			else if (dir.x < 0)
-				ywalk = 3;
+		
+			if (animationTime >= frameDuration)
+			{
+				idleTime = 0;
+				animationTime -= frameDuration;
+				moving = 1;
+				xwalk = (xwalk + 1) % 4;
+				if (dir.x > 0)
+					ywalk = 2;
+				else if (dir.x < 0)
+					ywalk = 3;
 
-			if (dir.y > 0)
-				ywalk = 0;
-			else if (dir.y < 0)
-				ywalk = 1;
+				if (dir.y > 0)
+					ywalk = 0;
+				else if (dir.y < 0)
+					ywalk = 1;
 
-			basetexture.loadFromFile("assets/images/character/Walk.png");
-			baseentity.setTexture(basetexture);
-			baseentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32-extrapixels, 32, 32+extrapixels));
+				basetexture.loadFromFile("assets/images/character/Walk.png");
+				baseentity.setTexture(basetexture);
+				baseentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32 + 26, 32, 6));
+				if (isshooting)
+				{
+					frameDuration = 0.05f;
+					setshooting(deltaTime);
+				}
+				else
+				{
+					frameDuration = 0.15f;
+					actiontexture.loadFromFile("assets/images/character/Walk.png");
+					actionentity.setTexture(actiontexture);
+					actionentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32, 32, 26));
 
-		}
+				}
 
 
-	}
+			}
+
+	
 
 
 
