@@ -21,6 +21,8 @@ sf::Sprite& Entity::getentity()
 	return spriteentity;
 }
 
+
+
 void Entity::setpos(float x, float y)
 {
 	spriteentity.setPosition(x, y);

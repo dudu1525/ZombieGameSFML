@@ -27,14 +27,29 @@ class Player:public Entity
 
 	int yshoot;
 
+	sf::Sprite& getentity2(); //function to display action sprites
+	sf::Sprite& getentity3();
+	void setpos2(float x, float y);
+	void setpos3(float x, float y);
+
 private:
 	void updateentity(sf::Vector2f dir,float deltaTime);
-	int xidle; //needed for idle animation
-	int yidle;
+	
+	sf::Texture actiontexture;
+	sf::Sprite	actionentity;
+
+	sf::Texture basetexture;
+	sf::Sprite baseentity;
+
+
+	int xidle,yidle; //needed for idle animation
+	
 	int xwalk = 0; //needed for sprint animation
 	int ywalk=0;
 
 	int xshoot; //needed for shooting animation
+
+	
 
 };
 static int depletionrate=2;

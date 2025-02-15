@@ -17,8 +17,8 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     int v[2] = { 0,0 };
     this->game->dm.queryData(v);
     player.setpos((float)v[0],(float) v[1]);
-
-  
+    player.setpos2((float)v[0], (float)v[1]);
+    player.setpos3((float)v[0], (float)v[1]+26);
 
     map.givepath("assets/images/map/try1.png");//choose image for the main map    
     gameview = this->game->window.getView();
@@ -38,7 +38,10 @@ void MainGame::draw()
 
    //draw map,player, etc
     this->game->window.draw(map.getmap());
-   this->game->window.draw(player.getentity());
+  // this->game->window.draw(player.getentity());
+    if (player.getshooting() == true)
+   this->game->window.draw(player.getentity2());
+   this->game->window.draw(player.getentity3());
     
    
    for (int i = 0; i < proj.getbullets().size(); i++)
@@ -219,6 +222,8 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
 
     player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());//added *deltatime
     handleplayeredges();
+    //get the position and save it to the other sprite, or call the function 2 times
+    
 
     player.setcharacter(direction,deltaTime.asSeconds());//animations
 
@@ -263,6 +268,7 @@ void MainGame::handleplayeredges()
 
    
     sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+  
 
    
     if (playerPosition.x < 0) {
@@ -279,7 +285,16 @@ void MainGame::handleplayeredges()
     else if (playerPosition.y + playerBounds.height > mapHeight) {
         playerPosition.y = mapHeight - playerBounds.height; // Prevent moving down out of bounds
     }
+    float posx = playerPosition.x;
+    float posy = playerPosition.y + 26;
 
     //update position
     player.getentity().setPosition(playerPosition);
+    player.getentity2().setPosition(playerPosition);
+    //if (player.getshooting() == false)
+    //    player.getentity3().setPosition(playerPosition);
+  //  else
+        player.setpos3(posx, posy);
+
+
 }

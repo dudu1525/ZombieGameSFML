@@ -6,14 +6,19 @@ Player::Player(std::string imagepath)
 	
 {
 	textureentity.loadFromFile(imagepath);
+	actiontexture.loadFromFile(imagepath);
 	sf::Sprite sprite(textureentity, sf::IntRect(0, 0, 32, 32));
+	sf::Sprite sprite2(actiontexture, sf::IntRect(0, 0, 32, 32));
+	sf::Sprite sprite3(actiontexture, sf::IntRect(0, 0, 32, 32));
 
 	spriteentity = sprite;
+	actionentity = sprite2;
+	baseentity = sprite3;
 	xidle = 0;
 	yidle = 0;
-	//spriteentity.setTexture()
-	spriteentity.setScale(1.1, 1.1);
-
+	//spriteentity.setScale(1.1, 1.1);
+	//actionentity.setScale(1.1, 1.1);
+	//baseentity.setScale(1.1, 1.1);
 
 }
 
@@ -103,9 +108,9 @@ void Player::setshooting(float deltaTime)
 	{
 		animationTime = 0;
 		xshoot = (xshoot + 1) % 4;
-		textureentity.loadFromFile("assets/images/character/Shoot.png");
-		spriteentity.setTexture(textureentity);
-		spriteentity.setTextureRect(sf::IntRect(xshoot * 32, yshoot*32, 32, 32));//last 2 are width, first is the column, second is the row
+		actiontexture.loadFromFile("assets/images/character/Shoot.png");
+		actionentity.setTexture(actiontexture);
+		actionentity.setTextureRect(sf::IntRect(xshoot * 32, yshoot*32, 32, 26));//last 2 are width, first is the column, second is the row
 		
 	}
 }
@@ -129,14 +134,17 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 	animationTime += deltaTime;//add 1 frame each time
 	idleTime += deltaTime;
 
+	int extrapixels = 0;
+
 	if (isshooting)
 	{
-		animationTime = 0.0f;
+		//variable that holds some info about scaling smth down
 		
-		idleTime = 0.0f;
+		extrapixels = -26;
 		setshooting(deltaTime);
 	}
-	else
+	
+
 	if (animationTime >= frameDuration)
 	{
 		animationTime -= frameDuration; // Reset for the next frame
@@ -151,10 +159,10 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 					xidle = 1;
 				else
 					xidle = 0;
-				textureentity.loadFromFile("assets/images/character/Idle.png");
-				spriteentity.setTexture(textureentity);
+				basetexture.loadFromFile("assets/images/character/Idle.png");
+				baseentity.setTexture(basetexture);
 				
-				spriteentity.setTextureRect(sf::IntRect(xidle * 32, 0, 32, 32));
+				baseentity.setTextureRect(sf::IntRect(xidle * 32, 0-extrapixels, 32, 32+extrapixels));
 			}
 		}
 		else//if moving, set directions
@@ -171,9 +179,9 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 			else if (dir.y < 0)
 				ywalk = 1;
 
-			textureentity.loadFromFile("assets/images/character/Walk.png");
-			spriteentity.setTexture(textureentity);
-			spriteentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32, 32, 32));
+			basetexture.loadFromFile("assets/images/character/Walk.png");
+			baseentity.setTexture(basetexture);
+			baseentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32-extrapixels, 32, 32+extrapixels));
 
 		}
 
@@ -187,3 +195,21 @@ void Player::updateentity(sf::Vector2f dir,float deltaTime)//update the images o
 
 }
 
+sf::Sprite& Player::getentity2()
+{
+	return actionentity;
+}
+sf::Sprite& Player::getentity3()
+{
+	return baseentity;
+}
+void Player::setpos2(float x, float y)
+{
+	actionentity.setPosition(x, y);
+
+}
+
+void Player::setpos3(float x, float y)
+{
+	baseentity.setPosition(x, y);
+}
