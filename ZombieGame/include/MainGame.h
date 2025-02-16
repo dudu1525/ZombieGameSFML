@@ -22,7 +22,7 @@ public:
 	virtual void handleInput();
 	virtual void handleResizing(sf::Event& event);
 	virtual void handleInputs(sf::Event& event);
-
+	
 	void setfrompause();
 
 private:
@@ -34,6 +34,7 @@ private:
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();
 	void handleplayeredges();
+	void handleobjects(sf::Vector2f& direction);
 
 };
 static sf::View uiview;

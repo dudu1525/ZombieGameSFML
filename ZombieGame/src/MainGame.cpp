@@ -20,7 +20,8 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     //player.setpos2((float)v[0], (float)v[1]);
     //player.setpos3((float)v[0], (float)v[1]);
 
-    map.givepath("assets/images/map/try1.png");//choose image for the main map    
+    map.givepath("assets/images/map/try3.png");//choose image for the main map    
+    map.matrixbuilder();
     gameview = this->game->window.getView();
         
     gameview.zoom(0.3);
@@ -222,6 +223,9 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
         direction /= length; 
     }
 
+    handleobjects(direction);
+   //movementSpeed = player.getspeed();
+
     player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());//added *deltatime
     handleplayeredges();
     //get the position and save it to the other sprite, or call the function 2 times
@@ -232,8 +236,8 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
 }
 void MainGame::handlemapedges()
 {
-    float mapWidth = 250 * 32; 
-    float mapHeight = 150 * 32; 
+    float mapWidth = 150 * 32; 
+    float mapHeight = 100 * 32; 
 
     // Get the current size of the view
     sf::Vector2f viewSize = gameview.getSize();
@@ -262,8 +266,8 @@ void MainGame::handlemapedges()
 
 void MainGame::handleplayeredges()
 {
-    float mapWidth = 250 * 32;  
-    float mapHeight = 150 * 32; 
+    float mapWidth = 150 * 32;  
+    float mapHeight = 100 * 32; 
 
   
     sf::Vector2f playerPosition = player.getentity().getPosition();
@@ -295,9 +299,63 @@ void MainGame::handleplayeredges()
     player.getentity().setPosition(playerPosition);
     //update sprites
     player.getentity2().setPosition(playerPosition);
-    //if (player.getshooting() == false)
-    //    player.getentity3().setPosition(playerPosition);
-  //  else
     player.getentity3().setPosition(playerpos2);
+
+}
+
+void MainGame::handleobjects(sf::Vector2f& direction)
+{
+    
+    const int tileSize = 32;
+
+    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+
+    //substract some pixels for better visuals
+    sf::FloatRect adjustedBounds = playerBounds;
+    adjustedBounds.left += 10;            
+    adjustedBounds.top += 25;             
+    adjustedBounds.width -= (20);      
+    adjustedBounds.height -=25;           
+    //center of player
+    float playerCenterX = adjustedBounds.left + adjustedBounds.width / 2.0f;
+    float playerCenterY = adjustedBounds.top + adjustedBounds.height / 2.0f;
+
+    //get tile of player
+    int playerTileX = static_cast<int>(playerCenterX) / tileSize;
+    int playerTileY = static_cast<int>(playerCenterY) / tileSize;
+
+    if (direction.x != 0.f) {
+        if (direction.x < 0) {
+            sf::FloatRect tileLeft( (playerTileX - 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
+
+            if (map.tileMatrix[playerTileY][playerTileX - 1] == 2 && adjustedBounds.intersects(tileLeft)) {
+                direction.x = 0.f;
+            }
+        }
+        else if (direction.x > 0) {
+            sf::FloatRect tileRight( (playerTileX + 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
+            if (map.tileMatrix[playerTileY][playerTileX + 1] == 2 && adjustedBounds.intersects(tileRight)) {
+                direction.x = 0.f;
+            }
+        }
+    }
+
+    
+    if (direction.y != 0.f) {
+        if (direction.y < 0) {
+            sf::FloatRect tileAbove( playerTileX * tileSize, (playerTileY - 1) * tileSize,tileSize, tileSize );
+            if (map.tileMatrix[playerTileY - 1][playerTileX] == 2 && adjustedBounds.intersects(tileAbove)) {
+                direction.y = 0.f;
+            }
+        }
+        else if (direction.y > 0) {
+           
+            sf::FloatRect tileBelow(  playerTileX * tileSize,(playerTileY + 1) * tileSize,tileSize, tileSize  );
+            if (map.tileMatrix[playerTileY + 1][playerTileX] == 2 && adjustedBounds.intersects(tileBelow)) {
+                direction.y = 0.f;
+            }
+        }
+    }
+
 
 }
