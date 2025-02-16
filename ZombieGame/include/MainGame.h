@@ -36,6 +36,8 @@ private:
 	void handleplayeredges();
 	void handleobjects(sf::Vector2f& direction);
 
+	void updateplayerhealth();
+
 };
 static sf::View uiview;
 static UIMainGame   e(uiview);

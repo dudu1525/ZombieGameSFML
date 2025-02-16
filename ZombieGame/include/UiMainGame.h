@@ -11,6 +11,7 @@ public:
 	
 	virtual void draw(sf::RenderTarget& target, sf::RenderStates states) const;
 	void changestamina(int stamina,int currentstamina, sf::RenderTarget& target, sf::RenderStates states, sf::RenderWindow& window);
+	void changehealth(int health, int maxhealth);
 
 	void detectslots(sf::RenderWindow& window);
 
@@ -34,6 +35,9 @@ private:
 
 	sf::RectangleShape staminatop;
 	sf::RectangleShape staminabottom;
+
+	sf::RectangleShape healthtop;
+	sf::RectangleShape healthbottom;
 
 
 	sf::RectangleShape slot1img;

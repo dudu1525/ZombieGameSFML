@@ -13,14 +13,6 @@ void WorldMap::givepath(std::string file)
 }
 
 
-
-
-
-
-//all I need to generate the map is to define the level vector accordingly so poppulate the matrix
-//I need to set the view somehow to be centered
-//I need to minify the map, with the middle mouse;
-
 void WorldMap::draw(sf::RenderTarget& target, sf::RenderStates states) const //needed because it inherits it
 {
     states.transform *= getTransform();
@@ -39,11 +31,11 @@ void WorldMap::matrixbuilder()
     const int tilesX = 150;  
     const int tilesY = 100;
 
-    //std::vector<std::vector<int>> tileMatrix(tilesY, std::vector<int>(tilesX, 0));
     
     //find a good color for each and do that, get the pixels for the tree, the rocks that have in common and youre set
-    sf::Color rockColor(100, 100, 92);//fimnd color in common for 8 parts of rock
+    sf::Color rockColor(126, 123, 116);//fimnd color in common for 8 parts of rock
     sf::Color treeColor(102, 57, 49);//good for tree
+    sf::Color watercolor(99, 155, 255);
 
    
     for (int i = 0; i < tilesY; ++i) {
@@ -51,19 +43,29 @@ void WorldMap::matrixbuilder()
 
             int pixelX = j * tileSize + tileSize / 2;
             int pixelY = i * tileSize + tileSize / 2;
+            int pixelx = j * 32;
+            int pixely = i * 32;
 
             sf::Color pixelColor = mapImage.getPixel(pixelX, pixelY);
             sf::Color pixelColor2 = mapImage.getPixel(pixelX-1, pixelY);
+            sf::Color pixelColor3 = mapImage.getPixel(pixelx+1,pixely+0);
+            sf::Color pixelColor4 = mapImage.getPixel(pixelx+0,pixely+5);
+            sf::Color damagecolortest = mapImage.getPixel(pixelx, pixely);
 
-            if (pixelColor == rockColor) {
-                tileMatrix[i][j] = 1;  
+            if (pixelColor == rockColor || rockColor == pixelColor3 || rockColor == pixelColor4) {
+                {//also set adjacent, the original i j is the top right
+                    tileMatrix[i][j] = 2;  //set to 1
+                    tileMatrix[i][j - 1] = 2;
+                    tileMatrix[i + 1][j] = 2;
+                    tileMatrix[i + 1][j - 1] = 2;
+                }
             }
-            else if (pixelColor == treeColor || pixelColor2==treeColor) {
+            else if (pixelColor == treeColor || pixelColor2 == treeColor) {
                 tileMatrix[i][j] = 2;  // Tree
             }
-            else {
-                tileMatrix[i][j] = 0;  // Normal tile
-            }
+            else if (damagecolortest == watercolor)
+                tileMatrix[i][j] = 1;
+            
         }
     }
 

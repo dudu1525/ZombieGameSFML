@@ -17,7 +17,7 @@ public:
 	void givepath(std::string file);
 	void matrixbuilder();
 
-	int tileMatrix[100][150]; // i*100+j, col i, row j
+	int tileMatrix[100][150] = { 0 };
 
 
 
@@ -27,7 +27,7 @@ private:
 	
 
 
-	sf::Sprite spritemap;   // Sprite for the player
+	sf::Sprite spritemap;   
 	sf::Texture texturemap;
 
 

@@ -46,6 +46,14 @@ UIMainGame::UIMainGame(sf::View view)
 	bulletsnum.setCharacterSize(18);
 	font.loadFromFile("assets/fonts/arial.ttf");
 	bulletsnum.setFont(font);
+
+	//health
+	healthbottom.setPosition(view.getCenter() - sf::Vector2f(view.getSize().x / 2 - 20, view.getSize().y / 2 - 40));
+	healthbottom.setFillColor(sf::Color::Black);
+	healthbottom.setSize(sf::Vector2f(160, 30));
+	healthtop.setPosition(view.getCenter() - sf::Vector2f(view.getSize().x / 2 - 20, view.getSize().y / 2 - 40));
+	healthtop.setFillColor(sf::Color::Red);
+	healthtop.setSize(sf::Vector2f(160, 30));
 }
 
 void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -55,6 +63,9 @@ void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 
 	target.draw(staminabottom);
 	target.draw(staminatop);
+
+	target.draw(healthbottom);
+	target.draw(healthtop);
 
 	target.draw(slot1);
 	target.draw(slot2);
@@ -82,9 +93,23 @@ void UIMainGame::changestamina(int stamina,int currentstamina, sf::RenderTarget&
 		finallenstamina = 0;
 
 	staminatop.setSize(sf::Vector2f(finallenstamina, 30));
+
 	detectslots(window);
 	draw(target, states);
 	
+
+}
+void UIMainGame::changehealth(int health, int maxhealth)
+{
+	int finalhealth = 0;
+	if (health > 0)
+	{//perc not necessary as health is 100, so *100/100 makes no sense
+		finalhealth = (health * 160) / 100;
+	}
+	else
+		finalhealth = 0;
+	healthtop.setSize(sf::Vector2f(finalhealth, 30));
+
 
 }
 void UIMainGame::detectslots(sf::RenderWindow& window)//function responsible for managing weapons ui

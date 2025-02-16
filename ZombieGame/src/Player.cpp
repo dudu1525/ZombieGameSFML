@@ -48,6 +48,26 @@ int Player::getyidle()
 	return yidle;
 }
 
+void Player::updatehealthvalue(int damage, float deltaTime, bool isbeingdmg)
+{
+    static float accumulatedtime = 0.0f;
+    const float invincframe = 0.6f;
+
+    accumulatedtime += deltaTime;
+
+    if (isbeingdmg && !isinvincible)  
+    {
+        this->health -= damage;
+        isinvincible = true;
+        accumulatedtime = 0.0f; 
+    }
+
+    if (isinvincible && accumulatedtime >= invincframe)
+    {
+        isinvincible = false;
+    }
+}
+
 void Player::updatestamina(bool sprint,float deltaTime)
 {
 	static float updatetime = 0.f;
@@ -118,6 +138,11 @@ void Player::setshooting(float deltaTime)
 bool& Player::getshooting()
 {
 	return isshooting;
+}
+
+void Player::sethealth(int health)
+{
+    this->health = health;
 }
 
 void Player::updateentity(sf::Vector2f dir, float deltaTime)

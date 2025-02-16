@@ -17,10 +17,13 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     int v[2] = { 0,0 };
     this->game->dm.queryData(v);
     player.setpos((float)v[0],(float) v[1]);
-    //player.setpos2((float)v[0], (float)v[1]);
-    //player.setpos3((float)v[0], (float)v[1]);
+    player.sethealth(this->game->dm.gethealthdb());
+    e.changehealth(player.health, 100);
+   // printf("%d ", this->game->dm.gethealthdb());
 
-    map.givepath("assets/images/map/try3.png");//choose image for the main map    
+   
+
+    map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();
     gameview = this->game->window.getView();
         
@@ -78,6 +81,7 @@ void MainGame::update(sf::Time timePerFrame)
    
     handlemapedges();
     
+    updateplayerhealth();
 
     if (frompause == 1)
     {
@@ -357,5 +361,30 @@ void MainGame::handleobjects(sf::Vector2f& direction)
         }
     }
 
+
+}
+
+void MainGame::updateplayerhealth()//add invincibility frame, add here the database 
+{
+    sf::Time timePerFrame = sf::seconds(1.0f / 60.0f); //get timeperframe as second after
+
+    sf::Vector2f playerPosition = player.getentity().getPosition();
+    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+
+    sf::Vector2f playerCenter = sf::Vector2f(
+        playerPosition.x + playerBounds.width / 2,
+        playerPosition.y + playerBounds.height / 2
+    );
+
+    int tilex = playerCenter.x / 32;
+    int tiley = playerCenter.y / 32;
+    if (map.tileMatrix[tiley][tilex] == 1)
+    {
+        player.updatehealthvalue(10, timePerFrame.asSeconds(),true);
+        //player.health--;//player get damage instead of player --, and there is a function with delay
+        e.changehealth(player.health, 100);
+    }
+    else
+        player.updatehealthvalue(10, timePerFrame.asSeconds(), false);
 
 }
