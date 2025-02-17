@@ -17,6 +17,30 @@ public:
 
 };
 
+class Sword {
+
+public:
+	float getangle();
+	int calculateangle(Player player, sf::RenderWindow& window, sf::View view);
+
+	bool& getactivesword();
+	void setposition(Player player);
+	sf::Sprite& getfrect();
+
+private:
+	sf::FloatRect swordhitbox;
+	sf::Sprite hitbox;
+	sf::Vector2f offset;
+	int  angle;  //1up, 2right, 0down, 3 left
+	bool fadingIn;
+	float alphaValue;
+
+	sf::Texture text;
+
+	bool isactive;
+
+};
+
 class Projectile
 {
 public:
@@ -31,6 +55,8 @@ public:
 	int getcurrentbullets();
 	float getspeed();
 	void deallocatebullets(sf::View view);//bullets out of view
+	void checkforcollisions(int map[100][150], sf::RenderWindow& window);
+	
 private:
 	std::vector<Bullet> bullets;
 	std::vector<float> angles;
@@ -41,7 +67,6 @@ private:
 };
 static int maxbullets = 18;
 static int currentbullets = 18;
-
 
 
 #endif

@@ -3,10 +3,10 @@
 MainGame::~MainGame()
 {
 }
-
+sf::Clock clock2;
 MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     
-{
+{ 
 
 	this->game = game;
 	printf(" main game constructor done");
@@ -40,20 +40,27 @@ void MainGame::draw()
     
     this->game->window.setView(gameview);
 
-   //draw map,player, etc
+   //draw game ui items
     this->game->window.draw(map.getmap());
 
-  // this->game->window.draw(player.getentity());
-   // if (player.getshooting() == true)
+  
 
    this->game->window.draw(player.getentity2());
    this->game->window.draw(player.getentity3());
+
+   if (player.getstabbing() == true)
+   {
+       
+       sword.setposition(player);//thats why it changes, here the fade in and fade out effect can be added?
+       this->game->window.draw(sword.getfrect());
+   }
     
    
    for (int i = 0; i < proj.getbullets().size(); i++)
    {
        this->game->window.draw(proj.getbullets()[i].getbullet());
        proj.getbullets()[i].getbullet().move(proj.getspeed() * cos(proj.getangle()[i]), proj.getspeed() * sin(proj.getangle()[i]));
+       proj.checkforcollisions(map.tileMatrix,this->game->window);//check for the collision with other objects
    }
 
 
@@ -77,7 +84,10 @@ void MainGame::update(sf::Time timePerFrame)
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
     gameview.setCenter(playerCenter);//set view to player center position
-    
+
+
+    float deltaTime2 = clock2.restart().asSeconds();
+    player.setstabbing(deltaTime2, sword.calculateangle(player,this->game->window,gameview));
    
     handlemapedges();
     
@@ -97,7 +107,7 @@ void MainGame::handleInput()
     sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
 
     moveplayerinput(timePerFrame);
-
+    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && player.stamina>=0  && player.moving==true)
     {
         player.updatestamina(true, timePerFrame.asSeconds());
@@ -112,6 +122,7 @@ void MainGame::handleInput()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player.getselectedweap() == 2)
     {
         proj.shoot(player,this->game->window,gameview);
+
         sf::Text& temp2 = e.getbulletstext();
         std::string st = std::to_string(proj.getcurrentbullets()) + "/18";
         temp2.setString(st);
@@ -124,7 +135,6 @@ void MainGame::handleInput()
     }
     
   
-   
 
     
 }
@@ -193,6 +203,20 @@ void MainGame::handleInputs(sf::Event& event)
         temp2.setString(st);
     }
 
+    if (event.type == sf::Event::MouseButtonPressed && event.mouseButton.button==sf::Mouse::Left && e.selected2==true)
+    {
+        bool& isstabbingtemp = player.getstabbing();
+        isstabbingtemp = true;
+        bool& projecttemp = sword.getactivesword();
+        projecttemp = true;
+
+        //call the sword sprite to be seen here, make it appear as long as the isstabbing is true and give it a direction
+        //so the hitbox is seen
+        
+    }
+
+    
+
 }
 
 void MainGame::setfrompause()
@@ -207,7 +231,7 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
     float movementSpeed = player.getspeed();
     sf::Vector2f direction(0.f, 0.f);
     
-
+    
     if (sf::Keyboard::isKeyPressed(sf::Keyboard::W)) {
         direction.y -= 1.f; // Move up
     }
@@ -228,7 +252,9 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
     }
 
     handleobjects(direction);
-   //movementSpeed = player.getspeed();
+
+    if (player.getstabbing() == true)
+        movementSpeed = 0;
 
     player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());//added *deltatime
     handleplayeredges();
@@ -381,7 +407,6 @@ void MainGame::updateplayerhealth()//add invincibility frame, add here the datab
     if (map.tileMatrix[tiley][tilex] == 1)
     {
         player.updatehealthvalue(10, timePerFrame.asSeconds(),true);
-        //player.health--;//player get damage instead of player --, and there is a function with delay
         e.changehealth(player.health, 100);
     }
     else

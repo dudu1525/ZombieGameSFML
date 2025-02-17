@@ -2,11 +2,11 @@
 #define PLAYER_H
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
-
+//#include "Projectiles.h"
 class Player:public Entity
 {public:
 		
-		//functions related to player movement and idling tiles
+	//functions related to player movement and idling tiles
 	Player(std::string imagepath);
 	void setcharacter(sf::Vector2f dir,float deltaTime);
 	void setxidle(int x);
@@ -24,12 +24,18 @@ class Player:public Entity
 	bool& getshooting();
 	void sethealth(int health);
 
+	void setstabbing(float deltaTime,int position);
+	bool& getstabbing();
+
+
 	//public general information
 
 	int stamina=100;
 	int health;
 	bool moving;
 	bool isinvincible = false;
+	float animationTimer = 0.0f;
+	float totaltime = 0.0f;
 
 	int yshoot;
 
@@ -56,12 +62,15 @@ private:
 
 	int xshoot; //needed for shooting animation
 
+	int xstab, ystab;
+
 	
 
 };
 static int depletionrate=2;
 static int selectedweap = 0; //0-no weap, 1-sword, 2-crossbow
 static bool isshooting = false;
+static bool isstabbing = false;
 
 
 

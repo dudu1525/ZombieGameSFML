@@ -30,6 +30,8 @@ private:
 	Player player;
 	sf::View gameview;
 	Projectile proj;	
+	Sword sword;
+//got the sowrd active from the player, just use it for collision damage
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();

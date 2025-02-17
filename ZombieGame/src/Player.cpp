@@ -145,6 +145,37 @@ void Player::sethealth(int health)
     this->health = health;
 }
 
+ //float animationTimer = 0.0f;
+
+void Player::setstabbing(float deltaTime,int position) {
+    animationTimer += deltaTime;
+    if (isstabbing==true)
+    totaltime += deltaTime;
+    if (isstabbing && animationTimer >= 0.2f) {
+        xstab = (xstab + 1) % 4;
+        actiontexture.loadFromFile("assets/images/character/Stab.png");
+        actionentity.setTexture(actiontexture);
+        actionentity.setTextureRect(sf::IntRect(xstab * 32, position*32, 32, 26));
+
+        // Reset animation timer
+        animationTimer = 0.0f;
+
+        // Stop stabbing after 4 frames
+        if (xstab == 0) {
+            isstabbing = false;
+            totaltime = 0.0f;
+            actiontexture.loadFromFile("assets/images/character/Idle.png");
+            actionentity.setTexture(actiontexture);
+        }
+    }
+}
+
+bool& Player::getstabbing()
+{
+    return isstabbing;
+}
+
+
 void Player::updateentity(sf::Vector2f dir, float deltaTime)
 {
     static float animationTime = 0.f;
@@ -163,74 +194,81 @@ void Player::updateentity(sf::Vector2f dir, float deltaTime)
         frameDuration = 0.1f;      
     }
 
+   
+
     animationTime += deltaTime;
     idleTime += deltaTime;
 
-    
-    if (dir.x == 0 && dir.y == 0)
+    if (!isstabbing)
+
     {
-        moving = 0; 
-
-        if (idleTime >= idleFrameDuration)
+        if (dir.x == 0 && dir.y == 0)
         {
-            idleTime -= idleFrameDuration; 
-            animationTime = 0;            
+            moving = 0;
 
-          
-            xidle = (xidle == 0) ? 1 : 0;
-
-         
-            basetexture.loadFromFile("assets/images/character/Idle.png");
-            baseentity.setTexture(basetexture);
-            baseentity.setTextureRect(sf::IntRect(xidle * 32, 26, 32, 6));
-
-            if (isshooting)
+            if (idleTime >= idleFrameDuration)
             {
-                setshooting(deltaTime);
-            }
-            else
-            {
-                actiontexture.loadFromFile("assets/images/character/Idle.png");
-                actionentity.setTexture(actiontexture);
-                actionentity.setTextureRect(sf::IntRect(xidle * 32, 0, 32, 26));
+                idleTime -= idleFrameDuration;
+                animationTime = 0;
+
+
+                xidle = (xidle == 0) ? 1 : 0;
+
+
+                basetexture.loadFromFile("assets/images/character/Idle.png");
+                baseentity.setTexture(basetexture);
+                baseentity.setTextureRect(sf::IntRect(xidle * 32, 26, 32, 6));
+
+                if (isshooting)
+                {
+                    setshooting(deltaTime);
+                }
+                
+                else
+                {
+                    actiontexture.loadFromFile("assets/images/character/Idle.png");
+                    actionentity.setTexture(actiontexture);
+                    actionentity.setTextureRect(sf::IntRect(xidle * 32, 0, 32, 26));
+                }
             }
         }
-    }
-    else // is moving
-    {
-        if (animationTime >= frameDuration) 
+        else // is moving
         {
-            idleTime = 0; 
-            animationTime -= frameDuration; 
-            moving = 1; 
-
-            
-            xwalk = (xwalk + 1) % 4;
-
-            
-            if (dir.x > 0)
-                ywalk = 2; // Right
-            else if (dir.x < 0)
-                ywalk = 3; // Left
-
-            if (dir.y > 0)
-                ywalk = 0; // Down
-            else if (dir.y < 0)
-                ywalk = 1; // Up
-
-            basetexture.loadFromFile("assets/images/character/Walk.png");
-            baseentity.setTexture(basetexture);
-            baseentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32 + 26, 32, 6));
-
-            if (isshooting)
+            if (animationTime >= frameDuration)
             {
-                setshooting(deltaTime); 
-            }
-            else
-            {
-                actiontexture.loadFromFile("assets/images/character/Walk.png");
-                actionentity.setTexture(actiontexture);
-                actionentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32, 32, 26));
+                idleTime = 0;
+                animationTime -= frameDuration;
+                moving = 1;
+
+
+                xwalk = (xwalk + 1) % 4;
+
+
+                if (dir.x > 0)
+                    ywalk = 2; // Right
+                else if (dir.x < 0)
+                    ywalk = 3; // Left
+
+                if (dir.y > 0)
+                    ywalk = 0; // Down
+                else if (dir.y < 0)
+                    ywalk = 1; // Up
+
+                basetexture.loadFromFile("assets/images/character/Walk.png");
+                baseentity.setTexture(basetexture);
+                baseentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32 + 26, 32, 6));
+
+                if (isshooting)
+                {
+                    setshooting(deltaTime);
+                }
+              
+                else
+                {
+                    actiontexture.loadFromFile("assets/images/character/Walk.png");
+                    actionentity.setTexture(actiontexture);
+                    actionentity.setTextureRect(sf::IntRect(xwalk * 32, ywalk * 32, 32, 26));
+                }
             }
         }
     }

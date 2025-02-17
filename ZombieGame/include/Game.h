@@ -32,6 +32,7 @@ public:
 	void changeState(States* state);
 	States* peekState();
 	DatabaseManager dm;
+	const sf::Time time = sf::seconds(1.0f / 60.0f);
 
 	
 	
