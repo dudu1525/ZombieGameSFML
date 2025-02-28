@@ -26,17 +26,19 @@ sf::Sprite& Entity::getentity()
 void Entity::setpos(float x, float y)
 {
 	spriteentity.setPosition(x, y);
+	this->posx = x;
+	this->posy = y;
 
 }
 
 int Entity::getposx()
 {
-	return posx;
+	return this->posx;
 }
 
 int Entity::getposy()
 {
-	return posy;
+	return this->posy;
 }
 
 void Entity::setspeed(float x)

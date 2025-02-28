@@ -28,7 +28,7 @@ public:
 	sf::Sprite& getfrect();
 
 private:
-	sf::FloatRect swordhitbox;
+	sf::FloatRect swordhitbox; //will used to set as damage
 	sf::Sprite hitbox;
 	sf::Vector2f offset;
 	int  angle;  //1up, 2right, 0down, 3 left

@@ -19,7 +19,7 @@ public:
 
 
 protected:
-	sf::Sprite spriteentity;   // Sprite for the player
+	sf::Sprite spriteentity;   // Sprite for the entity
 	sf::Texture textureentity;
 	sf::Vector2f location;
 

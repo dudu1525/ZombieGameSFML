@@ -3,8 +3,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "States.h"
-#include <iostream>
-#include <SFML/Graphics.hpp>
+#include "Zombie.h"
 #include "Button.h"
 #include "WorldMap.h"
 #include "Player.h"
@@ -32,6 +31,8 @@ private:
 	Projectile proj;	
 	Sword sword;
 //got the sowrd active from the player, just use it for collision damage
+
+	Zombie zombie;
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();

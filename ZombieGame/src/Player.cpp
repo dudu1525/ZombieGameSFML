@@ -16,9 +16,7 @@ Player::Player(std::string imagepath)
 	baseentity = sprite3;
 	xidle = 0;
 	yidle = 0;
-	//spriteentity.setScale(1.1, 1.1);
-	//actionentity.setScale(1.1, 1.1);
-	//baseentity.setScale(1.1, 1.1);
+	
 
 }
 
@@ -147,16 +145,16 @@ void Player::sethealth(int health)
 
  //float animationTimer = 0.0f;
 
-void Player::setstabbing(float deltaTime,int position) {
+void Player::setstabbing(float deltaTime,int position) {//takes 0.8 seconds
     animationTimer += deltaTime;
     if (isstabbing==true)
     totaltime += deltaTime;
     if (isstabbing && animationTimer >= 0.2f) {
-        xstab = (xstab + 1) % 4;
+        
         actiontexture.loadFromFile("assets/images/character/Stab.png");
         actionentity.setTexture(actiontexture);
         actionentity.setTextureRect(sf::IntRect(xstab * 32, position*32, 32, 26));
-
+        xstab = (xstab + 1) % 4;
         // Reset animation timer
         animationTimer = 0.0f;
 

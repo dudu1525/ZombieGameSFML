@@ -270,7 +270,7 @@ bool& Sword::getactivesword()
 	return this->isactive;
 }
 
-void Sword::setposition(Player player)
+void Sword::setposition(Player player)//controlling where sword hitscan its seen
 {
 	
 	text.loadFromFile("assets/images/character/swing2.png");

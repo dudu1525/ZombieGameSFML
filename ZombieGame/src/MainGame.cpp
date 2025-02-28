@@ -1,5 +1,6 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
+// . means current and .. means root of current
 MainGame::~MainGame()
 {
 }
@@ -15,11 +16,12 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     float yfloat = (float)game->getWindowHeight()/2;
 
     int v[2] = { 0,0 };
-    this->game->dm.queryData(v);
+    this->game->dm.queryData(v); //retrieve position from database
     player.setpos((float)v[0],(float) v[1]);
     player.sethealth(this->game->dm.gethealthdb());
     e.changehealth(player.health, 100);
-   // printf("%d ", this->game->dm.gethealthdb());
+
+    zombie.setpos((float)v[0]-20, (float)v[1]);
 
    
 
@@ -45,8 +47,11 @@ void MainGame::draw()
 
   
 
-   this->game->window.draw(player.getentity2());
-   this->game->window.draw(player.getentity3());
+   this->game->window.draw(player.getentity2());//draw legs
+   this->game->window.draw(player.getentity3());//draw torso
+
+   this->game->window.draw(zombie.getentity());
+   zombie.drawzombiehp(this->game->window);
 
    if (player.getstabbing() == true)
    {
@@ -92,6 +97,9 @@ void MainGame::update(sf::Time timePerFrame)
     handlemapedges();
     
     updateplayerhealth();
+
+    zombie.zombieanimations(timePerFrame.asSeconds());
+
 
     if (frompause == 1)
     {
@@ -321,9 +329,11 @@ void MainGame::handleplayeredges()
     else if (playerPosition.y + playerBounds.height > mapHeight) {
         playerPosition.y = mapHeight - playerBounds.height; // Prevent moving down out of bounds
     }
+
+
     float posx = playerPosition.x;
     float posy = playerPosition.y + 26;
-    sf::Vector2f playerpos2(posx, posy);
+    sf::Vector2f playerpos2(posx, posy);//needed for legs part of sprite
 
     //update position
     player.getentity().setPosition(playerPosition);

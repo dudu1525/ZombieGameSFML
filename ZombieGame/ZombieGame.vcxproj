@@ -171,6 +171,7 @@
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIMainGame.cpp" />
     <ClCompile Include="src\WorldMap.cpp" />
+    <ClCompile Include="src\Zombie.cpp" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="assets\images\character\Idle.png" />
@@ -192,6 +193,7 @@
     <ClInclude Include="include\TextureManager.h" />
     <ClInclude Include="include\UiMainGame.h" />
     <ClInclude Include="include\WorldMap.h" />
+    <ClInclude Include="include\Zombie.h" />
     <ClInclude Include="sqlite\sqlite3.h" />
     <ClInclude Include="sqlite\sqlite3ext.h" />
   </ItemGroup>

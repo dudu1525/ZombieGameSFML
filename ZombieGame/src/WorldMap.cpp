@@ -47,7 +47,7 @@ void WorldMap::matrixbuilder()
             int pixely = i * 32;
 
             sf::Color pixelColor = mapImage.getPixel(pixelX, pixelY);
-            sf::Color pixelColor2 = mapImage.getPixel(pixelX-1, pixelY);
+            sf::Color pixelColor2 = mapImage.getPixel(pixelX-1, pixelY);//inverse x and y coordinates
             sf::Color pixelColor3 = mapImage.getPixel(pixelx+1,pixely+0);
             sf::Color pixelColor4 = mapImage.getPixel(pixelx+0,pixely+5);
             sf::Color damagecolortest = mapImage.getPixel(pixelx, pixely);
