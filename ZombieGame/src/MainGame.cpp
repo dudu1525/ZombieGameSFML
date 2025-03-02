@@ -1,14 +1,16 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
 // . means current and .. means root of current
+#define PI 3.14159265
+#define NRZOMBIES 30
+
 MainGame::~MainGame()
 {
 }
 sf::Clock clock2;
 MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
-    
 { 
-
+    srand(time(NULL));
 	this->game = game;
 	printf(" main game constructor done");
     
@@ -21,12 +23,28 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     player.sethealth(this->game->dm.gethealthdb());
     e.changehealth(player.health, 100);
 
-    zombie.setpos((float)v[0]-20, (float)v[1]);
+    float playerCenterX = player.getentity().getGlobalBounds().left + player.getentity().getGlobalBounds().width / 2.0f;
+    float playerCenterY = player.getentity().getGlobalBounds().top + player.getentity().getGlobalBounds().height / 2.0f;
 
+    //get tile of player
+    int playerTileX = static_cast<int>(playerCenterX) / 32;
+    int playerTileY = static_cast<int>(playerCenterY) / 32;
+    map.tileMatrix[playerTileY][playerTileX] = 3; //mark player tile
+
+  
+
+
+   // zombie1.setpos((float)v[0] - 40, (float)v[1]);
+
+   // zombie2.setpos((float)v[0] + 40, (float)v[1]);
    
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();
+
+     positionzombies();
+
+
     gameview = this->game->window.getView();
         
     gameview.zoom(0.3);
@@ -45,13 +63,20 @@ void MainGame::draw()
    //draw game ui items
     this->game->window.draw(map.getmap());
 
+    for (int i=0;i<NRZOMBIES;i++)
+    {
+        this->game->window.draw(zombies[i].getentity());
+
+
+        zombies[i].drawzombiehp(this->game->window);
+
+    }
   
 
    this->game->window.draw(player.getentity2());//draw legs
    this->game->window.draw(player.getentity3());//draw torso
 
-   this->game->window.draw(zombie.getentity());
-   zombie.drawzombiehp(this->game->window);
+   
 
    if (player.getstabbing() == true)
    {
@@ -98,12 +123,14 @@ void MainGame::update(sf::Time timePerFrame)
     
     updateplayerhealth();
 
-    zombie.zombieanimations(timePerFrame.asSeconds());
+    for (int i=0;i<NRZOMBIES;i++)
+    detectzombie(zombies[i]);
+  
 
 
     if (frompause == 1)
     {
-        
+        clearzombies();
         frompause = 0;
         this->game->popState();
 
@@ -260,14 +287,15 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
     }
 
     handleobjects(direction);
+   // zombiecollision(direction); further testing
 
     if (player.getstabbing() == true)
         movementSpeed = 0;
 
     player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());//added *deltatime
     handleplayeredges();
+    player.setpos(player.getentity().getPosition().x, player.getentity().getPosition().y);
     //get the position and save it to the other sprite, or call the function 2 times
-    
 
     player.setcharacter(direction,deltaTime.asSeconds());//animations
 
@@ -335,6 +363,7 @@ void MainGame::handleplayeredges()
     float posy = playerPosition.y + 26;
     sf::Vector2f playerpos2(posx, posy);//needed for legs part of sprite
 
+
     //update position
     player.getentity().setPosition(playerPosition);
     //update sprites
@@ -364,7 +393,7 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     int playerTileX = static_cast<int>(playerCenterX) / tileSize;
     int playerTileY = static_cast<int>(playerCenterY) / tileSize;
 
-    if (direction.x != 0.f) {
+    if (direction.x != 0.f) {//left
         if (direction.x < 0) {
             sf::FloatRect tileLeft( (playerTileX - 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
 
@@ -372,7 +401,7 @@ void MainGame::handleobjects(sf::Vector2f& direction)
                 direction.x = 0.f;
             }
         }
-        else if (direction.x > 0) {
+        else if (direction.x > 0) {//right
             sf::FloatRect tileRight( (playerTileX + 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
             if (map.tileMatrix[playerTileY][playerTileX + 1] == 2 && adjustedBounds.intersects(tileRight)) {
                 direction.x = 0.f;
@@ -381,7 +410,7 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     }
 
     
-    if (direction.y != 0.f) {
+    if (direction.y != 0.f) {//up
         if (direction.y < 0) {
             sf::FloatRect tileAbove( playerTileX * tileSize, (playerTileY - 1) * tileSize,tileSize, tileSize );
             if (map.tileMatrix[playerTileY - 1][playerTileX] == 2 && adjustedBounds.intersects(tileAbove)) {
@@ -398,6 +427,127 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     }
 
 
+}
+
+
+
+void MainGame::detectzombie(Zombie& zombie)
+{
+    float angle=0;
+    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+    sf::FloatRect zombiebounds = zombie.getentity().getGlobalBounds();
+
+   // printf("%d %d \n", zombie.getposx(), zombie.getposy());
+
+    sf::FloatRect adjustedBounds = playerBounds;
+    adjustedBounds.left += 10;
+    adjustedBounds.top += 15;
+    adjustedBounds.width -= (20);
+    adjustedBounds.height -= 15;
+
+   
+    float hittime = 0.8f;
+
+    if (zombie.zombiecollision.intersects(adjustedBounds))
+    {   
+
+        bool& temp = zombie.getisattacking();
+        temp = true;
+        zombie.damageTime += this->game->time.asSeconds();
+        if (zombie.damageTime >= hittime)
+        {//add the angle between the center of the zombie and the center of the player and add the angle as a argument for the zombieanimations, maybe call it here
+            zombie.damageTime = 0.0f;
+            player.updatehealthvalue(10, this->game->time.asSeconds(), true);
+            e.changehealth(player.health, 100);
+
+            
+
+        }
+
+
+    }
+    else
+    {
+        player.updatehealthvalue(10, this->game->time.asSeconds(), false);
+
+        zombie.damageTime = 0.0f;
+    }
+
+    sf::Vector2f playerPosition = player.getentity().getPosition();
+    sf::Vector2f playerCenter = sf::Vector2f(
+        playerPosition.x + playerBounds.width / 2,
+        playerPosition.y + playerBounds.height / 2
+    );
+
+    sf::Vector2f zombieposition = zombie.getentity().getPosition();
+    sf::Vector2f zombiecenter = sf::Vector2f(
+        zombieposition.x + zombiebounds.width / 2,
+        zombieposition.y + zombiebounds.height / 2
+    );
+
+
+    angle = atan2(playerCenter.y - zombiecenter.y, playerCenter.x - zombiecenter.x);
+    float degrees = angle * 180 / PI;
+    if (degrees <= 45 && degrees > -45)//right
+    {
+        angle = 2;
+    }
+    else if (degrees <= -45 && degrees > -135)//up
+    {
+        angle = 1;
+
+    }
+    else if (degrees > 45 && degrees <= 135)//down
+    {
+       
+        angle = 0;
+    }
+    else//left
+    {
+       
+        angle = 3;
+    }
+
+    
+    zombie.zombieanimations(this->game->time.asSeconds(),angle);
+
+
+
+}
+
+void MainGame::positionzombies()
+{
+    int height = 100;
+    int width = 150;
+    for (int i = 0; i < 30; i++)
+    {
+        int xrand=0, yrand=0;
+        xrand = rand() % width + 1;
+        yrand = rand() % height + 1;
+        while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 3 || yrand==149 || xrand==100)
+        {
+            xrand = rand() % width + 1;
+            yrand = rand() % height + 1;
+
+        }
+
+        map.tileMatrix[yrand][xrand] = 3;
+
+        this->zombies[i].setpos(yrand * 32 , xrand * 32 );
+      //  printf("%d %d ",yrand,xrand );
+
+
+    }
+}
+
+void MainGame::clearzombies()
+{
+    for (int i=0;i<100;i++)
+        for (int j = 0; j < 150; j++)
+        {
+            if (map.tileMatrix[i][i] == 3)
+                map.tileMatrix[i][i] = 0;
+        }
 }
 
 void MainGame::updateplayerhealth()//add invincibility frame, add here the database 

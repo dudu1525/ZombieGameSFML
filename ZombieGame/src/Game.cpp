@@ -149,7 +149,7 @@ unsigned int Game::getWindowHeight() const {
 
 void Game::loadTextures()
 {
-	texmgr.loadTexture("backgroundmenu", "background_menu.png");
+	texmgr.loadTexture("backgroundmenu", "assets/images/map/background_menu.png");
 }
 
 //void Game::handleWindowResize(sf::Event& event) {

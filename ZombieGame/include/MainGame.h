@@ -32,12 +32,19 @@ private:
 	Sword sword;
 //got the sowrd active from the player, just use it for collision damage
 
-	Zombie zombie;
+	Zombie zombies[30];
+	//Zombie zombie1;
+	//Zombie zombie2;
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();
 	void handleplayeredges();
 	void handleobjects(sf::Vector2f& direction);
+	void zombiecollision(sf::Vector2f& direction); //not for now
+	void detectzombie(Zombie& zombie);
+	void positionzombies();
+	void clearzombies();
+
 
 	void updateplayerhealth();
 

@@ -24,11 +24,11 @@ MainMenu::MainMenu(Game* game)
 
     if (!game->background.loadFromFile("assets/images/map/background_menu.png"))
     {
-        printf("error loading background image\n");
+        printf("da serror loading background image\n");
     }
    //game->backgroundSprite.setTexture(game->texmgr.getRef("backgroundmenu")); //probably the load textures function isnt done as the mainmenu constructor is done first
 
-   game->background.loadFromFile("assets/images/map/background_menu.png");
+ //  game->background.loadFromFile("assets/images/map/background_menu.png");
    game->backgroundSprite.setTexture(game->background);
     game->backgroundSprite.setOrigin(0, 0);
     game->backgroundSprite.setScale( 1920 / game->backgroundSprite.getLocalBounds().width,  1080 / game->backgroundSprite.getLocalBounds().height);
