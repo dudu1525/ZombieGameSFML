@@ -23,15 +23,15 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     player.sethealth(this->game->dm.gethealthdb());
     e.changehealth(player.health, 100);
 
-    float playerCenterX = player.getentity().getGlobalBounds().left + player.getentity().getGlobalBounds().width / 2.0f;
-    float playerCenterY = player.getentity().getGlobalBounds().top + player.getentity().getGlobalBounds().height / 2.0f;
+   // /float playerCenterX = player.getentity().getGlobalBounds().left + player.getentity().getGlobalBounds().width / 2.0f;
+   // float playerCenterY = player.getentity().getGlobalBounds().top + player.getentity().getGlobalBounds().height / 2.0f;
 
     //get tile of player
-    int playerTileX = static_cast<int>(playerCenterX) / 32;
-    int playerTileY = static_cast<int>(playerCenterY) / 32;
-    map.tileMatrix[playerTileY][playerTileX] = 3; //mark player tile
+    //int playerTileX = static_cast<int>(playerCenterX) / 32;
+    //int playerTileY = static_cast<int>(playerCenterY) / 32;
+    //map.tileMatrix[playerTileY][playerTileX] = 3; //mark player tile
 
-  
+
 
 
    // zombie1.setpos((float)v[0] - 40, (float)v[1]);
@@ -113,11 +113,17 @@ void MainGame::update(sf::Time timePerFrame)
     this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
+    player.updateplayertile(map.tileMatrix); //update the current player of the tile after its moving
+        
+    for (int i = 0; i < NRZOMBIES; i++)
+       zombies[i].checkforplayer2(map.tileMatrix);
+    //function for the zombies to check if the player is in their range and go to the player
+
     gameview.setCenter(playerCenter);//set view to player center position
 
 
     float deltaTime2 = clock2.restart().asSeconds();
-    player.setstabbing(deltaTime2, sword.calculateangle(player,this->game->window,gameview));
+    player.setstabbing(deltaTime2, sword.calculateangle(player,this->game->window,gameview));//stabbing animation, if player is stabbing
    
     handlemapedges();
     

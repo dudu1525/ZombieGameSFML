@@ -2,6 +2,8 @@
 #define PLAYER_H
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
+#define WIDTH 150
+#define HEIGHT 100
 //#include "Projectiles.h"
 class Player:public Entity
 {public:
@@ -23,6 +25,7 @@ class Player:public Entity
 	void setshooting(float deltaTime);
 	bool& getshooting();
 	void sethealth(int health);
+	void updateplayertile(int tiles[HEIGHT][WIDTH]);
 
 	void setstabbing(float deltaTime,int position);
 	bool& getstabbing();
@@ -36,6 +39,9 @@ class Player:public Entity
 	bool isinvincible = false;
 	float animationTimer = 0.0f;
 	float totaltime = 0.0f;
+
+
+	
 
 	int yshoot;
 
@@ -63,6 +69,12 @@ private:
 	int xshoot; //needed for shooting animation
 
 	int xstab, ystab;
+
+	struct playertile {
+		int x;
+		int y;
+	}playertile;
+	
 
 	
 

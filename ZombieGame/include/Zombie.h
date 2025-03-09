@@ -4,6 +4,9 @@
 #include "Entity.h"
 #include <iostream>
 
+#define WIDTH 150
+#define HEIGHT 100
+
 class Zombie :public Entity
 {
 
@@ -12,6 +15,8 @@ public:
 	void zombieanimations(float deltatime, int angle);
 	void drawzombiehp(sf::RenderWindow& window);
 	sf::FloatRect zombiecollision;
+
+	void checkforplayer2(int tiles[HEIGHT][WIDTH]);
 
 	sf::Texture attacktexture;
 	sf::Texture idletexture;
@@ -34,10 +39,14 @@ private:
 		int x=0;
 		int y=0;
 	}attack;
+
+	
+	
+
 	sf::RectangleShape healthbehind;
 	sf::RectangleShape healthtop;
 	
-
+	
 	void zombieidle(float deltatime);
 	void zombieattacking(float deltatime,int angle);
 	float currenttime = 0.0f;  //previously static member

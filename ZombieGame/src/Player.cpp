@@ -143,7 +143,21 @@ void Player::sethealth(int health)
     this->health = health;
 }
 
- //float animationTimer = 0.0f;
+void Player::updateplayertile(int tiles[HEIGHT][WIDTH])
+{
+    tiles[playertile.y][playertile.x] = 0;
+
+    float playerCenterX = this->getentity().getGlobalBounds().left + this->getentity().getGlobalBounds().width / 2.0f;
+    float playerCenterY = this->getentity().getGlobalBounds().top + this->getentity().getGlobalBounds().height / 2.0f;
+
+    int playerTileX = static_cast<int>(playerCenterX) / 32;
+    playertile.x = playerTileX;
+    int playerTileY = static_cast<int>(playerCenterY) / 32;
+    playertile.y = playerTileY;
+    tiles[playerTileY][playerTileX] = 3;
+
+}
+
 
 void Player::setstabbing(float deltaTime,int position) {//takes 0.8 seconds
     animationTimer += deltaTime;

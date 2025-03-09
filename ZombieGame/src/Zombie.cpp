@@ -1,4 +1,5 @@
 #include "../include/Zombie.h"
+#include <queue>
 
 Zombie::Zombie()
 {
@@ -22,6 +23,7 @@ Zombie::Zombie()
 void Zombie::zombieidle(float deltatime)
 {
 	float totaltime = 0.25f; 
+
 	currenttime += deltatime; 
 	if (currenttime >= totaltime) 
 	{
@@ -83,6 +85,39 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 
 	window.draw(healthbehind);
 	window.draw(healthtop);
+}
+
+
+void Zombie::checkforplayer2(int tiles[HEIGHT][WIDTH])
+{
+	float zombiecx = this->getentity().getGlobalBounds().left + this->getentity().getGlobalBounds().width / 2.0f;
+	float zombiecy = this->getentity().getGlobalBounds().top + this->getentity().getGlobalBounds().height / 2.0f;
+	
+	int tilex = static_cast<int>(zombiecx) / 32;
+	int tiley = static_cast<int>(zombiecy) / 32;
+	int reached = 0;
+
+	for (int i = -3; i <= 3; i++) {
+		for (int j = -3; j <= 3; j++) {
+			int newx = tilex + i;  
+			int newy = tiley + j;  
+
+			
+			if (newx >= 0 && newx< HEIGHT && newy >= 0 && newy < WIDTH) {
+			
+				if (tiles[newy][newx] == 3) {
+					reached = 1;
+					//do smth here, start following algorithm
+					//this->setpos(newx * 32, newy * 32);
+				}
+			}
+			
+		}
+
+		if (reached)
+			break;
+	}
+
 }
 
 bool& Zombie::getisattacking()
