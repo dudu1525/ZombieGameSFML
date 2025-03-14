@@ -154,8 +154,9 @@ void Player::updateplayertile(int tiles[HEIGHT][WIDTH])
     playertile.x = playerTileX;
     int playerTileY = static_cast<int>(playerCenterY) / 32;
     playertile.y = playerTileY;
-    tiles[playerTileY][playerTileX] = 3;
+    tiles[playerTileY][playerTileX] = 4;
 
+   // printf("%d %d %d \n", playerTileX, playerTileY, tiles[playerTileY][playerTileX]);
 }
 
 

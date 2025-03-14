@@ -85,6 +85,7 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 
 	window.draw(healthbehind);
 	window.draw(healthtop);
+	
 }
 
 
@@ -96,6 +97,7 @@ void Zombie::checkforplayer2(int tiles[HEIGHT][WIDTH])
 	int tilex = static_cast<int>(zombiecx) / 32;
 	int tiley = static_cast<int>(zombiecy) / 32;
 	int reached = 0;
+	ismoving = 0;
 
 	for (int i = -3; i <= 3; i++) {
 		for (int j = -3; j <= 3; j++) {
@@ -103,21 +105,35 @@ void Zombie::checkforplayer2(int tiles[HEIGHT][WIDTH])
 			int newy = tiley + j;  
 
 			
-			if (newx >= 0 && newx< HEIGHT && newy >= 0 && newy < WIDTH) {
+			if (newx >= 0 && newx< WIDTH-4 && newy >= 0 && newy < HEIGHT-4) {
 			
-				if (tiles[newy][newx] == 3) {
-					reached = 1;
+				if (tiles[newy][newx] == 4) {
+
+					ismoving = 1;
+
 					//do smth here, start following algorithm
+					// set to moving, the zombie
 					//this->setpos(newx * 32, newy * 32);
 				}
+				
 			}
 			
 		}
 
-		if (reached)
+		if (ismoving)
 			break;
 	}
 
+}
+
+void Zombie::movez()//WHEN MOVING, its tile needs to be updated. collisions need to be checked, and so on, tielmatrix and player pos must be given
+{
+	if (ismoving==1)
+	{
+		sf::Vector2f direction(1, 0);
+		this->getentity().move(direction * this->speed * time.asSeconds());
+		this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
+	}
 }
 
 bool& Zombie::getisattacking()

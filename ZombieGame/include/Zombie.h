@@ -17,6 +17,7 @@ public:
 	sf::FloatRect zombiecollision;
 
 	void checkforplayer2(int tiles[HEIGHT][WIDTH]);
+	void movez();
 
 	sf::Texture attacktexture;
 	sf::Texture idletexture;
@@ -40,7 +41,8 @@ private:
 		int y=0;
 	}attack;
 
-	
+
+	const sf::Time time = sf::seconds(1.0f / 60.0f);
 	
 
 	sf::RectangleShape healthbehind;

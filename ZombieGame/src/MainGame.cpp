@@ -3,7 +3,7 @@
 // . means current and .. means root of current
 #define PI 3.14159265
 #define NRZOMBIES 30
-
+//all zombies stop at a set x coordinate
 MainGame::~MainGame()
 {
 }
@@ -113,11 +113,15 @@ void MainGame::update(sf::Time timePerFrame)
     this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
-    player.updateplayertile(map.tileMatrix); //update the current player of the tile after its moving
+    player.updateplayertile(map.tileMatrix); //update the current player tile
         
     for (int i = 0; i < NRZOMBIES; i++)
        zombies[i].checkforplayer2(map.tileMatrix);
     //function for the zombies to check if the player is in their range and go to the player
+    // 
+   for (int i = 0; i < NRZOMBIES; i++)
+       zombies[i].movez();
+
 
     gameview.setCenter(playerCenter);//set view to player center position
 
@@ -388,9 +392,9 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     //substract some pixels for better visuals
     sf::FloatRect adjustedBounds = playerBounds;
     adjustedBounds.left += 10;            
-    adjustedBounds.top += 25;             
+    adjustedBounds.top += 10;             
     adjustedBounds.width -= (20);      
-    adjustedBounds.height -=25;           
+    adjustedBounds.height -=10;           
     //center of player
     float playerCenterX = adjustedBounds.left + adjustedBounds.width / 2.0f;
     float playerCenterY = adjustedBounds.top + adjustedBounds.height / 2.0f;

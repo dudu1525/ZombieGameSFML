@@ -19,6 +19,7 @@ public:
 
 	int tileMatrix[100][150] = { 0 };
 
+	
 
 
 private:
