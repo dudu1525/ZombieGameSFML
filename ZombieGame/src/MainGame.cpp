@@ -116,11 +116,13 @@ void MainGame::update(sf::Time timePerFrame)
     player.updateplayertile(map.tileMatrix); //update the current player tile
         
     for (int i = 0; i < NRZOMBIES; i++)
-       zombies[i].checkforplayer2(map.tileMatrix);
-    //function for the zombies to check if the player is in their range and go to the player
-    // 
-   for (int i = 0; i < NRZOMBIES; i++)
-       zombies[i].movez(player);
+    {
+        zombies[i].checkforplayer(map.tileMatrix);
+        zombies[i].movez(player);
+        zombies[i].attackPlayer(player,e);
+
+    }
+   
 
 
     gameview.setCenter(playerCenter);//set view to player center position
@@ -133,8 +135,7 @@ void MainGame::update(sf::Time timePerFrame)
     
     updateplayerhealth();
 
-    for (int i=0;i<NRZOMBIES;i++)
-    detectzombie(zombies[i]);
+  
   
 
 
@@ -441,89 +442,7 @@ void MainGame::handleobjects(sf::Vector2f& direction)
 
 
 
-void MainGame::detectzombie(Zombie& zombie)//move this into zombie, make a function to calculate angle between zombie and player, update zombie sprites
-{
-    float angle=0;
-    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
-    sf::FloatRect zombiebounds = zombie.getentity().getGlobalBounds();
 
-   // printf("%d %d \n", zombie.getposx(), zombie.getposy());
-
-    sf::FloatRect adjustedBounds = playerBounds;
-    adjustedBounds.left += 10;
-    adjustedBounds.top += 15;
-    adjustedBounds.width -= (20);
-    adjustedBounds.height -= 15;
-
-   
-    float hittime = 0.8f;
-
-    if (zombie.zombiecollision.intersects(adjustedBounds))
-    {   
-
-        bool& temp = zombie.getisattacking();
-        temp = true;
-        zombie.damageTime += this->game->time.asSeconds();
-        if (zombie.damageTime >= hittime)
-        {//add the angle between the center of the zombie and the center of the player and add the angle as a argument for the zombieanimations, maybe call it here
-            zombie.damageTime = 0.0f;
-            player.updatehealthvalue(10, this->game->time.asSeconds(), true);
-            e.changehealth(player.health, 100);
-
-            
-
-        }
-
-
-    }
-    else
-    {
-        player.updatehealthvalue(10, this->game->time.asSeconds(), false);
-
-        zombie.damageTime = 0.0f;
-    }
-
-    sf::Vector2f playerPosition = player.getentity().getPosition();
-    sf::Vector2f playerCenter = sf::Vector2f(
-        playerPosition.x + playerBounds.width / 2,
-        playerPosition.y + playerBounds.height / 2
-    );
-
-    sf::Vector2f zombieposition = zombie.getentity().getPosition();
-    sf::Vector2f zombiecenter = sf::Vector2f(
-        zombieposition.x + zombiebounds.width / 2,
-        zombieposition.y + zombiebounds.height / 2
-    );
-
-
-    angle = atan2(playerCenter.y - zombiecenter.y, playerCenter.x - zombiecenter.x);
-    float degrees = angle * 180 / PI;
-    if (degrees <= 45 && degrees > -45)//right
-    {
-        angle = 2;
-    }
-    else if (degrees <= -45 && degrees > -135)//up
-    {
-        angle = 1;
-
-    }
-    else if (degrees > 45 && degrees <= 135)//down
-    {
-       
-        angle = 0;
-    }
-    else//left
-    {
-       
-        angle = 3;
-    }
-
-    
-    zombie.zombieanimations(this->game->time.asSeconds(),angle);
-
-
-
-}
 
 void MainGame::positionzombies()
 {

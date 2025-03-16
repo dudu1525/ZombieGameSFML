@@ -4,6 +4,7 @@
 #include "Entity.h"
 #include <iostream>
 #include "Player.h"
+#include "UiMainGame.h"
 
 #define WIDTH 150
 #define HEIGHT 100
@@ -17,7 +18,10 @@ public:
 	void drawzombiehp(sf::RenderWindow& window);
 	sf::FloatRect zombiecollision;
 
-	void checkforplayer2(int tiles[HEIGHT][WIDTH]);
+
+	void checkforplayer(int tiles[HEIGHT][WIDTH]);
+	float getPlayerZombieAngle(Player& player);
+	void attackPlayer(Player& player,  UIMainGame&   e);
 	void movez(Player& player);
 
 	sf::Texture attacktexture;
@@ -48,6 +52,7 @@ private:
 
 	sf::RectangleShape healthbehind;
 	sf::RectangleShape healthtop;
+	sf::Vector2f direction;//direction between zombie and player
 	
 	
 	void zombieidle(float deltatime);
