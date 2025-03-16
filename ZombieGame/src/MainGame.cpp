@@ -120,7 +120,7 @@ void MainGame::update(sf::Time timePerFrame)
     //function for the zombies to check if the player is in their range and go to the player
     // 
    for (int i = 0; i < NRZOMBIES; i++)
-       zombies[i].movez();
+       zombies[i].movez(player);
 
 
     gameview.setCenter(playerCenter);//set view to player center position
@@ -441,7 +441,7 @@ void MainGame::handleobjects(sf::Vector2f& direction)
 
 
 
-void MainGame::detectzombie(Zombie& zombie)
+void MainGame::detectzombie(Zombie& zombie)//move this into zombie, make a function to calculate angle between zombie and player, update zombie sprites
 {
     float angle=0;
     sf::FloatRect playerBounds = player.getentity().getGlobalBounds();

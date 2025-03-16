@@ -1,6 +1,6 @@
 #include "../include/Zombie.h"
 #include <queue>
-
+#define PI 3.14159265
 Zombie::Zombie()
 {
 
@@ -126,13 +126,36 @@ void Zombie::checkforplayer2(int tiles[HEIGHT][WIDTH])
 
 }
 
-void Zombie::movez()//WHEN MOVING, its tile needs to be updated. collisions need to be checked, and so on, tielmatrix and player pos must be given
+void Zombie::movez(Player& player)//WHEN MOVING, its tile needs to be updated. collisions need to be checked, and so on, tielmatrix and player pos must be given
 {
+	float angle = 0;
 	if (ismoving==1)
 	{
-		sf::Vector2f direction(1, 0);
-		this->getentity().move(direction * this->speed * time.asSeconds());
+		
+	
+
+		sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
+		sf::FloatRect zombiebounds = this->getentity().getGlobalBounds();
+		sf::Vector2f playerPosition = player.getentity().getPosition();
+		sf::Vector2f playerCenter = sf::Vector2f(
+			playerPosition.x + playerBounds.width / 2,
+			playerPosition.y + playerBounds.height / 2
+		);
+
+		sf::Vector2f zombieposition = this->getentity().getPosition();
+		sf::Vector2f zombiecenter = sf::Vector2f(
+			zombieposition.x + zombiebounds.width / 2,
+			zombieposition.y + zombiebounds.height / 2
+		);
+		sf::Vector2f direction(playerCenter.x - zombiecenter.x, playerCenter.y - zombiecenter.y);
+		float vectnorm = sqrt(pow(direction.x, 2) + pow(direction.y, 2));
+		sf::Vector2f normdir(direction.x / vectnorm, direction.y / vectnorm);
+
+		this->getentity().move(normdir * this->speed * time.asSeconds());
 		this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
+
+		angle = atan2(playerCenter.y - zombiecenter.y, playerCenter.x - zombiecenter.x);
+		float degrees = angle * 180 / PI;
 	}
 }
 

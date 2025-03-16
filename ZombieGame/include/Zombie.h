@@ -3,6 +3,7 @@
 #include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include <iostream>
+#include "Player.h"
 
 #define WIDTH 150
 #define HEIGHT 100
@@ -17,7 +18,7 @@ public:
 	sf::FloatRect zombiecollision;
 
 	void checkforplayer2(int tiles[HEIGHT][WIDTH]);
-	void movez();
+	void movez(Player& player);
 
 	sf::Texture attacktexture;
 	sf::Texture idletexture;
