@@ -8,6 +8,7 @@ Zombie::Zombie()
 	this->textureentity.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Idle.png");
 		
 	this->attacktexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Attack.png");
+	this->movetexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Walk.png");
 	spriteentity.setTexture(textureentity);
 	spriteentity.setTextureRect(sf::IntRect(0, 0, 32, 32));
 
@@ -35,32 +36,45 @@ void Zombie::zombieidle(float deltatime)
 }
 
 void Zombie::zombieattacking(float deltatime, int angle)
-{
-	float totaltime = 0.2f; 
+{//initially 0.2,  1.0
+	float totaltime = 0.1f; 
 	accumulatedtime += deltatime; 
-	currenttime += deltatime;
-	if (currenttime >= totaltime) 
+	attackcurrenttime += deltatime;
+	if (attackcurrenttime >= totaltime)
 	{
-		currenttime = 0.0f; 
+		attackcurrenttime = 0.0f;
 		spriteentity.setTexture(attacktexture); 
 		spriteentity.setTextureRect(sf::IntRect(attack.x * 32, angle * 32, 32, 32));
 		attack.x = (attack.x + 1) % 5; 
 	}
-	if (accumulatedtime >= 1.0f) 
+	if (accumulatedtime >= 0.50f) 
 	{
 		accumulatedtime = 0.0f;
 		isattacking = false;
 	}
 }
 
+void Zombie::zombiemovementanimations(float deltatime, int angle)
+{
+	float totaltime = 0.15f;
 
+	currenttime += deltatime;
+	if (currenttime >= totaltime)
+	{
+		currenttime = 0.0f;
+		spriteentity.setTexture(movetexture);
+		spriteentity.setTextureRect(sf::IntRect(move.x * 32,angle* 32, 32, 32));
+		move.x = (move.x + 1) % 10;
+
+	}
+
+
+
+}
 void Zombie::zombieanimations(float deltatime,int angle)
 {
-	zombiecollision = this->getentity().getGlobalBounds();
-	zombiecollision.left -= 3;
-	zombiecollision.top -= 3;
-	zombiecollision.width += 6;
-	zombiecollision.height += 6;
+	
+
 	
 
 	if (!ismoving && !isattacking)
@@ -74,6 +88,8 @@ void Zombie::zombieanimations(float deltatime,int angle)
 	else if (ismoving)
 	{
 
+		zombiemovementanimations(deltatime, angle);
+
 	}
 }
 
@@ -85,6 +101,16 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 
 	window.draw(healthbehind);
 	window.draw(healthtop);
+
+	//sf::RectangleShape zAtkRect;
+	//zAtkRect.setPosition(zombieAttackCollision.left, zombieAttackCollision.top);
+	//zAtkRect.setSize({ zombieAttackCollision.width, zombieAttackCollision.height });
+	//zAtkRect.setFillColor(sf::Color::Transparent);
+	//zAtkRect.setOutlineColor(sf::Color::Red);
+	//zAtkRect.setOutlineThickness(2.f);
+	//window.draw(zAtkRect);
+
+	
 	
 }
 
@@ -156,14 +182,24 @@ void Zombie::movez(Player& player)//WHEN MOVING, its tile needs to be updated. c
 	if (ismoving==1)
 	{
 		
-	
-		this->getPlayerZombieAngle(player);
+	//make the matrixes: tilemap, visited boolean, parent: vector2i
+		//make the bfs and construct the parent matrix, 
+		//after having the parents matrix, get the middle of the tiles and make the zombie go to each middle of tile and just keep updating 
+		
 		
 		float vectnorm = sqrt(pow(this->direction.x, 2) + pow(this->direction.y, 2));
-		sf::Vector2f normdir(this->direction.x / vectnorm, this->direction.y / vectnorm);
+		sf::Vector2f normdir(this->direction.x / vectnorm, this->direction.y / vectnorm); //get direction between zombie and player, but 'normalized'= unit step
+
+		if (isattacking == true)
+		{
+			normdir = sf::Vector2f(0, 0);
+
+		}
 
 		this->getentity().move(normdir * this->speed * time.asSeconds());
 		this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
+
+
 
 		
 	}
@@ -181,52 +217,63 @@ void Zombie::settextures(sf::Texture& idle, sf::Texture& attack)
 }
 
 
-void Zombie::attackPlayer(Player& player,  UIMainGame&   e)
+void Zombie::attackPlayer(Player& player, UIMainGame& e)
 {
-	float angle = 0;
 	sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
 	sf::FloatRect zombiebounds = this->getentity().getGlobalBounds();
 
-	// printf("%d %d \n", zombie.getposx(), zombie.getposy());
+	this->zombiecollision = zombiebounds;
+	//this->zombiecollision.left += 2;
+	//this->zombiecollision.top += 2;
+	//this->zombiecollision.width -= 4;
+	//this->zombiecollision.height -=4;
+
+	this->zombieAttackCollision = zombiebounds;
+	this->zombieAttackCollision.left -= 65; //20  40
+	this->zombieAttackCollision.top -= 65;
+	this->zombieAttackCollision.width += 130;
+	this->zombieAttackCollision.height += 130;
 
 	sf::FloatRect adjustedBounds = playerBounds;
-	adjustedBounds.left += 10;
+	adjustedBounds.left += 20;
 	adjustedBounds.top += 15;
 	adjustedBounds.width -= (20);
 	adjustedBounds.height -= 15;
 
+	float hittime = 0.4f;
+	bool inCloseRange = this->zombiecollision.intersects(adjustedBounds);
+	bool inAttackRange = this->zombieAttackCollision.intersects(adjustedBounds);
 
-	float hittime = 0.8f;
-
-	if (this->zombiecollision.intersects(adjustedBounds))
+	if (inCloseRange)//register as player is in the range
 	{
+		this->isattacking = true; 
+		accumulatedtime = 0.0f;
+	}
 
-		this->isattacking = true;
+	if (this->isattacking) //if is attacking, check in the bigger range
+	{
 		this->damageTime += this->time.asSeconds();
-		if (this->damageTime >= hittime)
-		{//add the angle between the center of the zombie and the center of the player and add the angle as a argument for the zombieanimations, maybe call it here
+		if (inAttackRange && this->damageTime >= hittime)
+		{
 			this->damageTime = 0.0f;
 			player.updatehealthvalue(10, this->time.asSeconds(), true);
 			e.changehealth(player.health, 100);
-
-
-
 		}
-
-
+		if (accumulatedtime >= 0.50f)
+		{
+			this->isattacking = false;
+			this->damageTime = 0.0f;
+			player.updatehealthvalue(10, this->time.asSeconds(), false); // Consider when this should happen
+		}
 	}
 	else
 	{
+		this->damageTime = 0.0f; 
 		player.updatehealthvalue(10, this->time.asSeconds(), false);
-
-		this->damageTime = 0.0f;
 	}
 
-
-
-
-	
 	float degrees = getPlayerZombieAngle(player);
+	int angle = 0;
 	if (degrees <= 45 && degrees > -45)//right
 	{
 		angle = 2;
@@ -234,22 +281,15 @@ void Zombie::attackPlayer(Player& player,  UIMainGame&   e)
 	else if (degrees <= -45 && degrees > -135)//up
 	{
 		angle = 1;
-
 	}
 	else if (degrees > 45 && degrees <= 135)//down
 	{
-
 		angle = 0;
 	}
 	else//left
 	{
-
 		angle = 3;
 	}
 
-
 	this->zombieanimations(this->time.asSeconds(), angle);
-
-
-
 }

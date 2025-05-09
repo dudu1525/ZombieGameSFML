@@ -16,7 +16,8 @@ public:
 	Zombie();
 	void zombieanimations(float deltatime, int angle);
 	void drawzombiehp(sf::RenderWindow& window);
-	sf::FloatRect zombiecollision;
+	sf::FloatRect zombiecollision;//used to detect the player's hitbox
+	sf::FloatRect zombieAttackCollision; //used as the 'range' of the attack
 
 
 	void checkforplayer(int tiles[HEIGHT][WIDTH]);
@@ -45,6 +46,10 @@ private:
 		int x=0;
 		int y=0;
 	}attack;
+	struct move {
+		int x;
+		int y;
+	}move;
 
 
 	const sf::Time time = sf::seconds(1.0f / 60.0f);
@@ -57,7 +62,9 @@ private:
 	
 	void zombieidle(float deltatime);
 	void zombieattacking(float deltatime,int angle);
+	void zombiemovementanimations(float deltatime, int angle);
 	float currenttime = 0.0f;  //previously static member
+	float attackcurrenttime = 0.0f;
 	float accumulatedtime = 0.0f; //total time
 };
 
