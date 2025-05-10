@@ -17,9 +17,9 @@ public:
 	void givepath(std::string file);
 	void matrixbuilder();
 
-	int tileMatrix[100][150] = { 0 };
+	int tileMatrix[100][150] = { 0 }; //0-nothing, 2-obstacle, 3-player, player-4
 
-	
+	//beside when in [][] inside the matrix, use as x,y,<normal
 
 
 private:

@@ -118,12 +118,14 @@ void MainGame::update(sf::Time timePerFrame)
     for (int i = 0; i < NRZOMBIES; i++)
     {
         zombies[i].checkforplayer(map.tileMatrix);
-        zombies[i].movez(player);
+        zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
+        zombies[i].followPath(this->game->time);
         zombies[i].attackPlayer(player,e);
-
+        zombies[i].updateZombieTiles(map.tileMatrix);
+        //update zombie tile
     }
    
-
+   // player.updateplayertile(map.tileMatrix); //update the current player tile
 
     gameview.setCenter(playerCenter);//set view to player center position
 

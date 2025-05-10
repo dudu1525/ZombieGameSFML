@@ -5,6 +5,7 @@
 #include <iostream>
 #include "Player.h"
 #include "UiMainGame.h"
+#include <queue>
 
 #define WIDTH 150
 #define HEIGHT 100
@@ -23,7 +24,7 @@ public:
 	void checkforplayer(int tiles[HEIGHT][WIDTH]);
 	float getPlayerZombieAngle(Player& player);
 	void attackPlayer(Player& player,  UIMainGame&   e);
-	void movez(Player& player);
+	void movez(Player& player,int tiles[HEIGHT][WIDTH]);
 
 	sf::Texture attacktexture;
 	sf::Texture idletexture;
@@ -53,7 +54,7 @@ private:
 
 
 	const sf::Time time = sf::seconds(1.0f / 60.0f);
-	
+	int calcangle;
 
 	sf::RectangleShape healthbehind;
 	sf::RectangleShape healthtop;
@@ -66,6 +67,32 @@ private:
 	float currenttime = 0.0f;  //previously static member
 	float attackcurrenttime = 0.0f;
 	float accumulatedtime = 0.0f; //total time
+	//------------------------------------------------------------------------//for zombie bfs
+	void bfs(int tiles[HEIGHT][WIDTH]);
+	void reconstructPath();
+public:
+	void followPath(sf::Time deltaTime);
+	void updateZombieTiles(int tiles[HEIGHT][WIDTH]);
+private:
+	struct zombietile {
+		int x;
+		int y;
+	}ztile;
+	
+
+	struct playertile {
+		int x;
+		int y;
+	}ptile;
+	std::vector<sf::Vector2f> path;
+	int currentPathIndex = 0;
+	bool followingPath = false;
+	
+	bool visited[HEIGHT][WIDTH];
+	sf::Vector2i parent[HEIGHT][WIDTH];
+	sf::Vector2i finalPath[HEIGHT][WIDTH];
+	
+
 };
 
 
