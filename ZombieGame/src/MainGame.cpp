@@ -34,6 +34,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
 
 
+
    // zombie1.setpos((float)v[0] - 40, (float)v[1]);
 
    // zombie2.setpos((float)v[0] + 40, (float)v[1]);
