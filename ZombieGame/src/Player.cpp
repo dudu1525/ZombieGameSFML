@@ -1,6 +1,8 @@
 #include "../include/Player.h"
 #include <iostream>
-
+//make bullets do damage to zombies, then make them die when they reach 0 hp, so see in zombies 
+//make collision the zombies so bullets dissapear, 
+//if a zombie dies, a new one respawns, this is the last part
 
 Player::Player(std::string imagepath)
 	

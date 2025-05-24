@@ -9,6 +9,7 @@
 #include "Player.h"
 #include "UiMainGame.h"
 #include "Projectiles.h"
+#include <vector>
 //view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
@@ -30,9 +31,11 @@ private:
 	sf::View gameview;
 	Projectile proj;	
 	Sword sword;
+	int currentZombies=30;
 //got the sowrd active from the player, just use it for collision damage
 
 	Zombie zombies[30];
+
 	//Zombie zombie1;
 	//Zombie zombie2;
 
@@ -44,6 +47,7 @@ private:
 	void detectzombie(Zombie& zombie);
 	void positionzombies();
 	void clearzombies();
+	void deallocateDeadZombies();
 
 
 	void updateplayerhealth();

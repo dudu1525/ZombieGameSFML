@@ -116,6 +116,30 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 }
 
 
+void Zombie::updateZombieHpBar()
+{
+	int x = health * 20 / MAXHP;
+	healthtop.setSize(sf::Vector2f(x, 3));
+
+}
+
+void Zombie::takeDamage(int amount)
+{
+	health = health - amount;
+	if (health <= 0)
+	{
+		healthbehind.setSize(sf::Vector2f(0, 0));
+		healthtop.setSize(sf::Vector2f(0, 0));
+
+
+	}
+	else
+	{
+		updateZombieHpBar();
+
+	}
+}
+
 void Zombie::checkforplayer(int tiles[HEIGHT][WIDTH])
 {
 	float zombiecx = this->getentity().getGlobalBounds().left + this->getentity().getGlobalBounds().width / 2.0f;
@@ -313,6 +337,11 @@ void Zombie::updateZombieTiles(int tiles[HEIGHT][WIDTH])
 
 	}
 	
+}
+
+int Zombie::getHealth()
+{
+	return this->health;
 }
 
 

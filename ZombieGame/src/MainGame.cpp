@@ -41,7 +41,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();
-
+        
      positionzombies();
 
 
@@ -63,7 +63,7 @@ void MainGame::draw()
    //draw game ui items
     this->game->window.draw(map.getmap());
 
-    for (int i=0;i<NRZOMBIES;i++)
+    for (int i=0;i<currentZombies;i++)
     {
         this->game->window.draw(zombies[i].getentity());
 
@@ -91,6 +91,8 @@ void MainGame::draw()
        this->game->window.draw(proj.getbullets()[i].getbullet());
        proj.getbullets()[i].getbullet().move(proj.getspeed() * cos(proj.getangle()[i]), proj.getspeed() * sin(proj.getangle()[i]));
        proj.checkforcollisions(map.tileMatrix,this->game->window);//check for the collision with other objects
+       proj.collisionWithZombies(map.tileMatrix, this->game->window, zombies, currentZombies);
+
    }
 
 
@@ -115,7 +117,7 @@ void MainGame::update(sf::Time timePerFrame)
 
     player.updateplayertile(map.tileMatrix); //update the current player tile
         
-    for (int i = 0; i < NRZOMBIES; i++)
+    for (int i = 0; i < currentZombies; i++)
     {
         zombies[i].checkforplayer(map.tileMatrix);
         zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
@@ -450,7 +452,7 @@ void MainGame::positionzombies()
 {
     int height = 100;
     int width = 150;
-    for (int i = 0; i < 30; i++)
+    for (int i = 0; i < currentZombies; i++)
     {
         int xrand=0, yrand=0;
         xrand = rand() % width + 1;
@@ -476,9 +478,20 @@ void MainGame::clearzombies()
     for (int i=0;i<100;i++)
         for (int j = 0; j < 150; j++)
         {
-            if (map.tileMatrix[i][i] == 3)
-                map.tileMatrix[i][i] = 0;
+            if (map.tileMatrix[i][j] == 3)
+                map.tileMatrix[i][j] = 0;
         }
+}
+
+void MainGame::deallocateDeadZombies()
+{
+    for (int i = 0; i < currentZombies; i++)
+    {
+        if (zombies[i].getHealth() <= 0)
+        {
+            
+        }
+    }
 }
 
 void MainGame::updateplayerhealth()//add invincibility frame, add here the database 
@@ -498,7 +511,7 @@ void MainGame::updateplayerhealth()//add invincibility frame, add here the datab
     if (map.tileMatrix[tiley][tilex] == 1)
     {
         player.updatehealthvalue(10, timePerFrame.asSeconds(),true);
-        e.changehealth(player.health, 100);
+        e.changehealth(player.health, 100);//screen health
     }
     else
         player.updatehealthvalue(10, timePerFrame.asSeconds(), false);

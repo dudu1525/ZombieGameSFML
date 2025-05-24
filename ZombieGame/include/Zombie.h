@@ -9,7 +9,7 @@
 
 #define WIDTH 150
 #define HEIGHT 100
-
+#define MAXHP 100
 class Zombie :public Entity
 {
 
@@ -20,7 +20,8 @@ public:
 	sf::FloatRect zombiecollision;//used to detect the player's hitbox
 	sf::FloatRect zombieAttackCollision; //used as the 'range' of the attack
 
-
+	void updateZombieHpBar();//update ui based on health/maxhealth
+	void takeDamage(int amount);//health- call updatezombiehp 
 	void checkforplayer(int tiles[HEIGHT][WIDTH]);
 	float getPlayerZombieAngle(Player& player);
 	void attackPlayer(Player& player,  UIMainGame&   e);
@@ -73,6 +74,7 @@ private:
 public:
 	void followPath(sf::Time deltaTime);
 	void updateZombieTiles(int tiles[HEIGHT][WIDTH]);
+	int getHealth();
 private:
 	struct zombietile {
 		int x;

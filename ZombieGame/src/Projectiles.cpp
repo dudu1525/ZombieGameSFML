@@ -193,6 +193,45 @@ void Projectile::checkforcollisions(int map[100][150], sf::RenderWindow& window)
 
 }
 
+void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& window, Zombie zombies[],int nrzombies)//mnot realiable, cannot know which bullet hit, just pass the zombies array here and the window
+{
+
+	for (int i = 0; i < bullets.size(); )
+	{
+		Bullet& b = bullets[i];
+		sf::CircleShape bulletShape = b.getbullet();
+		sf::FloatRect bulletBounds = bulletShape.getGlobalBounds();
+
+		bool hit = false;
+
+		for (int j = 0; j < nrzombies; ++j)
+		{
+			Zombie& z = zombies[j];
+			sf::FloatRect zombieBounds = z.getentity().getGlobalBounds();
+
+			if (bulletBounds.intersects(zombieBounds))
+			{
+				z.takeDamage(10); 
+				hit = true;
+				break; 
+			}
+		}
+
+		if (hit)
+		{
+			bullets.erase(bullets.begin() + i);
+			angles.erase(angles.begin() + i);
+		}
+		else
+		{
+			i++;
+		}
+	}
+
+
+
+}
+
 
 
 
@@ -214,6 +253,7 @@ Bullet::Bullet()
 	this->bullet.setRadius(1.2);
 }
 
+//ctrl+k  +c/u
 
 
 

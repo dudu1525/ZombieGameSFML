@@ -2,7 +2,7 @@
 #define PROJECTILES_H
 #include <SFML/Graphics.hpp>
 #include "Player.h"	
-
+#include "Zombie.h"
 class Bullet {
 
 private:
@@ -56,6 +56,7 @@ public:
 	float getspeed();
 	void deallocatebullets(sf::View view);//bullets out of view
 	void checkforcollisions(int map[100][150], sf::RenderWindow& window);
+	void collisionWithZombies(int map[100][150], sf::RenderWindow& window, Zombie zombies[], int nrzombies);
 	
 private:
 	std::vector<Bullet> bullets;
