@@ -42,7 +42,11 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();
-        
+    for (int i = 0; i < NRZOMBIES; i++)
+    {
+        Zombie z;
+        zombies.push_back(z);
+    }
      positionzombies();
 
 
@@ -64,8 +68,12 @@ void MainGame::draw()
    //draw game ui items
     this->game->window.draw(map.getmap());
 
-    for (int i=0;i<currentZombies;i++)
+    for (int i=0;i<zombies.size();i++)
     {
+      
+
+       
+
         this->game->window.draw(zombies[i].getentity());
 
 
@@ -118,15 +126,18 @@ void MainGame::update(sf::Time timePerFrame)
 
     player.updateplayertile(map.tileMatrix); //update the current player tile
         
-    for (int i = 0; i < currentZombies; i++)
+    for (int i = 0; i < zombies.size(); i++)
     {
         zombies[i].checkforplayer(map.tileMatrix);
         zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
         zombies[i].followPath(this->game->time);
         zombies[i].attackPlayer(player,e);
+      
         zombies[i].updateZombieTiles(map.tileMatrix);
+        
         //update zombie tile
     }
+    deallocateDeadZombies();
    
    // player.updateplayertile(map.tileMatrix); //update the current player tile
 
@@ -456,9 +467,10 @@ void MainGame::positionzombies()
     for (int i = 0; i < currentZombies; i++)
     {
         int xrand=0, yrand=0;
-        xrand = rand() % width + 1;
-        yrand = rand() % height + 1;
-        while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 3 || yrand==149 || xrand==100)
+        xrand = rand() % width-10 + 10;
+        yrand = rand() % height-10 + 10;
+        while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
+            || map.tileMatrix[yrand][xrand] == 3 || yrand>=149 || xrand>=100)
         {
             xrand = rand() % width + 1;
             yrand = rand() % height + 1;
@@ -466,12 +478,14 @@ void MainGame::positionzombies()
         }
 
         map.tileMatrix[yrand][xrand] = 3;
-
-        this->zombies[i].setpos(yrand * 32 , xrand * 32 );
-      //  printf("%d %d ",yrand,xrand );
+        
+        this->zombies[i].setpos(xrand * 32 , yrand * 32 );
+       // printf("zombie %d at:%d x,%d y: \n", i, zombies[i].getposx(), zombies[i].getposy());
 
 
     }
+  //  printf(" FINALL");
+
 }
 
 void MainGame::clearzombies()
@@ -486,11 +500,16 @@ void MainGame::clearzombies()
 
 void MainGame::deallocateDeadZombies()
 {
-    for (int i = 0; i < currentZombies; i++)
+    for (int i = 0; i < zombies.size(); )
     {
         if (zombies[i].getHealth() <= 0)
         {
+            zombies.erase(zombies.begin() + i);
             
+        }
+        else//increment if not <=0
+        {
+            ++i;
         }
     }
 }

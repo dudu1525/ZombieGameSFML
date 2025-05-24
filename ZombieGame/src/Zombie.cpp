@@ -1,5 +1,6 @@
 #include "../include/Zombie.h"
 #include <queue>
+#include <stdexcept>
 #define PI 3.14159265
 Zombie::Zombie()
 {
@@ -11,6 +12,7 @@ Zombie::Zombie()
 	this->movetexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Walk.png");
 	spriteentity.setTexture(textureentity);
 	spriteentity.setTextureRect(sf::IntRect(0, 0, 32, 32));
+	
 
 	healthbehind.setFillColor(sf::Color::Black);
 	healthtop.setFillColor(sf::Color::Green);
@@ -268,11 +270,7 @@ void Zombie::reconstructPath()
 
 	std::reverse(path.begin(), path.end());
 
-	// Optional debug
-//	std::cout << "Path (in tiles): ";
-//	for (auto& tile : path)
-	///	std::cout << "(" << tile.x << "," << tile.y << ") ";
-	//std::cout << std::endl;
+	
 }
 
 void Zombie::followPath(sf::Time deltaTime)
@@ -312,17 +310,31 @@ void Zombie::followPath(sf::Time deltaTime)
 		}
 
 		this->getentity().move(normdir * this->speed * time.asSeconds());
+		if (this->getentity().getPosition().x > 5000 || this->getentity().getPosition().y > 3500 || this->getentity().getPosition().x <= 0 || this->getentity().getPosition().y <= 0
+			|| std::isnan(this->getentity().getPosition().x) || std::isinf(this->getentity().getPosition().x) || std::isnan(this->getentity().getPosition().y) || std::isinf(this->getentity().getPosition().y))
+		{
+			printf("in first pos, caused");
+			throw std::runtime_error("Something went wrong!");
+		}
 		this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
 	}
-
-	// Normalize and clamp movement to avoid overshooting
-	sf::Vector2f normalized = adirection / distance;
+	sf::Vector2f normalized;
+	if (distance > 0.00001f)
+		normalized = adirection / distance;
+	else
+		normalized = adirection;
 	float moveStep = speed * deltaTime.asSeconds();
 
 	if (distance < moveStep)
 		moveStep = distance;
 
 	this->getentity().move(normalized * moveStep);
+	if (this->getentity().getPosition().x > 5000 || this->getentity().getPosition().y > 3500 || this->getentity().getPosition().x <= 0 || this->getentity().getPosition().y <= 0
+		|| std::isnan(this->getentity().getPosition().x) || std::isinf(this->getentity().getPosition().x) || std::isnan(this->getentity().getPosition().y) || std::isinf(this->getentity().getPosition().y))
+	{
+		printf("in second pos, caused");
+		throw std::runtime_error("Something went wrong!");
+	}
 	this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
 }
 
@@ -330,9 +342,11 @@ void Zombie::updateZombieTiles(int tiles[HEIGHT][WIDTH])
 {
 	int newtilex = static_cast<int> (this->getentity().getGlobalBounds().left + this->getentity().getGlobalBounds().width / 2.0f) / 32;
 	int newtiley = static_cast<int>(this->getentity().getGlobalBounds().top + this->getentity().getGlobalBounds().height / 2.0f) / 32;
+	//printf("globalbounds: %d %d ", this->getentity().getGlobalBounds().left, this->getentity().getGlobalBounds().top);
 	if (ztile.x != newtilex || newtiley != ztile.y)
 	{
 		tiles[ztile.y][ztile.x] = 0;
+		//printf(" tiles: %d %d ", newtilex, newtiley);
 		tiles[newtiley][newtilex] = 3;
 
 	}

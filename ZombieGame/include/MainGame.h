@@ -33,8 +33,8 @@ private:
 	Sword sword;
 	int currentZombies=30;
 //got the sowrd active from the player, just use it for collision damage
-
-	Zombie zombies[30];
+	std::vector<Zombie> zombies;
+	//Zombie zombies[30];
 
 	//Zombie zombie1;
 	//Zombie zombie2;

@@ -193,7 +193,7 @@ void Projectile::checkforcollisions(int map[100][150], sf::RenderWindow& window)
 
 }
 
-void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& window, Zombie zombies[],int nrzombies)//mnot realiable, cannot know which bullet hit, just pass the zombies array here and the window
+void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombies,int nrzombies)//mnot realiable, cannot know which bullet hit, just pass the zombies array here and the window
 {
 
 	for (int i = 0; i < bullets.size(); )
@@ -204,7 +204,7 @@ void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& windo
 
 		bool hit = false;
 
-		for (int j = 0; j < nrzombies; ++j)
+		for (int j = 0; j < zombies.size(); ++j)
 		{
 			Zombie& z = zombies[j];
 			sf::FloatRect zombieBounds = z.getentity().getGlobalBounds();

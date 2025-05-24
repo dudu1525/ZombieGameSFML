@@ -54,7 +54,7 @@ private:
 	}move;
 
 
-	const sf::Time time = sf::seconds(1.0f / 60.0f);
+	 sf::Time time = sf::seconds(1.0f / 60.0f);
 	int calcangle;
 
 	sf::RectangleShape healthbehind;

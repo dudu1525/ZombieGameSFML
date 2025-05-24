@@ -56,7 +56,7 @@ public:
 	float getspeed();
 	void deallocatebullets(sf::View view);//bullets out of view
 	void checkforcollisions(int map[100][150], sf::RenderWindow& window);
-	void collisionWithZombies(int map[100][150], sf::RenderWindow& window, Zombie zombies[], int nrzombies);
+	void collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombie, int nrzombies);
 	
 private:
 	std::vector<Bullet> bullets;
