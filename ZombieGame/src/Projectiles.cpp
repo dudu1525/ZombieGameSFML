@@ -305,6 +305,35 @@ int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view
 	
 }
 
+void Sword::swordHitZombies(std::vector<Zombie>& zombies)
+{
+		
+	for (int i = 0; i < zombies.size();i++)
+	{
+
+		Zombie& z = zombies[i];
+		sf::FloatRect zombieBounds = z.getentity().getGlobalBounds();
+		
+		if (swordhitbox.intersects(zombieBounds))
+		{
+			z.accumulatedTime += 1.0 / 60;//time accumulated for 1 frame
+			if (z.accumulatedTime >= z.invincibilityTime)
+			{
+				z.accumulatedTime = 0.0f;
+				z.takingDamagefromSword = false;
+			}
+
+			if (z.takingDamagefromSword==false)
+			{
+				z.takeDamage(50);
+				z.takingDamagefromSword = true;
+			}
+			
+		
+		}
+	}
+}
+
 bool& Sword::getactivesword()
 {
 	return this->isactive;
@@ -358,13 +387,17 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 		sf::FloatRect temprect = hitbox.getGlobalBounds();
 		swordhitbox = temprect;
 	
-		
+		if (player.totaltime <  0.4)//register hit in first half only
+		{
+
+		}
 
 		this->hitbox.setPosition(playerCenter + offset);
+		//
 
 }
 
 sf::Sprite& Sword::getfrect()
 {
-	return this->hitbox;
+	return this->hitbox;//sprite of sword
 }

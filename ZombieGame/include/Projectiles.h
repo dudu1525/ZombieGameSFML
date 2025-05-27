@@ -22,14 +22,15 @@ class Sword {
 public:
 	float getangle();
 	int calculateangle(Player player, sf::RenderWindow& window, sf::View view);
+	void swordHitZombies(std::vector<Zombie>& zombie);
 
 	bool& getactivesword();
 	void setposition(Player player);
 	sf::Sprite& getfrect();
 
 private:
-	sf::FloatRect swordhitbox; //will used to set as damage
-	sf::Sprite hitbox;
+	sf::FloatRect swordhitbox; //will used to set as damage //used with intersects
+	sf::Sprite hitbox;//sprite to draw the sword
 	sf::Vector2f offset;
 	int  angle;  //1up, 2right, 0down, 3 left
 	bool fadingIn;

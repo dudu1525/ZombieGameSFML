@@ -75,6 +75,12 @@ public:
 	void followPath(sf::Time deltaTime);
 	void updateZombieTiles(int tiles[HEIGHT][WIDTH]);
 	int getHealth();
+
+	bool takingDamagefromSword=false;
+	float invincibilityTime = 0.8f;
+	float accumulatedTime = 0.0f;
+
+
 private:
 	struct zombietile {
 		int x;

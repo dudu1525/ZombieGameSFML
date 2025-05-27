@@ -329,7 +329,7 @@ void Zombie::followPath(sf::Time deltaTime)
 		moveStep = distance;
 
 	this->getentity().move(normalized * moveStep);
-	if (this->getentity().getPosition().x > 5000 || this->getentity().getPosition().y > 3500 || this->getentity().getPosition().x <= 0 || this->getentity().getPosition().y <= 0
+	if (this->getentity().getPosition().x > 5000 || this->getentity().getPosition().y > 3500 || this->getentity().getPosition().x < 0 || this->getentity().getPosition().y < 0
 		|| std::isnan(this->getentity().getPosition().x) || std::isinf(this->getentity().getPosition().x) || std::isnan(this->getentity().getPosition().y) || std::isinf(this->getentity().getPosition().y))
 	{
 		printf("in second pos, caused");

@@ -137,8 +137,13 @@ void MainGame::update(sf::Time timePerFrame)
         
         //update zombie tile
     }
+    if (player.getstabbing() == true)//register sword hits
+    {
+        sword.swordHitZombies(zombies);
+    }
+
     deallocateDeadZombies();
-   
+    printf("%d\n", zombies.size());
    // player.updateplayertile(map.tileMatrix); //update the current player tile
 
     gameview.setCenter(playerCenter);//set view to player center position
