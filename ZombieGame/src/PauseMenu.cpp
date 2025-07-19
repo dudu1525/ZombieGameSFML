@@ -9,6 +9,7 @@ PauseMenu::~PauseMenu()
 
 PauseMenu::PauseMenu(Game* game, MainGame* mg)
 	:backbtn(200, 50, "Back to Game", 25, sf::Color::Green),  startbtn(200, 50, "Main Menu", 25, sf::Color::Green), optionsbtn(200, 50, "Options", 25, sf::Color::Green)
+	, savegamebtn(200, 50, "Save", 25, sf::Color::Green)
 {
 	printf("\nconstructor of pause menu: done\n");
 	this->game = game;
@@ -75,6 +76,7 @@ void PauseMenu::draw()
 		backbtn.draw_button(this->game->window);
 		optionsbtn.draw_button(this->game->window);
 		startbtn.draw_button(this->game->window);
+		savegamebtn.draw_button(this->game->window);
 
 	}
 
@@ -105,7 +107,8 @@ void PauseMenu::update(sf::Time timePerFrame)
 	float yPos = viewCenter.y + viewSize.y /2 * 0.058;
 	backbtn.set_position(xPos, yPos-250);
 	startbtn.set_position(xPos, yPos+170 );
-	optionsbtn.set_position(xPos, yPos - 100);
+	optionsbtn.set_position(xPos, yPos - 30);
+	savegamebtn.set_position(xPos, yPos - 150);
 	
 		
 	
@@ -145,6 +148,18 @@ void PauseMenu::handleInputs(sf::Event& event)
 		mgrefference->setfrompause();
 
 		this->game->popState();
+
+	}
+
+	if (event.type == sf::Event::MouseButtonPressed && savegamebtn.isMouseIn(this->game->window))
+	{
+
+		//SERIALIZE THE MAIN GAME'S COMPONENTS
+		// 
+		// MGREFFERENCE->SERIALIZE
+		
+
+		
 
 	}
 

@@ -22,6 +22,7 @@ public:
     void set_text();
     void PressedPlay();
     void PressedExit();
+    void PressedLoad();
     sf::View menuview;
 
     MainMenu(Game* game);
@@ -29,6 +30,7 @@ private:
     sf::Text MenuText;
     sf::Font font;
     Button playbtn;
+    Button loadbtn;
     Button exitbtn;
 
     

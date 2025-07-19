@@ -24,6 +24,11 @@ public:
 	virtual void handleInputs(sf::Event& event);
 	
 	void setfrompause();
+	void loadPlayer();
+
+	void serializeData(); //TO BE IMPLEMENTED
+	void deserializeData();
+
 
 private:
 	WorldMap map;  //map used for the game
@@ -48,6 +53,9 @@ private:
 	void positionzombies();
 	void clearzombies();
 	void deallocateDeadZombies();
+	void makeMoreZombies();
+	float accumulatedRespawnTime = 0.0f;
+	sf::Clock accumulatedGameTime;
 
 
 	void updateplayerhealth();

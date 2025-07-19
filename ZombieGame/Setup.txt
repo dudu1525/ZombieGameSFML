@@ -1,0 +1,15 @@
+1. Setup sfml
+
+2. Open properties of the project inside Visual Studio
+
+In general type:
+
+output directory: $(SolutionDir)Build\$(Platform)\$(Configuration)\bin
+intermediate directory: $(SolutionDir)Build\$(Platform)\$(Configuration)\Intermediate
+
+Under C/C++:
+Additional include Directories: $(SolutionDir)sfml\include
+
+Under Linker:
+
+General: Output File: $(OutDir)$(TargetName)$(TargetExt)

@@ -2,7 +2,7 @@
 #include "../include/PauseMenu.h"
 // . means current and .. means root of current
 #define PI 3.14159265
-#define NRZOMBIES 30
+#define MAXZOMBIES 50
 //all zombies stop at a set x coordinate
 MainGame::~MainGame()
 {
@@ -17,19 +17,20 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     float xfloat = (float)game->getWindowWidth()/2;
     float yfloat = (float)game->getWindowHeight()/2;
 
-    int v[2] = { 0,0 };
-    this->game->dm.queryData(v); //retrieve position from database
-    player.setpos((float)v[0],(float) v[1]);
-    player.sethealth(this->game->dm.gethealthdb());
-    e.changehealth(player.health, 100);
+ 
+
+           player.setpos(xfloat, yfloat);
+           player.sethealth(100);
+    player.updateplayertile(map.tileMatrix); //update location in the tilemap
+   
 
    // /float playerCenterX = player.getentity().getGlobalBounds().left + player.getentity().getGlobalBounds().width / 2.0f;
    // float playerCenterY = player.getentity().getGlobalBounds().top + player.getentity().getGlobalBounds().height / 2.0f;
 
     //get tile of player
-    //int playerTileX = static_cast<int>(playerCenterX) / 32;
-    //int playerTileY = static_cast<int>(playerCenterY) / 32;
-    //map.tileMatrix[playerTileY][playerTileX] = 3; //mark player tile
+  //  int playerTileX = static_cast<int>(playerCenterX) / 32;
+   // int playerTileY = static_cast<int>(playerCenterY) / 32;
+    //map.tileMatrix[playerTileY][playerTileX] = 4; //mark player tile
 
 
 
@@ -42,7 +43,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();
-    for (int i = 0; i < NRZOMBIES; i++)
+    for (int i = 0; i < currentZombies; i++)
     {
         Zombie z;
         zombies.push_back(z);
@@ -59,7 +60,16 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
 
 }
+void MainGame::loadPlayer()
+{
+    int v[2] = { 0,0 };
+    this->game->dm.queryData(v); //retrieve position from database
+    player.setpos((float)v[0], (float)v[1]);
+    player.sethealth(this->game->dm.gethealthdb());
+    e.changehealth(player.health, 100); //for testing purposes
+    player.updateplayertile(map.tileMatrix);
 
+}
 void MainGame::draw()
 {
     
@@ -143,7 +153,10 @@ void MainGame::update(sf::Time timePerFrame)
     }
 
     deallocateDeadZombies();
-    printf("%d\n", zombies.size());
+    //make more zombies once 1minute passes, 
+
+
+ //   printf("%d\n", zombies.size());
    // player.updateplayertile(map.tileMatrix); //update the current player tile
 
     gameview.setCenter(playerCenter);//set view to player center position
@@ -157,7 +170,7 @@ void MainGame::update(sf::Time timePerFrame)
     updateplayerhealth();
 
   
-  
+    printf("%f\n\n", this->accumulatedGameTime.getElapsedTime().asSeconds());
 
 
     if (frompause == 1)
@@ -516,6 +529,36 @@ void MainGame::deallocateDeadZombies()
         {
             ++i;
         }
+    }
+}
+
+void MainGame::makeMoreZombies()//not used for now
+{
+
+    if (currentZombies == MAXZOMBIES)
+        return;
+    currentZombies++;
+
+    int currentZombiesinVector = zombies.size();
+    float incrementFrame = 1.0 / 60;
+    accumulatedRespawnTime += incrementFrame;
+
+    if (accumulatedRespawnTime< 3600)
+        return;
+
+    for (int i = currentZombiesinVector; i < currentZombies; i++)
+    {
+        Zombie z;
+        zombies.push_back(z);
+        //position them on the map
+        //update the tilematrix
+        //dont let them spawn in range of +-20 from the player
+        //check bounds
+
+        //call a function that makes that for a specific zombie
+
+        //give the refference of the zombie
+
     }
 }
 

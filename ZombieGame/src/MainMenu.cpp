@@ -8,7 +8,7 @@
 #include <string>
 
 MainMenu::MainMenu(Game* game)
-    :playbtn(230, 100, "PLAY", 50,sf::Color::Green),exitbtn(200,80,"EXIT",40,sf::Color::Cyan)
+    :playbtn(230, 100, "NEW GAME", 30,sf::Color::Green),exitbtn(200,80,"EXIT",40,sf::Color::Cyan), loadbtn(230,100, "LOAD GAME", 30, sf::Color::Green)
 {       
     this->game = game;
     printf("main menu constructor done");
@@ -20,6 +20,7 @@ MainMenu::MainMenu(Game* game)
     float exity = game->getWindowHeight()-exitbtn.getShape().getGlobalBounds().height*1.2;
 
     playbtn.set_position(xPos, yPos);
+    loadbtn.set_position(xPos, yPos+250);
     exitbtn.set_position(5,exity);
 
     if (!game->background.loadFromFile("assets/images/map/background_menu.png"))
@@ -48,6 +49,7 @@ void MainMenu::draw()
     
     exitbtn.draw_button(this->game->window);
     playbtn.draw_button(this->game->window);
+    loadbtn.draw_button(this->game->window);
     
 }
 
@@ -63,6 +65,7 @@ void MainMenu::handleInput()
 
    PressedPlay();
     PressedExit();
+    PressedLoad();
 
 }
 
@@ -101,7 +104,10 @@ void MainMenu::PressedPlay()
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && playbtn.isMouseIn(this->game->window))
     {
-        game->pushState(new MainGame(game));//push the main game as the current state, with the constructor that has as parameter a Game class
+        MainGame* mg = new MainGame(game);
+        //no deserialization needed
+        //player put in a basic location, from the main gmae's constructor
+        game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
     }
 
 
@@ -113,6 +119,19 @@ void MainMenu::PressedExit()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && exitbtn.isMouseIn(this->game->window))
     {
         this->game->window.close();
+    }
+
+}
+
+void MainMenu::PressedLoad()
+{
+    if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && loadbtn.isMouseIn(this->game->window))
+    {
+        MainGame* mg = new MainGame(game);
+        //DESERIALIZATION HERE!!!!
+        mg->loadPlayer();
+        //put the player in the last position
+        game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
     }
 
 }

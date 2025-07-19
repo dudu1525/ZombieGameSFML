@@ -42,8 +42,11 @@ private:
 	Button backbtn;
 	Button startbtn;
 	Button optionsbtn;
+	Button savegamebtn;
 
 	MainGame* mgrefference;
+
+	
 
 };
 
