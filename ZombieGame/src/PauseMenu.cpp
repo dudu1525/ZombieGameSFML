@@ -129,19 +129,23 @@ void PauseMenu::handleInputs(sf::Event& event)
 {
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {
-		printf("handled esc\n");
+		
 		this->game->ispaused = 0;
+		mgrefference->localPassedTime.restart();
 		this->game->popState();
 		
 	}
 
 	if (event.type == sf::Event::MouseButtonPressed && backbtn.isMouseIn(this->game->window))
 	{
+		
 		this->game->ispaused = 0;
+		mgrefference->localPassedTime.restart();
+
 		this->game->popState();
 
 	}
-	else
+	else 
 	if (event.type == sf::Event::MouseButtonPressed && startbtn.isMouseIn(this->game->window))
 	{
 		this->game->ispaused = 0;
@@ -150,7 +154,7 @@ void PauseMenu::handleInputs(sf::Event& event)
 		this->game->popState();
 
 	}
-
+	else //it tries to execute code after it popped ELSE NECESSARY!!!
 	if (event.type == sf::Event::MouseButtonPressed && savegamebtn.isMouseIn(this->game->window))
 	{
 
@@ -158,7 +162,7 @@ void PauseMenu::handleInputs(sf::Event& event)
 		// 
 		// MGREFFERENCE->SERIALIZE
 		
-
+		mgrefference->serializeData();
 		
 
 	}

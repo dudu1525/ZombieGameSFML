@@ -54,6 +54,15 @@ UIMainGame::UIMainGame(sf::View view)
 	healthtop.setPosition(view.getCenter() - sf::Vector2f(view.getSize().x / 2 - 20, view.getSize().y / 2 - 40));
 	healthtop.setFillColor(sf::Color::Red);
 	healthtop.setSize(sf::Vector2f(160, 30));
+
+
+	//time alive
+	timeAlive.setFont(font);
+	timeAlive.setString("Time Alive: ");
+	timeAlive.setCharacterSize(24);
+	
+	timeAlive.setPosition(view.getCenter().x-80, 20);
+	
 }
 
 void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
@@ -77,7 +86,7 @@ void UIMainGame::draw(sf::RenderTarget& target, sf::RenderStates states) const
 		target.draw(bullets);
 		target.draw(bulletsnum);
 	}
-	
+	target.draw(timeAlive);
 		
 }
 
@@ -134,6 +143,14 @@ void UIMainGame::detectslots(sf::RenderWindow& window)//function responsible for
 
 
 
+}
+
+void UIMainGame::updateTimeAliveUI(float time)
+{	
+		int timeint=(int)time;
+		std::string str="Time Alive: " + std::to_string(timeint);
+	timeAlive.setString(str);
+	
 }
 
 void UIMainGame::setbulletsvisible()

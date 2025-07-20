@@ -14,6 +14,7 @@ public:
 	void changehealth(int health, int maxhealth);
 
 	void detectslots(sf::RenderWindow& window);
+	void updateTimeAliveUI(float time);
 
 	void setbulletsvisible();
 	bool& getbulletsvisib();
@@ -44,6 +45,8 @@ private:
 	sf::RectangleShape slot2img;
 	sf::Texture tx1;
 	sf::Texture tx2;
+
+	sf::Text timeAlive;
 
 	
 	

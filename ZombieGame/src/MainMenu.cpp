@@ -108,6 +108,8 @@ void MainMenu::PressedPlay()
         //no deserialization needed
         //player put in a basic location, from the main gmae's constructor
         game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
+
+       // game->pushState(new MainGame(game));
     }
 
 
@@ -127,7 +129,10 @@ void MainMenu::PressedLoad()
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && loadbtn.isMouseIn(this->game->window))
     {
-        MainGame* mg = new MainGame(game);
+       // MainGame* mg = new MainGame(game);
+        const std::string dataFile = "assets/files/gamedata.dat";
+        MainGame* mg = MainGame::deserializeData(game,dataFile);
+
         //DESERIALIZATION HERE!!!!
         mg->loadPlayer();
         //put the player in the last position

@@ -7,6 +7,7 @@
 MainGame::~MainGame()
 {
 }
+
 sf::Clock clock2;
 MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 { 
@@ -70,6 +71,26 @@ void MainGame::loadPlayer()
     player.updateplayertile(map.tileMatrix);
 
 }
+void MainGame::serializeData()
+{
+    printf("serialize called ");
+    const std::string dataFile = "assets/files/gamedata.dat";
+    std::ofstream data(dataFile, std::ios::binary);
+    if (!data.is_open())
+    {
+        printf("couldnt open or create file! ");
+        return;
+    }
+   
+    data.write(reinterpret_cast<const char*>(&serializedPassedTime), sizeof(float));
+    data.close();
+    this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
+
+   std::cout << "data serialized successfully." << std::endl;
+
+    
+}
+
 void MainGame::draw()
 {
     
@@ -131,7 +152,6 @@ void MainGame::update(sf::Time timePerFrame)
 {
     //update player position based on arrows pressed
     sf::Vector2f playerPosition = player.getentity().getPosition();
-    this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
 
     player.updateplayertile(map.tileMatrix); //update the current player tile
@@ -170,7 +190,7 @@ void MainGame::update(sf::Time timePerFrame)
     updateplayerhealth();
 
   
-    printf("%f\n\n", this->accumulatedGameTime.getElapsedTime().asSeconds());
+    e.updateTimeAliveUI(this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime);
 
 
     if (frompause == 1)
@@ -229,6 +249,7 @@ void MainGame::handleInputs(sf::Event& event)
     {
         this->game->window.setView(gameview);
         this->game->ispaused = 0;
+        serializedPassedTime += localPassedTime.getElapsedTime().asSeconds();
         this->game->pushState(new PauseMenu(this->game,this));
     }
 
@@ -350,27 +371,27 @@ void MainGame::handlemapedges()
     float mapWidth = 150 * 32; 
     float mapHeight = 100 * 32; 
 
-    // Get the current size of the view
+    
     sf::Vector2f viewSize = gameview.getSize();
 
-    // Get the player's current position and bounds
+   
     sf::Vector2f playerPosition = player.getentity().getPosition();
     sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
 
-    // Calculate the player's center position
+   
     sf::Vector2f playerCenter = sf::Vector2f(
         playerPosition.x + playerBounds.width / 2,
         playerPosition.y + playerBounds.height / 2
     );
 
-    // Get half of the view size for clamping
+   
     sf::Vector2f halfViewSize = viewSize / 2.0f;
 
-    // Clamp the view center so it doesn't go out of bounds
+    
     float clampedX = std::max(halfViewSize.x, std::min(playerCenter.x, mapWidth - halfViewSize.x));
     float clampedY = std::max(halfViewSize.y, std::min(playerCenter.y, mapHeight - halfViewSize.y));
 
-    // Update the view's center
+    
     gameview.setCenter(clampedX, clampedY);
 }
 
@@ -562,7 +583,7 @@ void MainGame::makeMoreZombies()//not used for now
     }
 }
 
-void MainGame::updateplayerhealth()//add invincibility frame, add here the database 
+void MainGame::updateplayerhealth()//given main game has access to player and ui view, the modif should appear here to the ui
 {
     sf::Time timePerFrame = sf::seconds(1.0f / 60.0f); //get timeperframe as second after
 

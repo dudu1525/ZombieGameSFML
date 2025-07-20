@@ -10,6 +10,7 @@
 #include "UiMainGame.h"
 #include "Projectiles.h"
 #include <vector>
+#include <fstream>
 //view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
@@ -27,44 +28,69 @@ public:
 	void loadPlayer();
 
 	void serializeData(); //TO BE IMPLEMENTED
-	void deserializeData();
+	
 
+	sf::Clock localPassedTime;
 
 private:
 	WorldMap map;  //map used for the game
-	Player player;
 	sf::View gameview;
+
+	Player player;
 	Projectile proj;	
 	Sword sword;
-	int currentZombies=30;
-//got the sowrd active from the player, just use it for collision damage
-	std::vector<Zombie> zombies;
-	//Zombie zombies[30];
 
-	//Zombie zombie1;
-	//Zombie zombie2;
+	int currentZombies=30;
+	std::vector<Zombie> zombies;
+
+	float accumulatedRespawnTime = 0.0f;
+	              //local time+serialized time=total in-game time
+	float serializedPassedTime;
+	
+
 
 	void moveplayerinput(sf::Time deltaTime);
 	void handlemapedges();
 	void handleplayeredges();
 	void handleobjects(sf::Vector2f& direction);
-	void zombiecollision(sf::Vector2f& direction); //not for now
-	void detectzombie(Zombie& zombie);
+
 	void positionzombies();
 	void clearzombies();
 	void deallocateDeadZombies();
 	void makeMoreZombies();
-	float accumulatedRespawnTime = 0.0f;
-	sf::Clock accumulatedGameTime;
-
-
 	void updateplayerhealth();
 
+
+	
+
+
+	public:
+	
+		static MainGame* deserializeData(Game* game, std::string dataFile)//static cuz you dont need an object to call it
+	{
+
+		printf("deserialized called");
+		MainGame* mg=new MainGame(game); //see if player is loaded good
+
+		std::ifstream data(dataFile, std::ios::binary);
+		if (!data.is_open())
+		{
+			printf("couldnt open file! ");
+			return nullptr;
+		}
+		data.read(reinterpret_cast<char*>(&mg->serializedPassedTime), sizeof(mg->serializedPassedTime));
+
+
+
+		std::cout << "data deserialied succesfully" << std::endl;
+		return mg;
+	}
+	
 };
 static sf::View uiview;
 static UIMainGame   e(uiview);
+static bool frompause = 0;
 
-	static bool frompause = 0;
 
 
 #endif
