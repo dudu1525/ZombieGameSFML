@@ -117,6 +117,24 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 	
 }
 
+void Zombie::serializeZombieData(std::ofstream& data)
+{
+	data.write(reinterpret_cast<const char*>(&health), sizeof(health));
+	data.write(reinterpret_cast<const char*>(&posx), sizeof(posx));
+	data.write(reinterpret_cast<const char*>(&posy), sizeof(posy));
+
+}
+
+void Zombie::deserializeZombieData(std::ifstream& data)
+{
+	data.read(reinterpret_cast<char*>(&health), sizeof(health));
+	data.read(reinterpret_cast<char*>(&posx), sizeof(posx));
+	data.read(reinterpret_cast<char*>(&posy), sizeof(posy));
+	this->setpos(posx, posy);
+	this->updateZombieHpBar();
+	//update hp of zombies on the ui
+}
+
 
 void Zombie::updateZombieHpBar()
 {

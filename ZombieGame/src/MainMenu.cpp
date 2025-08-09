@@ -7,6 +7,9 @@
 #include <map>
 #include <string>
 
+const std::string DATAFILE= "assets/files/gamedata.dat";
+ std::ifstream FILEINPUT("assets/files/gamedata.dat");
+
 MainMenu::MainMenu(Game* game)
     :playbtn(230, 100, "NEW GAME", 30,sf::Color::Green),exitbtn(200,80,"EXIT",40,sf::Color::Cyan), loadbtn(230,100, "LOAD GAME", 30, sf::Color::Green)
 {       
@@ -49,6 +52,8 @@ void MainMenu::draw()
     
     exitbtn.draw_button(this->game->window);
     playbtn.draw_button(this->game->window);
+
+    if (!is_empty(FILEINPUT))
     loadbtn.draw_button(this->game->window);
     
 }
@@ -65,6 +70,8 @@ void MainMenu::handleInput()
 
    PressedPlay();
     PressedExit();
+
+    if (!is_empty(FILEINPUT))
     PressedLoad();
 
 }
@@ -128,14 +135,11 @@ void MainMenu::PressedExit()
 void MainMenu::PressedLoad()
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && loadbtn.isMouseIn(this->game->window))
-    {
+    {     //NEED TO CHECK IF THE FILE IS NOT EMPTY, IF IT IS, DO SMTH ON THE SCREEN!!!!!!!!!!
        // MainGame* mg = new MainGame(game);
-        const std::string dataFile = "assets/files/gamedata.dat";
-        MainGame* mg = MainGame::deserializeData(game,dataFile);
-
-        //DESERIALIZATION HERE!!!!
-        mg->loadPlayer();
-        //put the player in the last position
+        
+        MainGame* mg = MainGame::deserializeData(game,DATAFILE);
+        mg->loadPlayer();//put the player in the last position
         game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
     }
 

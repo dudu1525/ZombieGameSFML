@@ -20,7 +20,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
  
 
-           player.setpos(xfloat, yfloat);
+           player.setpos(xfloat, yfloat);//basic coords and health
            player.sethealth(100);
     player.updateplayertile(map.tileMatrix); //update location in the tilemap
    
@@ -43,17 +43,18 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
    
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
-    map.matrixbuilder();
-    for (int i = 0; i < currentZombies; i++)
+    map.matrixbuilder();//construct based on rocks and so on
+    for (int i = 0; i < currentZombies; i++)//initially set to 30
     {
         Zombie z;
         zombies.push_back(z);
     }
-     positionzombies();
+     positionzombies();//position zombies randomly on the map
 
 
-    gameview = this->game->window.getView();
-        
+
+     //view related
+    gameview = this->game->window.getView();   
     gameview.zoom(0.3);
 
 
@@ -76,15 +77,25 @@ void MainGame::serializeData()
     printf("serialize called ");
     const std::string dataFile = "assets/files/gamedata.dat";
     std::ofstream data(dataFile, std::ios::binary);
-    if (!data.is_open())
+    if (!data.is_open())  
     {
         printf("couldnt open or create file! ");
         return;
     }
    
     data.write(reinterpret_cast<const char*>(&serializedPassedTime), sizeof(float));
+    data.write(reinterpret_cast<const char*>(&currentZombies), sizeof(int));
+    //serialize current nr of zombies   
+    //serialize each zombie
+    for (int i = 0; i < currentZombies; i++)
+    {
+        zombies[i].serializeZombieData(data);
+    }
+
+
     data.close();
     this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
+
 
    std::cout << "data serialized successfully." << std::endl;
 
@@ -176,7 +187,7 @@ void MainGame::update(sf::Time timePerFrame)
     //make more zombies once 1minute passes, 
 
 
- //   printf("%d\n", zombies.size());
+    printf("zombie vector size: %d\ncurrent zombie counter:%d\n", zombies.size(), this->currentZombies);
    // player.updateplayertile(map.tileMatrix); //update the current player tile
 
     gameview.setCenter(playerCenter);//set view to player center position
@@ -551,6 +562,7 @@ void MainGame::deallocateDeadZombies()
             ++i;
         }
     }
+    currentZombies = zombies.size();
 }
 
 void MainGame::makeMoreZombies()//not used for now

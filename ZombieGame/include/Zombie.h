@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "UiMainGame.h"
 #include <queue>
+#include <fstream>
 
 #define WIDTH 150
 #define HEIGHT 100
@@ -19,6 +20,8 @@ public:
 	void drawzombiehp(sf::RenderWindow& window);
 	sf::FloatRect zombiecollision;//used to detect the player's hitbox
 	sf::FloatRect zombieAttackCollision; //used as the 'range' of the attack
+	void serializeZombieData(std::ofstream& data);
+	void deserializeZombieData(std::ifstream& data);
 
 	void updateZombieHpBar();//update ui based on health/maxhealth
 	void takeDamage(int amount);//health- call updatezombiehp 

@@ -38,8 +38,8 @@ void WorldMap::matrixbuilder()
     sf::Color watercolor(99, 155, 255);
 
    
-    for (int i = 0; i < tilesY; ++i) {
-        for (int j = 0; j < tilesX; ++j) {
+    for (int i = 0; i < tilesY-1; ++i) {
+        for (int j = 0; j < tilesX-1; ++j) {
 
             int pixelX = j * tileSize + tileSize / 2;
             int pixelY = i * tileSize + tileSize / 2;

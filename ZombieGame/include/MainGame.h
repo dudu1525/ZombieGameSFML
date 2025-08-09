@@ -33,15 +33,15 @@ public:
 	sf::Clock localPassedTime;
 
 private:
-	WorldMap map;  //map used for the game
+	WorldMap map;  //!!------------------------needs to be updated after zombie serialization is done
 	sf::View gameview;
 
 	Player player;
 	Projectile proj;	
 	Sword sword;
 
-	int currentZombies=30;
-	std::vector<Zombie> zombies;
+	int currentZombies=30;//!!!!!-----------------next to be serialized as well as the zombies
+	std::vector<Zombie> zombies; //position, health, their number from ^^
 
 	float accumulatedRespawnTime = 0.0f;
 	              //local time+serialized time=total in-game time
@@ -79,8 +79,13 @@ private:
 			return nullptr;
 		}
 		data.read(reinterpret_cast<char*>(&mg->serializedPassedTime), sizeof(mg->serializedPassedTime));
-
-
+		data.read(reinterpret_cast<char*>(&mg->currentZombies), sizeof(mg->currentZombies));
+		mg->zombies.resize(mg->currentZombies);
+		for (int i = 0; i < mg->currentZombies; i++)
+		{
+			mg->zombies[i].deserializeZombieData(data);
+		}
+		//update tiles? or updated inside update func
 
 		std::cout << "data deserialied succesfully" << std::endl;
 		return mg;

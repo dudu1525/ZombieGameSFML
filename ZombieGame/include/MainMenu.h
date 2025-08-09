@@ -4,6 +4,7 @@
 #include <iostream>
 #include <SFML/Graphics.hpp>
 #include "Button.h"
+#include <fstream>
 //view here, has zoom 1, set to 0,0, size 1920, 1080
 
 class MainMenu:public States {//extends states
@@ -32,6 +33,10 @@ private:
     Button playbtn;
     Button loadbtn;
     Button exitbtn;
+    bool is_empty(std::ifstream& file) //returns true if the file is empty
+    {   
+        return file.peek() == std::ifstream::traits_type::eof();
+    }
 
     
 };
