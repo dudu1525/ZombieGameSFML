@@ -10,7 +10,13 @@ MainGame::~MainGame()
 
 sf::Clock clock2;
 MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
-{ 
+{  
+    //initialize textures
+    tm.loadTexture("zombie_idle", "assets/images/Apocalypse Character Pack/Zombie/Idle.png");
+    tm.loadTexture("zombie_move", "assets/images/Apocalypse Character Pack/Zombie/Walk.png");
+    tm.loadTexture("zombie_attack", "assets/images/Apocalypse Character Pack/Zombie/Attack.png");
+
+
     srand(time(NULL));
 	this->game = game;
 	printf(" main game constructor done");
@@ -46,7 +52,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     map.matrixbuilder();//construct based on rocks and so on
     for (int i = 0; i < currentZombies; i++)//initially set to 30
     {
-        Zombie z;
+        Zombie z(&tm);
         zombies.push_back(z);
     }
      positionzombies();//position zombies randomly on the map
@@ -115,7 +121,7 @@ void MainGame::draw()
       
 
        
-
+        
         this->game->window.draw(zombies[i].getentity());
 
 
@@ -154,7 +160,7 @@ void MainGame::draw()
    sf::RenderStates rs;
    //  UIMainGame   e(uiview);
    // e.draw(this->game->window,rs);
-    e.changestamina(100, player.stamina, this->game->window, rs,this->game->window);
+    e.changestamina(100, player.stamina, this->game->window, rs,this->game->window); //here drawing of ui elements also happens
    
 
 }
@@ -184,10 +190,11 @@ void MainGame::update(sf::Time timePerFrame)
     }
 
     deallocateDeadZombies();
+    makeMoreZombies();
     //make more zombies once 1minute passes, 
 
 
-    printf("zombie vector size: %d\ncurrent zombie counter:%d\n", zombies.size(), this->currentZombies);
+    printf("zombie vector size: %d\ncurrent zombie counter:%d\nmax current zombies:%d\n", zombies.size(), this->currentZombies, this->maxCurrentZombies);
    // player.updateplayertile(map.tileMatrix); //update the current player tile
 
     gameview.setCenter(playerCenter);//set view to player center position
@@ -200,8 +207,9 @@ void MainGame::update(sf::Time timePerFrame)
     
     updateplayerhealth();
 
-  
+    
     e.updateTimeAliveUI(this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime);
+    accumulatedRespawnTime = this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime;
 
 
     if (frompause == 1)
@@ -567,32 +575,48 @@ void MainGame::deallocateDeadZombies()
 
 void MainGame::makeMoreZombies()//not used for now
 {
+    static float timeSinceMadeMoreZombies = 0.0f;
 
     if (currentZombies == MAXZOMBIES)
         return;
-    currentZombies++;
+    timeSinceMadeMoreZombies += 1.0 / 60;
+  
+    if (timeSinceMadeMoreZombies < 0.99)
+        return;
+    timeSinceMadeMoreZombies = 0.0;
+    
+    //need to make it once a sec passes to be checked
+   
+    if ((int)accumulatedRespawnTime % 60 != 0)
+        return;
+    if ((int)accumulatedRespawnTime == 0)
+        return;
+    
+    if (maxCurrentZombies < currentZombies)
+        maxCurrentZombies = currentZombies;
+
+    maxCurrentZombies++;
 
     int currentZombiesinVector = zombies.size();
-    float incrementFrame = 1.0 / 60;
-    accumulatedRespawnTime += incrementFrame;
+    
 
-    if (accumulatedRespawnTime< 3600)
-        return;
-
-    for (int i = currentZombiesinVector; i < currentZombies; i++)
+    for (int i = currentZombiesinVector; i < maxCurrentZombies; i++)
     {
-        Zombie z;
-        zombies.push_back(z);
-        //position them on the map
-        //update the tilematrix
-        //dont let them spawn in range of +-20 from the player
-        //check bounds
+        Zombie z(&tm);
+        positionZombieOnMap(z);
+        zombies.push_back(z);   
+            
+       
+        //^^update the tilematrix
+        //^^dont let them spawn in range of +-20 from the player
+        //^^check bounds
 
         //call a function that makes that for a specific zombie
 
         //give the refference of the zombie
 
     }
+    
 }
 
 void MainGame::updateplayerhealth()//given main game has access to player and ui view, the modif should appear here to the ui
@@ -616,5 +640,28 @@ void MainGame::updateplayerhealth()//given main game has access to player and ui
     }
     else
         player.updatehealthvalue(10, timePerFrame.asSeconds(), false);
+
+}
+
+void MainGame::positionZombieOnMap(Zombie& zombie)
+{
+    int xrand = 0, yrand = 0;
+    xrand = rand() % WIDTH;
+    yrand = rand() % HEIGHT;
+    int xplayer = player.getposx();
+    int yplayer = player.getposy();
+    while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
+        || map.tileMatrix[yrand][xrand] == 3 || yrand >= 149 || xrand >= 100 || (xrand<xplayer+32*20 && xrand>xplayer-32*20)
+        || (yrand<yplayer + 32 * 20 && yrand>yplayer - 32 * 20))
+    {
+        xrand = rand() % WIDTH;
+        yrand = rand() % HEIGHT;
+
+
+    }
+    printf("newzombiepos:%d %d\n", xrand * 32, yrand * 32);
+    map.tileMatrix[yrand][xrand] = 3;
+    zombie.setpos(xrand * 32, yrand * 32);
+
 
 }

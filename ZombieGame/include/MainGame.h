@@ -7,6 +7,7 @@
 #include "Button.h"
 #include "WorldMap.h"
 #include "Player.h"
+#include "TextureManager.h"
 #include "UiMainGame.h"
 #include "Projectiles.h"
 #include <vector>
@@ -17,7 +18,7 @@ class MainGame:public States {
 	~MainGame();
 public:
 	MainGame(Game* game);
-
+	//inherited from state machine
 	virtual void draw();
 	virtual void update(sf::Time timePerFrame);
 	virtual void handleInput();
@@ -25,26 +26,26 @@ public:
 	virtual void handleInputs(sf::Event& event);
 	
 	void setfrompause();
+
+
+
+	//load player and game data
 	void loadPlayer();
-
-	void serializeData(); //TO BE IMPLEMENTED
-	
-
+	void serializeData(); 
 	sf::Clock localPassedTime;
 
 private:
-	WorldMap map;  //!!------------------------needs to be updated after zombie serialization is done
+	WorldMap map;  
 	sf::View gameview;
-
 	Player player;
 	Projectile proj;	
 	Sword sword;
 
-	int currentZombies=30;//!!!!!-----------------next to be serialized as well as the zombies
-	std::vector<Zombie> zombies; //position, health, their number from ^^
+	int currentZombies=30;//zombies that are in real time on the map
+	int maxCurrentZombies=30;//total zombies that should be on the map
+	std::vector<Zombie> zombies; 
 
-	float accumulatedRespawnTime = 0.0f;
-	              //local time+serialized time=total in-game time
+	float accumulatedRespawnTime = 0.0f; //local time+serialized time=total in-game time
 	float serializedPassedTime;
 	
 
@@ -59,8 +60,10 @@ private:
 	void deallocateDeadZombies();
 	void makeMoreZombies();
 	void updateplayerhealth();
+	void positionZombieOnMap(Zombie& zombie);
 
 
+	TextureManager tm;
 	
 
 
@@ -86,7 +89,7 @@ private:
 			mg->zombies[i].deserializeZombieData(data);
 		}
 		//update tiles? or updated inside update func
-
+		//deserialize maxcurrentzombies also
 		std::cout << "data deserialied succesfully" << std::endl;
 		return mg;
 	}
@@ -99,3 +102,6 @@ static bool frompause = 0;
 
 
 #endif
+
+
+//now to do respawning and creating more zombies!

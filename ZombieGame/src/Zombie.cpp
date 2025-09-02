@@ -1,4 +1,5 @@
 #include "../include/Zombie.h"
+
 #include <queue>
 #include <stdexcept>
 #define PI 3.14159265
@@ -6,11 +7,11 @@ Zombie::Zombie()
 {
 
 	this->speed = 160;
-	this->textureentity.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Idle.png");
+	//this->textureentity.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Idle.png");
 		
-	this->attacktexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Attack.png");
-	this->movetexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Walk.png");
-	spriteentity.setTexture(textureentity);
+	//this->attacktexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Attack.png");
+	//this->movetexture.loadFromFile("assets/images/Apocalypse Character Pack/Zombie/Walk.png");
+	//spriteentity.setTexture(textureentity);
 	spriteentity.setTextureRect(sf::IntRect(0, 0, 32, 32));
 	
 
@@ -23,7 +24,25 @@ Zombie::Zombie()
 
 }
 
-void Zombie::zombieidle(float deltatime)
+Zombie::Zombie(TextureManager* tm)
+{	
+
+	textmang = tm;
+	spriteentity.setTexture(tm->getRef("zombie_idle"));
+	
+	spriteentity.setTextureRect(sf::IntRect(0, 0, 32, 32));
+
+
+	healthbehind.setFillColor(sf::Color::Black);
+	healthtop.setFillColor(sf::Color::Green);
+
+	healthbehind.setSize(sf::Vector2f(20, 3));
+	healthtop.setSize(sf::Vector2f(20, 3));
+
+
+}
+
+void Zombie::zombieidle(float deltatime )
 {
 	float totaltime = 0.25f; 
 
@@ -31,7 +50,8 @@ void Zombie::zombieidle(float deltatime)
 	if (currenttime >= totaltime) 
 	{
 		currenttime = 0.0f; 
-		spriteentity.setTexture(textureentity);
+		//spriteentity.setTexture(textureentity);
+		spriteentity.setTexture(textmang->getRef("zombie_idle"));
 		spriteentity.setTextureRect(sf::IntRect(idle.x * 32, idle.y * 32, 32, 32));
 		idle.x = (idle.x + 1) % 5; 
 	}
@@ -45,7 +65,8 @@ void Zombie::zombieattacking(float deltatime, int angle)
 	if (attackcurrenttime >= totaltime)
 	{
 		attackcurrenttime = 0.0f;
-		spriteentity.setTexture(attacktexture); 
+		//spriteentity.setTexture(attacktexture); 
+		spriteentity.setTexture(textmang->getRef("zombie_attack"));
 		spriteentity.setTextureRect(sf::IntRect(attack.x * 32, angle * 32, 32, 32));
 		attack.x = (attack.x + 1) % 5; 
 	}
@@ -64,7 +85,8 @@ void Zombie::zombiemovementanimations(float deltatime, int angle)
 	if (currenttime >= totaltime)
 	{
 		currenttime = 0.0f;
-		spriteentity.setTexture(movetexture);
+		//spriteentity.setTexture(movetexture);
+		spriteentity.setTexture(textmang->getRef("zombie_move"));
 		spriteentity.setTextureRect(sf::IntRect(move.x * 32,angle* 32, 32, 32));
 		move.x = (move.x + 1) % 10;
 
@@ -422,11 +444,6 @@ bool& Zombie::getisattacking()
 	return this->isattacking;
 }
 
-void Zombie::settextures(sf::Texture& idle, sf::Texture& attack)
-{
-	this->attacktexture = attack;
-	this->idletexture = idle;
-}
 
 
 void Zombie::attackPlayer(Player& player, UIMainGame& e)

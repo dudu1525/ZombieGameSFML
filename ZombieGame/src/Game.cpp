@@ -5,7 +5,7 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
 
-Game::Game() //constructor
+Game::Game() //constructor //MAKE CONSTRUCTOR OF TEXTURE
 	:view(sf::FloatRect(0, 0,1920, 1080)), dm("gamedb.db")
 {
 	window.setView(view);

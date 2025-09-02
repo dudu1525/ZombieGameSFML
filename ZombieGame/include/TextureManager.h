@@ -10,8 +10,7 @@ class TextureManager
 {
 private:
 
-    /* Array of textures used */
-  //  std::map<std::string, sf::Texture> textures;
+   
 
 public:
     std::map<std::string, sf::Texture> textures;

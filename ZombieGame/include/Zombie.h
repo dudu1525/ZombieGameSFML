@@ -7,6 +7,7 @@
 #include "UiMainGame.h"
 #include <queue>
 #include <fstream>
+#include "TextureManager.h"
 
 #define WIDTH 150
 #define HEIGHT 100
@@ -16,6 +17,7 @@ class Zombie :public Entity
 
 public:
 	Zombie();
+	Zombie(TextureManager* tm);
 	void zombieanimations(float deltatime, int angle);
 	void drawzombiehp(sf::RenderWindow& window);
 	sf::FloatRect zombiecollision;//used to detect the player's hitbox
@@ -30,12 +32,12 @@ public:
 	void attackPlayer(Player& player,  UIMainGame&   e);
 	void movez(Player& player,int tiles[HEIGHT][WIDTH]);
 
-	sf::Texture attacktexture;
-	sf::Texture idletexture;
-	sf::Texture movetexture;
+	
+
+
 	bool& getisattacking();
 
-	void settextures(sf::Texture& idle, sf::Texture& attack);
+	
 	float damageTime = 0.0f;
 
 private:
@@ -74,6 +76,8 @@ private:
 	//------------------------------------------------------------------------//for zombie bfs
 	void bfs(int tiles[HEIGHT][WIDTH]);
 	void reconstructPath();
+
+	TextureManager* textmang=nullptr;
 public:
 	void followPath(sf::Time deltaTime);
 	void updateZombieTiles(int tiles[HEIGHT][WIDTH]);
