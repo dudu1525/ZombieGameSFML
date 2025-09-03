@@ -2,9 +2,10 @@
 
 #ifndef DBManager_h
 #define  DBManager_h
-#include "/proiecte/ZombieGame/ZombieGame/sqlite/sqlite3.h"
+//#include "/proiecte/ZombieGame/ZombieGame/sqlite/sqlite3.h"
 #include <string>
 #include <iostream>
+#include "sqlite3.h"
 
 class DatabaseManager {
 public:
