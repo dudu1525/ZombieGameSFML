@@ -61,8 +61,8 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
      //view related
     gameview = this->game->window.getView();   
-    gameview.zoom(0.3);
-
+   // gameview.zoom(0.3);
+    gameview.zoom(1.7);
 
     
 
@@ -190,7 +190,9 @@ void MainGame::update(sf::Time timePerFrame)
     }
 
     deallocateDeadZombies();
+    printf("before making more\n");
     makeMoreZombies();
+    printf("after making more\n");
     //make more zombies once 1minute passes, 
 
 
@@ -575,6 +577,7 @@ void MainGame::deallocateDeadZombies()
 
 void MainGame::makeMoreZombies()//not used for now
 {
+    printf("inside the function\n");
     static float timeSinceMadeMoreZombies = 0.0f;
 
     if (currentZombies == MAXZOMBIES)
@@ -587,7 +590,7 @@ void MainGame::makeMoreZombies()//not used for now
     
     //need to make it once a sec passes to be checked
    
-    if ((int)accumulatedRespawnTime % 60 != 0)
+    if ((int)accumulatedRespawnTime % 20 != 0)
         return;
     if ((int)accumulatedRespawnTime == 0)
         return;
@@ -602,20 +605,15 @@ void MainGame::makeMoreZombies()//not used for now
 
     for (int i = currentZombiesinVector; i < maxCurrentZombies; i++)
     {
+        printf("inside the for with index:%d\n", i);
         Zombie z(&tm);
         positionZombieOnMap(z);
         zombies.push_back(z);   
-            
+        printf("inside the for with index,but after:%d\n", i);
        
-        //^^update the tilematrix
-        //^^dont let them spawn in range of +-20 from the player
-        //^^check bounds
-
-        //call a function that makes that for a specific zombie
-
-        //give the refference of the zombie
 
     }
+    printf("after the function");
     
 }
 
@@ -648,15 +646,19 @@ void MainGame::positionZombieOnMap(Zombie& zombie)
     int xrand = 0, yrand = 0;
     xrand = rand() % WIDTH;
     yrand = rand() % HEIGHT;
+    
     int xplayer = player.getposx();
     int yplayer = player.getposy();
     while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
-        || map.tileMatrix[yrand][xrand] == 3 || yrand >= 149 || xrand >= 100 || (xrand<xplayer+32*20 && xrand>xplayer-32*20)
-        || (yrand<yplayer + 32 * 20 && yrand>yplayer - 32 * 20))
+        || map.tileMatrix[yrand][xrand] == 3 || yrand >= 149 || xrand >= 100 || (xrand*32<xplayer+32*20 && xrand*32>xplayer-32*20)
+        || (yrand * 32 <yplayer + 32 * 20 && yrand * 32 >yplayer - 32 * 20))
     {
         xrand = rand() % WIDTH;
         yrand = rand() % HEIGHT;
+     //   printf("xrand:%d, yrand:%d, xplayer:%d, yplayer:%d\n",xrand,yrand, xplayer, yplayer);
+       // printf("%d", (xrand<xplayer + 32 * 20 && xrand>xplayer - 32 * 20) || (yrand*32<yplayer + 32 * 20 && yrand * 32>yplayer - 32 * 20));
 
+      
 
     }
     printf("newzombiepos:%d %d\n", xrand * 32, yrand * 32);
