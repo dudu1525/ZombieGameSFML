@@ -1,7 +1,7 @@
 #ifndef MAINGAME_H
 #define MAINGAME_H
 #include <iostream>
-#include <SFML/Graphics.hpp>
+
 #include "States.h"
 #include "Zombie.h"
 #include "Button.h"

@@ -2,27 +2,25 @@
 #define BUTTON_H
 #include <iostream>
 #include <SFML/Graphics.hpp>
-
+#include <SFML/Window/Mouse.hpp>
 
 
 class Button {
 public:
-	Button(int x,int y,int x2,int y2);
-	Button(int x,int y,std::string name,int size,sf::Color colour);
-	~Button();
-
 	
-	void set_button();
+	Button(int x,int y,std::string name,int size,sf::Color colour);
+	
 	void set_position(int x,int y);
 	void draw_button(sf::RenderWindow& window);//draw shape+text
-	void hover_button(sf::RenderWindow& window);
 
 	bool isMouseIn(sf::RenderWindow& window);
 
 	const sf::RectangleShape& getShape() const;
-	const sf::Text& getText() const;
+
 private:
 	void centerText(int x,int y);
+	void hover_button(sf::RenderWindow& window);
+	void set_button();
 
 	sf::RectangleShape button;
 	sf::Text button_text;

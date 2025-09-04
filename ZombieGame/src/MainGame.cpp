@@ -61,8 +61,8 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
      //view related
     gameview = this->game->window.getView();   
-   // gameview.zoom(0.3);
-    gameview.zoom(1.7);
+    gameview.zoom(0.3);
+   //gameview.zoom(1.7);
 
     
 
@@ -177,7 +177,7 @@ void MainGame::update(sf::Time timePerFrame)
     {
         zombies[i].checkforplayer(map.tileMatrix);
         zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
-        zombies[i].followPath(this->game->time);
+        zombies[i].followPath(this->game->timePerFrame);
         zombies[i].attackPlayer(player,e);
       
         zombies[i].updateZombieTiles(map.tileMatrix);
@@ -190,9 +190,9 @@ void MainGame::update(sf::Time timePerFrame)
     }
 
     deallocateDeadZombies();
-    printf("before making more\n");
+    
     makeMoreZombies();
-    printf("after making more\n");
+   
     //make more zombies once 1minute passes, 
 
 
@@ -577,7 +577,7 @@ void MainGame::deallocateDeadZombies()
 
 void MainGame::makeMoreZombies()//not used for now
 {
-    printf("inside the function\n");
+   
     static float timeSinceMadeMoreZombies = 0.0f;
 
     if (currentZombies == MAXZOMBIES)
@@ -605,15 +605,15 @@ void MainGame::makeMoreZombies()//not used for now
 
     for (int i = currentZombiesinVector; i < maxCurrentZombies; i++)
     {
-        printf("inside the for with index:%d\n", i);
+       
         Zombie z(&tm);
         positionZombieOnMap(z);
         zombies.push_back(z);   
-        printf("inside the for with index,but after:%d\n", i);
+    
        
 
     }
-    printf("after the function");
+
     
 }
 

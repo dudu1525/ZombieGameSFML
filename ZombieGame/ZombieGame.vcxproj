@@ -173,7 +173,6 @@
     <ClCompile Include="src\PauseMenu.cpp" />
     <ClCompile Include="src\Player.cpp" />
     <ClCompile Include="src\Projectiles.cpp" />
-    <ClCompile Include="src\States.cpp" />
     <ClCompile Include="src\TextureManager.cpp" />
     <ClCompile Include="src\UIMainGame.cpp" />
     <ClCompile Include="src\WorldMap.cpp" />

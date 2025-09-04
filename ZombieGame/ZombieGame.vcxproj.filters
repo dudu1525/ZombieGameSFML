@@ -54,9 +54,6 @@
     <ClCompile Include="src\Player.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="src\States.cpp">
-      <Filter>Source Files\src</Filter>
-    </ClCompile>
     <ClCompile Include="src\TextureManager.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>

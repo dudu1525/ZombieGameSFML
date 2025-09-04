@@ -1,8 +1,6 @@
-
-
 #ifndef DBManager_h
 #define  DBManager_h
-//#include "/proiecte/ZombieGame/ZombieGame/sqlite/sqlite3.h"
+
 #include <string>
 #include <iostream>
 #include "sqlite3.h"
@@ -13,7 +11,7 @@ public:
     DatabaseManager(const std::string& dbName);
     ~DatabaseManager();
 
-    // Public Methods
+ 
     bool createTable();
     bool insertData(int posx, int posy, int health, int level, int exp);
     void queryData(int v[2]);
@@ -21,7 +19,7 @@ public:
     int gethealthdb();
 
 
-    bool updatePosition(int posX, int posY);  // New method to update player position
+    bool updatePosition(int posX, int posY);  
 
     void updateHealthdb(int new_health);
 

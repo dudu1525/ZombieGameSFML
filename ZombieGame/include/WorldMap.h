@@ -31,8 +31,6 @@ private:
 	sf::Sprite spritemap;   
 	sf::Texture texturemap;
 
-
-
 	sf::VertexArray m_vertices;  //vertex array used for generating all the tiles
 	sf::Texture m_tileset;//tiles for generation
 

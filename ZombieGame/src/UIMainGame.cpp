@@ -95,8 +95,8 @@ void UIMainGame::changestamina(int stamina,int currentstamina, sf::RenderTarget&
 	int finallenstamina=0;
 	if (currentstamina > 0)
 	{
-		int perc = (currentstamina * 100) / stamina;
-		finallenstamina = (perc * 160) / 100;
+		int perc = (currentstamina * 100) / stamina; //stamina is 100 here
+		finallenstamina = (perc * 160) / 100;//160=size of stamina box
 	}
 	else
 		finallenstamina = 0;
@@ -113,7 +113,7 @@ void UIMainGame::changehealth(int health, int maxhealth)
 	int finalhealth = 0;
 	if (health > 0)
 	{//perc not necessary as health is 100, so *100/100 makes no sense
-		finalhealth = (health * 160) / 100;
+		finalhealth = (health * 160) / 100; //health bar length=160
 	}
 	else
 		finalhealth = 0;

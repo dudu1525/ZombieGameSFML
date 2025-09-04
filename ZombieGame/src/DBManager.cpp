@@ -1,5 +1,3 @@
-
-
 #include "../include/DBManager.h"
 
 DatabaseManager::DatabaseManager(const std::string& dbName) : db(nullptr), dbName(dbName) {

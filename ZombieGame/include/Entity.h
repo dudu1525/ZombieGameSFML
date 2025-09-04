@@ -6,8 +6,8 @@
 class Entity
 {
 public:
-	Entity();
-	Entity(std::string imagepath);
+	Entity() {};//used by inherited classes
+	
 	sf::Sprite& getentity();
 
 	void setpos(float x, float y);
@@ -21,11 +21,11 @@ public:
 protected:
 	sf::Sprite spriteentity;   // Sprite for the entity
 	sf::Texture textureentity;
-	sf::Vector2f location;
+	
 
 	float speed = 151.3f;
-	int posx;
-	int posy;
+	int posx=0;
+	int posy=0;
 
 };
 

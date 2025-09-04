@@ -1,7 +1,6 @@
 #include "../include/MainMenu.h"
-#include <iostream>
-#include <SFML/Graphics.hpp>
-#include <SFML/Window.hpp>
+
+
 #include "../include/States.h"
 #include "../include/MainGame.h"
 #include <map>
@@ -26,16 +25,14 @@ MainMenu::MainMenu(Game* game)
     loadbtn.set_position(xPos, yPos+250);
     exitbtn.set_position(5,exity);
 
-    if (!game->background.loadFromFile("assets/images/map/background_menu.png"))
+    if (!background.loadFromFile("assets/images/map/background_menu.png"))
     {
         printf("da serror loading background image\n");
     }
-   //game->backgroundSprite.setTexture(game->texmgr.getRef("backgroundmenu")); //probably the load textures function isnt done as the mainmenu constructor is done first
 
- //  game->background.loadFromFile("assets/images/map/background_menu.png");
-   game->backgroundSprite.setTexture(game->background);
-    game->backgroundSprite.setOrigin(0, 0);
-    game->backgroundSprite.setScale( 1920 / game->backgroundSprite.getLocalBounds().width,  1080 / game->backgroundSprite.getLocalBounds().height);
+  backgroundSprite.setTexture(background);
+   backgroundSprite.setOrigin(0, 0);
+    backgroundSprite.setScale( 1920 / backgroundSprite.getLocalBounds().width,  1080 /backgroundSprite.getLocalBounds().height);
 
     this->set_text(); //set main menu text
 
@@ -47,7 +44,7 @@ void MainMenu::draw()
    
     init();
         
-    this->game->window.draw(this->game->backgroundSprite);
+    this->game->window.draw(this->backgroundSprite);
     this->game->window.draw(MenuText);
     
     exitbtn.draw_button(this->game->window);
@@ -70,7 +67,6 @@ void MainMenu::handleInput()
 
    PressedPlay();
     PressedExit();
-
     if (!is_empty(FILEINPUT))
     PressedLoad();
 
@@ -79,7 +75,6 @@ void MainMenu::handleInput()
 
 void MainMenu::init()
 {//reset view to initial
-   this->game->view.reset(sf::FloatRect(0,0,1920,1080));
     menuview.setSize(1920, 1080);
     menuview.setCenter(1920 / 2, 1080 / 2);
     this->game->window.setView(menuview);
@@ -124,7 +119,6 @@ void MainMenu::PressedPlay()
 
 void MainMenu::PressedExit()
 {
-    //if exit is pressed, window closes
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && exitbtn.isMouseIn(this->game->window))
     {
         this->game->window.close();
@@ -135,7 +129,7 @@ void MainMenu::PressedExit()
 void MainMenu::PressedLoad()
 {
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && loadbtn.isMouseIn(this->game->window))
-    {     //NEED TO CHECK IF THE FILE IS NOT EMPTY, IF IT IS, DO SMTH ON THE SCREEN!!!!!!!!!!
+    {    
        // MainGame* mg = new MainGame(game);
         
         MainGame* mg = MainGame::deserializeData(game,DATAFILE);
@@ -155,11 +149,11 @@ void MainMenu::handleResizing(sf::Event& event) {
     this->game->window.setView(menuview);
 
     // Correct background scaling to always fit
-    float scaleX = newWidth / game->background.getSize().x;
-    float scaleY = newHeight / game->background.getSize().y;
+    float scaleX = newWidth /background.getSize().x;
+    float scaleY = newHeight / background.getSize().y;
     float scale = std::max(scaleX, scaleY); // Maintain aspect ratio
-    game->backgroundSprite.setScale(scale, scale);
-    game->backgroundSprite.setPosition(0, 0); // Always align to top-left
+    backgroundSprite.setScale(scale, scale);
+    backgroundSprite.setPosition(0, 0); // Always align to top-left
 
     // Reposition Menu Text
     MenuText.setPosition(newWidth / 2 - MenuText.getGlobalBounds().width / 2, newHeight / 10);
@@ -176,12 +170,6 @@ void MainMenu::handleResizing(sf::Event& event) {
 
 void MainMenu::handleInputs(sf::Event& event)
 {
-
-    //if (event.type == sf::Event::MouseButtonPressed && playbtn.isMouseIn(this->game->window))
-    //{
-  //      game->pushState(new MainGame(game));//push the main game as the current state, with the constructor that has as parameter a Game class
-
-
-//    }
+   
 }
 

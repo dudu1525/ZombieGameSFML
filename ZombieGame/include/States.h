@@ -9,7 +9,7 @@
 class States {//superclass that has the following methods
 
 public:
-    Game* game;//link game to game states
+    Game* game=nullptr;//link game to game states
     virtual void draw() = 0;
     virtual void update(sf::Time timePerFrame) = 0; //added time to input
     virtual void handleInput() = 0;

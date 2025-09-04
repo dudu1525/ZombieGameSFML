@@ -1,25 +1,19 @@
 #include "../include/Game.h"
-#include <SFML/Graphics.hpp>
+
+
 #include "../include/States.h"
 #include "../include/MainMenu.h"
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
 
-Game::Game() //constructor //MAKE CONSTRUCTOR OF TEXTURE
+Game::Game() 
 	:view(sf::FloatRect(0, 0,1920, 1080)), dm("gamedb.db")
 {
 	window.setView(view);
-	
-
-		this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
-		
+	this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
 
 	this->pushState(new MainMenu(this)); //push the main menu state with this as the parameter of the MainMenu constructor
-	this->loadTextures();
 	printf("constructor game opened");
-
-	
-
 	
 }
 
@@ -29,18 +23,13 @@ void Game:: mainloop()//this happens for every state of the game, so the mainmen
 	while (window.isOpen())
 	{
 		sf::Time deltaTime = deltaClock.restart();  // Time since last frame
-		timeSinceLastUpdate += deltaTime;//accumulated time until it is more or equal than 1/60th of a second which is the value of the timeperframe
+		timeSinceLastUpdate += deltaTime;
 
 		processevents();
 		
-		
 		if (peekState() == nullptr) continue;
-;
 
-		//peekState()->handleInput(); //handle inputs, before frame rate
-		
-		
-		while (timeSinceLastUpdate >= timePerFrame)//instead of happening a lot of times, the updates and handles happen 60 times per second(60 fps)
+		while (timeSinceLastUpdate >= timePerFrame)//(60 fps)
 		{
 			timeSinceLastUpdate -= timePerFrame;  
 			peekState()->handleInput(); 
@@ -49,12 +38,7 @@ void Game:: mainloop()//this happens for every state of the game, so the mainmen
 		
 		
 		peekState()->draw(); 
-		
-		
-
 		this->window.display();
-		
-		
 	}
 
 }
@@ -72,7 +56,6 @@ void Game::processevents()
 		if (evnt.type == sf::Event::Resized)
 		{
 			peekState()->handleResizing(evnt);
-			//handleWindowResize(evnt);
 		}
 		if (peekState() != nullptr) {
 			peekState()->handleInputs(evnt);
@@ -94,7 +77,7 @@ void Game::processevents()
 		}
 
 
-		//if (evnt.type == sf::Event::KeyPressed && evnt.key.code == sf::Keyboard::Escape)
+	
 			
 	
 	}
@@ -147,15 +130,3 @@ unsigned int Game::getWindowHeight() const {
 	return window.getSize().y;
 }
 
-void Game::loadTextures()
-{
-	texmgr.loadTexture("backgroundmenu", "assets/images/map/background_menu.png");
-}
-
-//void Game::handleWindowResize(sf::Event& event) {
-	// Update the view to match the new window size
-	//view.setSize(static_cast<float>(event.size.width), static_cast<float>(event.size.height));
-
-	// Optionally maintain the aspect ratio if needed, or adjust how you handle the new size
-//	window.setView(view);
-//}
