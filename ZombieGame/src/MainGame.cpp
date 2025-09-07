@@ -61,7 +61,9 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
      //view related
     gameview = this->game->window.getView();   
     gameview.zoom(0.3);
-   //gameview.zoom(1.7);
+
+   //gameview holds the zoomed in version of the view
+
 
     
 
@@ -166,6 +168,7 @@ void MainGame::draw()
 
 void MainGame::update(sf::Time timePerFrame)
 {
+    
     //update player position based on arrows pressed
     sf::Vector2f playerPosition = player.getentity().getPosition();
     sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
@@ -260,8 +263,11 @@ void MainGame::handleInputs()
 }
 
 
-void MainGame::handleResizing(sf::Event& event)
-{
+void MainGame::handleResizing(sf::Event& event)//when maximizing, the previous view was 1920x1080, now it becomes 1920x1009(-taskbar size)
+{//so the current view needs to be reset
+    sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+    gameview=sf::View(visibleArea);
+    gameview.zoom(0.3);
 }
 
 void MainGame::handleEvents(sf::Event& event)

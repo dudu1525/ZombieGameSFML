@@ -23,6 +23,7 @@ public:
 	sf::RenderWindow window;
 	sf::View view;                  //what do you see on the screen
 
+	//make a function to get center of view from view
 
 
 	void pushState(States* state);

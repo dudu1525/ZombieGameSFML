@@ -19,7 +19,7 @@ MainMenu::MainMenu(Game* game)
 
     float xPos = game->getWindowWidth() / 2 - playbtn.getShape().getGlobalBounds().width / 2;
     float yPos = game->getWindowHeight()*0.28;
-    float exity = game->getWindowHeight()-exitbtn.getShape().getGlobalBounds().height*1.2;
+    float exity = game->getWindowHeight()-exitbtn.getShape().getGlobalBounds().height*1.5;
 
     playbtn.set_position(xPos, yPos);
     loadbtn.set_position(xPos, yPos+250);
@@ -36,14 +36,24 @@ MainMenu::MainMenu(Game* game)
 
     this->set_text(); //set main menu text
 
-    
+    menuview = this->game->view;//very initial  view, created in game, the original view
     
 }
 void MainMenu::draw()
 {           
    
-    init();
-        
+  //  init();
+   
+    if (menuview.getSize().y != this->game->window.getSize().y)
+    {
+        sf::FloatRect visibleArea(0, 0, this->game->window.getSize().x, this->game->window.getSize().y);
+        menuview = sf::View(visibleArea);
+        printf("cjangeddd");
+
+    }
+
+    this->game->window.setView(menuview);
+
     this->game->window.draw(this->backgroundSprite);
     this->game->window.draw(MenuText);
     
@@ -140,31 +150,8 @@ void MainMenu::PressedLoad()
 }
 
 void MainMenu::handleResizing(sf::Event& event) {
-    float newWidth = static_cast<float>(event.size.width);
-    float newHeight = static_cast<float>(event.size.height);
-
-    // Update the view and center it properly
-    menuview.setSize(newWidth, newHeight);
-    menuview.setCenter(newWidth / 2, newHeight / 2);
-    this->game->window.setView(menuview);
-
-    // Correct background scaling to always fit
-    float scaleX = newWidth /background.getSize().x;
-    float scaleY = newHeight / background.getSize().y;
-    float scale = std::max(scaleX, scaleY); // Maintain aspect ratio
-    backgroundSprite.setScale(scale, scale);
-    backgroundSprite.setPosition(0, 0); // Always align to top-left
-
-    // Reposition Menu Text
-    MenuText.setPosition(newWidth / 2 - MenuText.getGlobalBounds().width / 2, newHeight / 10);
-
-    // Reposition Buttons to be centered correctly
-    float playX = newWidth / 2 - playbtn.getShape().getGlobalBounds().width / 2;
-    float playY = newHeight * 0.28;
-    float exitY = newHeight - exitbtn.getShape().getGlobalBounds().height * 1.2;
-
-    playbtn.set_position(playX, playY);
-    exitbtn.set_position(5, exitY);
+ 
+   
 }
 
 

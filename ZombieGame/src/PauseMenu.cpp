@@ -8,31 +8,28 @@ PauseMenu::~PauseMenu()
 //when popping the view, it gets updated to the x0.3 one
 
 PauseMenu::PauseMenu(Game* game, MainGame* mg)
-	:backbtn(200, 50, "Back to Game", 25, sf::Color::Green),  startbtn(200, 50, "Main Menu", 25, sf::Color::Green), optionsbtn(200, 50, "Options", 25, sf::Color::Green)
+	:backbtn(200, 50, "Back to Game", 25, sf::Color::Green), 
+	startbtn(200, 50, "Main Menu", 25, sf::Color::Green),
+	optionsbtn(200, 50, "Options", 25, sf::Color::Green)
 	, savegamebtn(200, 50, "Save", 25, sf::Color::Green)
 {
 	printf("\nconstructor of pause menu: done\n");
-	this->game = game;
-	this->background.setSize(sf::Vector2f(static_cast<float> (game->getWindowWidth()), static_cast<float>(game->getWindowHeight()) +70 ));
-	sf::Vector2f coords(400, 600);
-	this->middlerect.setSize(coords);
 
+	this->game = game;
+
+	this->background.setSize(sf::Vector2f(static_cast<float> (game->getWindowWidth()), static_cast<float>(game->getWindowHeight()) +70 ));
 	this->background.setFillColor(sf::Color(0, 0, 0, 100));
 
-	//set main 
+	sf::Vector2f coords(400, 600);
+	this->middlerect.setSize(coords);
 	middlerecttext.setSmooth(1);
 	middlerecttext.loadFromFile("assets/images/menutexture.jpg");
 	middlerect.setTexture(&middlerecttext);
 
-	//initialize all buttons
-	sf::View currentView = this->game->window.getView();
-	sf::Vector2f viewCenter = currentView.getCenter();
-	
-	backbtn.set_position(viewCenter.x, viewCenter.y);
-	startbtn.set_position(viewCenter.x, viewCenter.y);
-	optionsbtn.set_position(viewCenter.x, viewCenter.y);
-		//create a scaling component into button
-	//and for button border
+	//pauseview holds the original view
+	pauseview = this->game->window.getView();
+	pauseview.zoom(3.3333333);
+	this->game->window.setView(pauseview);
 
 	//set main game
 	this->setMGref(mg);
@@ -44,12 +41,8 @@ void PauseMenu::draw()
 	//this happens exactly once, then it just gets drawn
 	if (this->game->ispaused == 0)
 	{
-		sf::View currentView = this->game->window.getView();
-		currentView.zoom(3.333333);
-		pauseview = currentView;
-		this->game->window.setView(pauseview);
-		sf::Vector2f viewCenter = currentView.getCenter();
-		sf::Vector2f viewSize = currentView.getSize();
+		sf::Vector2f viewCenter = pauseview.getCenter();
+		sf::Vector2f viewSize = pauseview.getSize();
 		
 		//center the background on the view
 		this->background.setPosition(viewCenter.x - viewSize.x / 2, viewCenter.y - viewSize.y / 2);
@@ -62,6 +55,18 @@ void PauseMenu::draw()
 		backgroundTextureimage.create(this->game->window.getSize().x, this->game->window.getSize().y);
 		backgroundTextureimage.update(this->game->window);//set current window as texture
 		backgroundSprite.setTexture(backgroundTextureimage);
+		backgroundSprite.setPosition(viewCenter.x - viewSize.x / 2, viewCenter.y - viewSize.y / 2);
+		sf::Vector2f rectSize = this->middlerect.getSize();
+		this->middlerect.setPosition(viewCenter.x - rectSize.x / 2, viewCenter.y - rectSize.y / 2);
+
+		//set button positions
+		float xPos = viewCenter.x - backbtn.getShape().getGlobalBounds().width / 2;
+		float yPos = viewCenter.y + viewSize.y / 2 * 0.058;
+		backbtn.set_position(xPos, yPos - 250);
+		startbtn.set_position(xPos, yPos + 170);
+		optionsbtn.set_position(xPos, yPos - 30);
+		savegamebtn.set_position(xPos, yPos - 150);
+
 
 	}
 	else//does not take in factor the zoom(scaling) of the game so it must be done yet again to properly display the captured image from the window
@@ -77,7 +82,7 @@ void PauseMenu::draw()
 		optionsbtn.draw_button(this->game->window);
 		startbtn.draw_button(this->game->window);
 		savegamebtn.draw_button(this->game->window);
-
+		printf("game winodw size:%d\n", this->game->window.getSize().y);
 	}
 
 
@@ -89,30 +94,8 @@ void PauseMenu::update(sf::Time timePerFrame)
 
 	
 
-	pauseview = this->game->window.getView();
-	sf::Vector2f viewCenter = pauseview.getCenter();
-	sf::Vector2f viewSize = pauseview.getSize();
 
-	sf::Vector2u textureSize = backgroundTextureimage.getSize();
 	
-
-	float scaleX = viewSize.x / static_cast<float>(textureSize.x);//scale accordingly, current size/gotten,untransformed size
-	float scaleY = viewSize.y / static_cast<float>(textureSize.y);
-	
-	backgroundSprite.setScale(scaleX, scaleY);
-
-	//set rectangles position
-	backgroundSprite.setPosition(viewCenter.x - viewSize.x / 2, viewCenter.y - viewSize.y / 2);
-	sf::Vector2f rectSize = this->middlerect.getSize();
-	this->middlerect.setPosition(viewCenter.x - rectSize.x / 2, viewCenter.y - rectSize.y / 2);
-
-	//set button positions
-	float xPos = viewCenter.x  - backbtn.getShape().getGlobalBounds().width / 2;
-	float yPos = viewCenter.y + viewSize.y /2 * 0.058;
-	backbtn.set_position(xPos, yPos-250);
-	startbtn.set_position(xPos, yPos+170 );
-	optionsbtn.set_position(xPos, yPos - 30);
-	savegamebtn.set_position(xPos, yPos - 150);
 	
 		
 	
@@ -126,6 +109,9 @@ void PauseMenu::handleInputs()
 
 void PauseMenu::handleResizing(sf::Event& event)
 {
+	
+		
+	
 }
 
 void PauseMenu::handleEvents(sf::Event& event)

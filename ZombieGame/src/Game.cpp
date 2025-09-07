@@ -53,10 +53,10 @@ void Game::processevents()
 		if (evnt.type == sf::Event::Closed)
 			window.close();
 
-	//	if (evnt.type == sf::Event::Resized)
-	//	{
-	//		peekState()->handleResizing(evnt);
-	//	}
+		if (evnt.type == sf::Event::Resized)
+		{
+			peekState()->handleResizing(evnt);
+		}
 		if (peekState() != nullptr) {
 			peekState()->handleEvents(evnt);
 		}
