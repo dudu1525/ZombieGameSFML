@@ -1,8 +1,7 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
 // . means current and .. means root of current
-#define PI 3.14159265
-#define MAXZOMBIES 50
+
 //all zombies stop at a set x coordinate
 MainGame::~MainGame()
 {
@@ -111,7 +110,7 @@ void MainGame::serializeData()
 void MainGame::draw()
 {
     
-    this->game->window.setView(gameview);
+    this->game->window.setView(gameview); //set to default*0.3 view
 
    //draw game ui items
     this->game->window.draw(map.getmap());
@@ -223,18 +222,19 @@ void MainGame::update(sf::Time timePerFrame)
     }
 }
 
-void MainGame::handleInput()
+void MainGame::handleInputs()
 { 
+   
     sf::Time timePerFrame = sf::seconds(1.0f / 60.0f);
 
     moveplayerinput(timePerFrame);
-    
-    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && player.stamina>=0  && player.moving==true)
+
+    if (sf::Keyboard::isKeyPressed(sf::Keyboard::LShift) && player.stamina >= 0 && player.moving == true)
     {
         player.updatestamina(true, timePerFrame.asSeconds());
         player.setspeed(200);
     }
-    else 
+    else
     {
         player.updatestamina(false, timePerFrame.asSeconds());
         player.setspeed(150);
@@ -242,7 +242,7 @@ void MainGame::handleInput()
 
     if (sf::Mouse::isButtonPressed(sf::Mouse::Left) && player.getselectedweap() == 2)
     {
-        proj.shoot(player,this->game->window,gameview);
+        proj.shoot(player, this->game->window, gameview);
 
         sf::Text& temp2 = e.getbulletstext();
         std::string st = std::to_string(proj.getcurrentbullets()) + "/18";
@@ -254,18 +254,20 @@ void MainGame::handleInput()
         bool& isshootingtemp = player.getshooting();
         isshootingtemp = false;
     }
-    
   
 
     
 }
 
+
 void MainGame::handleResizing(sf::Event& event)
 {
 }
 
-void MainGame::handleInputs(sf::Event& event)
+void MainGame::handleEvents(sf::Event& event)
 {
+    //handlePlayerRelatedInput();
+
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
         this->game->window.setView(gameview);
@@ -336,6 +338,8 @@ void MainGame::handleInputs(sf::Event& event)
         //so the hitbox is seen
         
     }
+
+    
 
     
 

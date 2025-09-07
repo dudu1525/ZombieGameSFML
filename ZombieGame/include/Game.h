@@ -3,7 +3,7 @@
 #include <iostream>
 #include <stack>
 
-#include "TextureManager.h"
+#include <SFML/Graphics.hpp>
 #include "DBManager.h"
 #define WIDTH 150
 #define HEIGHT 100

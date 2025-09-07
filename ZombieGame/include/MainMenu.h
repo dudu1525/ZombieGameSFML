@@ -14,9 +14,9 @@ public:
 
     virtual void draw();
     virtual void update(sf::Time timePerFrame);
-    virtual void handleInput();
+    virtual void handleInputs();
     virtual void handleResizing(sf::Event& event);
-    virtual void handleInputs(sf::Event& event);
+    virtual void handleEvents(sf::Event& event);
     
     void init();
 

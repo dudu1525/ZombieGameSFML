@@ -27,10 +27,7 @@ void WorldMap::draw(sf::RenderTarget& target, sf::RenderStates states) const //n
 void WorldMap::matrixbuilder()
 {
     sf::Image mapImage = texturemap.copyToImage();
-    const int tileSize = 32;
-    const int tilesX = 150;  
-    const int tilesY = 100;
-
+   
     
     //find a good color for each and do that, get the pixels for the tree, the rocks that have in common and youre set
     sf::Color rockColor(126, 123, 116);//fimnd color in common for 8 parts of rock
@@ -38,11 +35,11 @@ void WorldMap::matrixbuilder()
     sf::Color watercolor(99, 155, 255);
 
    
-    for (int i = 0; i < tilesY-1; ++i) {
-        for (int j = 0; j < tilesX-1; ++j) {
+    for (int i = 0; i < HEIGHT-1; ++i) {
+        for (int j = 0; j < WIDTH-1; ++j) {
 
-            int pixelX = j * tileSize + tileSize / 2;
-            int pixelY = i * tileSize + tileSize / 2;
+            int pixelX = j * TILESIZE + TILESIZE / 2;
+            int pixelY = i * TILESIZE + TILESIZE / 2;
             int pixelx = j * 32;
             int pixely = i * 32;
 
@@ -70,8 +67,8 @@ void WorldMap::matrixbuilder()
     }
 
     
-    //for (int i = 0; i < tilesY; ++i) {
-        //for (int j = 0; j < tilesX; ++j) {
+    //for (int i = 0; i < HEIGHT; ++i) {
+        //for (int j = 0; j < WIDTH; ++j) {
          //   if (tileMatrix[i][j] == 2)
        //         std::cout << i << " " << j << std::endl;
      //   }

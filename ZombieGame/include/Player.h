@@ -1,10 +1,9 @@
 #ifndef PLAYER_H
 #define PLAYER_H
-#include <SFML/Graphics.hpp>
 #include "Entity.h"
-#define WIDTH 150
-#define HEIGHT 100
-//#include "Projectiles.h"
+#include "Constants.h"
+#include <iostream>
+
 class Player:public Entity
 {public:
 		

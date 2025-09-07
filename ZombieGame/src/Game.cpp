@@ -32,11 +32,11 @@ void Game:: mainloop()//this happens for every state of the game, so the mainmen
 		while (timeSinceLastUpdate >= timePerFrame)//(60 fps)
 		{
 			timeSinceLastUpdate -= timePerFrame;  
-			peekState()->handleInput(); 
+			peekState()->handleInputs(); 
 			peekState()->update(timePerFrame);  
 		}
 		
-		
+			
 		peekState()->draw(); 
 		this->window.display();
 	}
@@ -53,12 +53,12 @@ void Game::processevents()
 		if (evnt.type == sf::Event::Closed)
 			window.close();
 
-		if (evnt.type == sf::Event::Resized)
-		{
-			peekState()->handleResizing(evnt);
-		}
+	//	if (evnt.type == sf::Event::Resized)
+	//	{
+	//		peekState()->handleResizing(evnt);
+	//	}
 		if (peekState() != nullptr) {
-			peekState()->handleInputs(evnt);
+			peekState()->handleEvents(evnt);
 		}
 		if (evnt.type == sf::Event::KeyPressed && evnt.key.code == sf::Keyboard::F11)
 		{

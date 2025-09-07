@@ -12,9 +12,9 @@ public:
     Game* game=nullptr;//link game to game states
     virtual void draw() = 0;
     virtual void update(sf::Time timePerFrame) = 0; //added time to input
-    virtual void handleInput() = 0;
+    virtual void handleInputs() = 0;
     virtual void handleResizing(sf::Event& event) = 0;
-    virtual void handleInputs(sf::Event& event) = 0;
+    virtual void handleEvents(sf::Event& event) = 0;
 
 };
 

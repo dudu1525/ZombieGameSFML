@@ -9,6 +9,7 @@
 #include <cmath>
 #include <algorithm>
 #include <random>
+#include "Constants.h"
 class WorldMap :public sf::Drawable, public sf::Transformable {
 
 public:
@@ -17,7 +18,7 @@ public:
 	void givepath(std::string file);
 	void matrixbuilder();
 
-	int tileMatrix[100][150] = { 0 }; //0-nothing, 2-obstacle, 3-player, player-4
+	int tileMatrix[HEIGHT][WIDTH] = { 0 }; //0-nothing, 2-obstacle, 3-player, player-4
 
 	//beside when in [y][x] inside the matrix, use as x,y,<normal
 

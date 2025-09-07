@@ -3,7 +3,8 @@
 PauseMenu::~PauseMenu()
 {
 }
-//got zoomed in view, reset by setting to 3.3 view and send it forward
+//got zoomed in view(pauseview gets the view multiplied by 0.3)
+// , reset by setting to 3.3 view and send it forward
 //when popping the view, it gets updated to the x0.3 one
 
 PauseMenu::PauseMenu(Game* game, MainGame* mg)
@@ -44,9 +45,9 @@ void PauseMenu::draw()
 	if (this->game->ispaused == 0)
 	{
 		sf::View currentView = this->game->window.getView();
-		currentView.zoom(3.33);
+		currentView.zoom(3.333333);
 		pauseview = currentView;
-		this->game->window.setView(currentView);
+		this->game->window.setView(pauseview);
 		sf::Vector2f viewCenter = currentView.getCenter();
 		sf::Vector2f viewSize = currentView.getSize();
 		
@@ -59,7 +60,7 @@ void PauseMenu::draw()
 		this->game->window.draw(background);
 		
 		backgroundTextureimage.create(this->game->window.getSize().x, this->game->window.getSize().y);
-		backgroundTextureimage.update(this->game->window);
+		backgroundTextureimage.update(this->game->window);//set current window as texture
 		backgroundSprite.setTexture(backgroundTextureimage);
 
 	}
@@ -85,15 +86,19 @@ void PauseMenu::draw()
 
 void PauseMenu::update(sf::Time timePerFrame)
 {
+
+	
+
 	pauseview = this->game->window.getView();
 	sf::Vector2f viewCenter = pauseview.getCenter();
 	sf::Vector2f viewSize = pauseview.getSize();
 
 	sf::Vector2u textureSize = backgroundTextureimage.getSize();
-
+	
 
 	float scaleX = viewSize.x / static_cast<float>(textureSize.x);//scale accordingly, current size/gotten,untransformed size
 	float scaleY = viewSize.y / static_cast<float>(textureSize.y);
+	
 	backgroundSprite.setScale(scaleX, scaleY);
 
 	//set rectangles position
@@ -113,10 +118,9 @@ void PauseMenu::update(sf::Time timePerFrame)
 	
 }
 
-void PauseMenu::handleInput()
+void PauseMenu::handleInputs()
 {
-	//PressedBack();
-	//PressedMenu();
+	
 	
 }
 
@@ -124,7 +128,7 @@ void PauseMenu::handleResizing(sf::Event& event)
 {
 }
 
-void PauseMenu::handleInputs(sf::Event& event)
+void PauseMenu::handleEvents(sf::Event& event)
 {
 	
 	if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape) {

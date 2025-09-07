@@ -4,12 +4,12 @@
 
 #include "States.h"
 #include "Zombie.h"
-#include "Button.h"
 #include "WorldMap.h"
 #include "Player.h"
 #include "TextureManager.h"
 #include "UiMainGame.h"
 #include "Projectiles.h"
+#include "Constants.h"
 #include <vector>
 #include <fstream>
 //view reseted, zoomed 0.3, not in the upper part of the desktop
@@ -21,9 +21,9 @@ public:
 	//inherited from state machine
 	virtual void draw();
 	virtual void update(sf::Time timePerFrame);
-	virtual void handleInput();
+	virtual void handleInputs();
 	virtual void handleResizing(sf::Event& event);
-	virtual void handleInputs(sf::Event& event);
+	virtual void handleEvents(sf::Event& event);
 	
 	void setfrompause();
 

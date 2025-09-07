@@ -186,6 +186,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\Button.h" />
+    <ClInclude Include="include\Constants.h" />
     <ClInclude Include="include\DBManager.h" />
     <ClInclude Include="include\Entity.h" />
     <ClInclude Include="include\Game.h" />

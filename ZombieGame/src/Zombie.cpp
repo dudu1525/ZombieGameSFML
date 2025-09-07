@@ -1,8 +1,7 @@
 #include "../include/Zombie.h"
 
-#include <queue>
 #include <stdexcept>
-#define PI 3.14159265
+
 Zombie::Zombie()
 {
 

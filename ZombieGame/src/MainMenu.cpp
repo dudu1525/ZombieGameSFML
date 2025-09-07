@@ -60,15 +60,15 @@ void MainMenu::update(sf::Time timePerFrame)
     
 }
 
-void MainMenu::handleInput()
+void MainMenu::handleInputs()
 {
-   
-
-
-   PressedPlay();
+    PressedPlay();
     PressedExit();
     if (!is_empty(FILEINPUT))
-    PressedLoad();
+        PressedLoad();
+
+
+
 
 }
 
@@ -168,8 +168,9 @@ void MainMenu::handleResizing(sf::Event& event) {
 }
 
 
-void MainMenu::handleInputs(sf::Event& event)
+void MainMenu::handleEvents(sf::Event& event)
 {
+    
    
 }
 

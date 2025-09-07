@@ -1,6 +1,5 @@
 #ifndef ZOMBIE_H
 #define ZOMBIE_H
-#include <SFML/Graphics.hpp>
 #include "Entity.h"
 #include <iostream>
 #include "Player.h"
@@ -8,10 +7,8 @@
 #include <queue>
 #include <fstream>
 #include "TextureManager.h"
+#include "Constants.h"
 
-#define WIDTH 150
-#define HEIGHT 100
-#define MAXHP 100
 class Zombie :public Entity
 {
 
