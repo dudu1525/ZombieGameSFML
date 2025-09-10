@@ -10,15 +10,14 @@ class Player:public Entity
 	//functions related to player movement and idling tiles
 	Player(std::string imagepath);
 	void setcharacter(sf::Vector2f dir,float deltaTime);
-	void setxidle(int x);
-	void setyidle(int y);
-	int getxidle();
-	int getyidle();
+
+	sf::Vector2f getPlayerCenter();
+
 
 	//functions related to stamina, health, weapons
 	void updatehealthvalue(int damage,float deltaTime,bool isbeingdmg);
 	void updatestamina(bool sprint,float deltaTime);
-	int getdepletion();
+
 	int getselectedweap();
 	void setselectedweap(int id);
 	void setshooting(float deltaTime);
@@ -33,8 +32,8 @@ class Player:public Entity
 	//public general information
 
 	int stamina=100;
-	int health;
-	bool moving;
+	int health=100;
+	bool moving=false;
 	bool isinvincible = false;
 	float animationTimer = 0.0f;
 	float totaltime = 0.0f;
@@ -47,8 +46,7 @@ class Player:public Entity
 
 	sf::Sprite& getentity2(); //function to display action sprites
 	sf::Sprite& getentity3();
-	void setpos2(float x, float y);
-	void setpos3(float x, float y);
+	
 
 private:
 	void updateentity(sf::Vector2f dir,float deltaTime);
@@ -60,7 +58,7 @@ private:
 	sf::Sprite baseentity;
 
 
-	int xidle,yidle; //needed for idle animation
+	int xidle=0,yidle=0; //needed for idle animation
 	
 	int xwalk = 0; //needed for sprint animation
 	int ywalk=0;

@@ -26,24 +26,15 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 		animationTime -= delay;
 		Bullet	b;
 		bullets.push_back(b);
-		//bullets.back().setRadius(1.3);
-		//bullets.back().setFillColor(sf::Color::Black);
-		//bullets.back().setOrigin(0, 0);
 
-		bullets.back().getbullet().setPosition(player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
-			player.getentity().getGlobalBounds().height / 2));
-
+		bullets.back().getbullet().setPosition(player.getPlayerCenter());
 
 
 		float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333;
 		float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333;
 
-		float playerposx = player.getentity().getPosition().x + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
-			player.getentity().getGlobalBounds().height / 2).x;
-		float playerposy = player.getentity().getPosition().y + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
-			player.getentity().getGlobalBounds().height / 2).y;
-
-	
+		float playerposx = player.getPlayerCenter().x;
+		float playerposy = player.getPlayerCenter().y;
 
 		angles.push_back(atan2(posmousey - playerposy,posmousex - playerposx));
 		float degrees = angles.back() * 180 / PI;
@@ -163,7 +154,7 @@ void Projectile::deallocatebullets(sf::View view)
 
 
 
-void Projectile::checkforcollisions(int map[100][150], sf::RenderWindow& window)
+void Projectile::checkforcollisions(int map[HEIGHT][WIDTH], sf::RenderWindow& window)
 {
 	for (int i = 0; i < bullets.size();)
 	{
@@ -174,16 +165,8 @@ void Projectile::checkforcollisions(int map[100][150], sf::RenderWindow& window)
 
 		if (map[posy / 32][posx / 32] == 2)//if it collides with an object
 		{
-		//	sf::Sprite temp;
-			//temp.setPosition(posx, posy);
-			//sf::Texture temp2;
-			//temp2.loadFromFile("assets/images/character/Bullet.png");
-			//temp.setTextureRect(sf::IntRect(96, 0, 32, 32));
-
-
 			bullets.erase(bullets.begin() + i);
 			angles.erase(angles.begin() + i);
-			//window.draw(temp);
 		}
 		else
 			i++;
@@ -266,10 +249,8 @@ int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view
 	float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333;
 	float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333;
 
-	float playerposx = player.getentity().getPosition().x + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
-		player.getentity().getGlobalBounds().height / 2).x;
-	float playerposy = player.getentity().getPosition().y + sf::Vector2f(player.getentity().getGlobalBounds().width / 2,
-		player.getentity().getGlobalBounds().height / 2).y;
+	float playerposx = player.getPlayerCenter().x;
+	float playerposy = player.getPlayerCenter().y;
 
 	float angleinrad= atan2(posmousey - playerposy, posmousex - playerposx);
 	float degrees = angleinrad* 180 / PI;
@@ -387,14 +368,8 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 		sf::FloatRect temprect = hitbox.getGlobalBounds();
 		swordhitbox = temprect;
 	
-		if (player.totaltime <  0.4)//register hit in first half only
-		{
-
-		}
-
 		this->hitbox.setPosition(playerCenter + offset);
-		//
-
+		
 }
 
 sf::Sprite& Sword::getfrect()

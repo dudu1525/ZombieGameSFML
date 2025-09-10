@@ -22,7 +22,7 @@ public:
 
 	void PressedBack();
 
-	void PressedMenu();
+
 
 
 private:

@@ -82,7 +82,6 @@ void PauseMenu::draw()
 		optionsbtn.draw_button(this->game->window);
 		startbtn.draw_button(this->game->window);
 		savegamebtn.draw_button(this->game->window);
-		printf("game winodw size:%d\n", this->game->window.getSize().y);
 	}
 
 
@@ -92,13 +91,7 @@ void PauseMenu::draw()
 void PauseMenu::update(sf::Time timePerFrame)
 {
 
-	
 
-
-	
-	
-		
-	
 }
 
 void PauseMenu::handleInputs()
@@ -171,15 +164,6 @@ void PauseMenu::PressedBack()
 	{
 		this->game->ispaused = 0;
 		this->game->popState();
-	}
-
-
-}
-void PauseMenu::PressedMenu()
-{//if play pressed, push state
-
-	if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && startbtn.isMouseIn(this->game->window))
-	{
 	}
 
 

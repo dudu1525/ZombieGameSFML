@@ -59,7 +59,7 @@ private:
 	void clearzombies();
 	void deallocateDeadZombies();
 	void makeMoreZombies();
-	void updateplayerhealth();
+	void updateplayerhealth(sf::Time timePerFrame);
 	void positionZombieOnMap(Zombie& zombie);
 
 

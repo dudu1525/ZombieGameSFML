@@ -19,33 +19,17 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     srand(time(NULL));
 	this->game = game;
 	printf(" main game constructor done");
-    
-    float xfloat = (float)game->getWindowWidth()/2;
-    float yfloat = (float)game->getWindowHeight()/2;
-
- 
-
-           player.setpos(xfloat, yfloat);//basic coords and health
-           player.sethealth(100);
-    player.updateplayertile(map.tileMatrix); //update location in the tilemap
    
 
-   // /float playerCenterX = player.getentity().getGlobalBounds().left + player.getentity().getGlobalBounds().width / 2.0f;
-   // float playerCenterY = player.getentity().getGlobalBounds().top + player.getentity().getGlobalBounds().height / 2.0f;
-
-    //get tile of player
+    player.setpos((float)game->getWindowHeight() / 2, (float)game->getWindowWidth() / 2);//basic coords and health
+    player.updateplayertile(map.tileMatrix); //update location in the tilemap
+   
+   
   //  int playerTileX = static_cast<int>(playerCenterX) / 32;
    // int playerTileY = static_cast<int>(playerCenterY) / 32;
     //map.tileMatrix[playerTileY][playerTileX] = 4; //mark player tile
 
 
-
-
-
-   // zombie1.setpos((float)v[0] - 40, (float)v[1]);
-
-   // zombie2.setpos((float)v[0] + 40, (float)v[1]);
-   
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
     map.matrixbuilder();//construct based on rocks and so on
@@ -119,13 +103,7 @@ void MainGame::draw()
 
     for (int i=0;i<zombies.size();i++)
     {
-      
-
-       
-        
         this->game->window.draw(zombies[i].getentity());
-
-
         zombies[i].drawzombiehp(this->game->window);
 
     }
@@ -142,17 +120,13 @@ void MainGame::draw()
        sword.setposition(player);//thats why it changes, here the fade in and fade out effect can be added?
        this->game->window.draw(sword.getfrect());
    }
-    
    
+
    for (int i = 0; i < proj.getbullets().size(); i++)
    {
        this->game->window.draw(proj.getbullets()[i].getbullet());
-       proj.getbullets()[i].getbullet().move(proj.getspeed() * cos(proj.getangle()[i]), proj.getspeed() * sin(proj.getangle()[i]));
-       proj.checkforcollisions(map.tileMatrix,this->game->window);//check for the collision with other objects
-       proj.collisionWithZombies(map.tileMatrix, this->game->window, zombies, currentZombies);
-
    }
-
+ 
 
     
 
@@ -168,40 +142,36 @@ void MainGame::draw()
 
 void MainGame::update(sf::Time timePerFrame)
 {
-    
-    //update player position based on arrows pressed
-    sf::Vector2f playerPosition = player.getentity().getPosition();
-    sf::Vector2f playerCenter = player.getentity().getPosition() + sf::Vector2f(player.getentity().getGlobalBounds().width/2 , player.getentity().getGlobalBounds().height/2 );
-
     player.updateplayertile(map.tileMatrix); //update the current player tile
+
+    for (int i = 0; i < proj.getbullets().size(); i++)
+    proj.getbullets()[i].getbullet().move(proj.getspeed() * cos(proj.getangle()[i]), proj.getspeed() * sin(proj.getangle()[i]));
+    proj.checkforcollisions(map.tileMatrix, this->game->window);//check for the collision with other objects
+    proj.collisionWithZombies(map.tileMatrix, this->game->window, zombies, currentZombies);
+
+    
         
     for (int i = 0; i < zombies.size(); i++)
     {
         zombies[i].checkforplayer(map.tileMatrix);
+        zombies[i].updateZombieTiles(map.tileMatrix);
         zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
         zombies[i].followPath(this->game->timePerFrame);
-        zombies[i].attackPlayer(player,e);
-      
-        zombies[i].updateZombieTiles(map.tileMatrix);
-        
-        //update zombie tile
+
+        zombies[i].attackPlayer(player,e,timePerFrame);
     }
+
     if (player.getstabbing() == true)//register sword hits
     {
         sword.swordHitZombies(zombies);
     }
 
     deallocateDeadZombies();
-    
     makeMoreZombies();
    
-    //make more zombies once 1minute passes, 
+  //  printf("zombie vector size: %d\ncurrent zombie counter:%d\nmax current zombies:%d\n", zombies.size(), this->currentZombies, this->maxCurrentZombies);
 
-
-    printf("zombie vector size: %d\ncurrent zombie counter:%d\nmax current zombies:%d\n", zombies.size(), this->currentZombies, this->maxCurrentZombies);
-   // player.updateplayertile(map.tileMatrix); //update the current player tile
-
-    gameview.setCenter(playerCenter);//set view to player center position
+    gameview.setCenter(player.getPlayerCenter());//set view to player center position
 
 
     float deltaTime2 = clock2.restart().asSeconds();
@@ -209,7 +179,7 @@ void MainGame::update(sf::Time timePerFrame)
    
     handlemapedges();
     
-    updateplayerhealth();
+    updateplayerhealth(timePerFrame);
 
     
     e.updateTimeAliveUI(this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime);
@@ -272,7 +242,7 @@ void MainGame::handleResizing(sf::Event& event)//when maximizing, the previous v
 
 void MainGame::handleEvents(sf::Event& event)
 {
-    //handlePlayerRelatedInput();
+
 
     if (event.type == sf::Event::KeyPressed && event.key.code == sf::Keyboard::Escape)
     {
@@ -402,25 +372,10 @@ void MainGame::handlemapedges()
     float mapWidth = 150 * 32; 
     float mapHeight = 100 * 32; 
 
-    
-    sf::Vector2f viewSize = gameview.getSize();
+    sf::Vector2f halfViewSize = gameview.getSize() / 2.0f;
 
-   
-    sf::Vector2f playerPosition = player.getentity().getPosition();
-    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
-
-   
-    sf::Vector2f playerCenter = sf::Vector2f(
-        playerPosition.x + playerBounds.width / 2,
-        playerPosition.y + playerBounds.height / 2
-    );
-
-   
-    sf::Vector2f halfViewSize = viewSize / 2.0f;
-
-    
-    float clampedX = std::max(halfViewSize.x, std::min(playerCenter.x, mapWidth - halfViewSize.x));
-    float clampedY = std::max(halfViewSize.y, std::min(playerCenter.y, mapHeight - halfViewSize.y));
+    float clampedX = std::max(halfViewSize.x, std::min(player.getPlayerCenter().x, mapWidth - halfViewSize.x));
+    float clampedY = std::max(halfViewSize.y, std::min(player.getPlayerCenter().y, mapHeight - halfViewSize.y));
 
     
     gameview.setCenter(clampedX, clampedY);
@@ -471,9 +426,7 @@ void MainGame::handleplayeredges()
 
 void MainGame::handleobjects(sf::Vector2f& direction)
 {
-    
-    const int tileSize = 32;
-
+  
     sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
 
     //substract some pixels for better visuals
@@ -482,24 +435,21 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     adjustedBounds.top += 10;             
     adjustedBounds.width -= (20);      
     adjustedBounds.height -=10;           
-    //center of player
-    float playerCenterX = adjustedBounds.left + adjustedBounds.width / 2.0f;
-    float playerCenterY = adjustedBounds.top + adjustedBounds.height / 2.0f;
 
-    //get tile of player
-    int playerTileX = static_cast<int>(playerCenterX) / tileSize;
-    int playerTileY = static_cast<int>(playerCenterY) / tileSize;
+
+    int playerTileX = static_cast<int>(player.getPlayerCenter().x) / TILESIZE;
+    int playerTileY = static_cast<int>(player.getPlayerCenter().y) / TILESIZE;
 
     if (direction.x != 0.f) {//left
         if (direction.x < 0) {
-            sf::FloatRect tileLeft( (playerTileX - 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
+            sf::FloatRect tileLeft( (playerTileX - 1) * TILESIZE,playerTileY * TILESIZE, TILESIZE, TILESIZE);
 
             if (map.tileMatrix[playerTileY][playerTileX - 1] == 2 && adjustedBounds.intersects(tileLeft)) {
                 direction.x = 0.f;
             }
         }
         else if (direction.x > 0) {//right
-            sf::FloatRect tileRight( (playerTileX + 1) * tileSize,playerTileY * tileSize,tileSize,tileSize);
+            sf::FloatRect tileRight( (playerTileX + 1) * TILESIZE,playerTileY * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY][playerTileX + 1] == 2 && adjustedBounds.intersects(tileRight)) {
                 direction.x = 0.f;
             }
@@ -509,14 +459,14 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     
     if (direction.y != 0.f) {//up
         if (direction.y < 0) {
-            sf::FloatRect tileAbove( playerTileX * tileSize, (playerTileY - 1) * tileSize,tileSize, tileSize );
+            sf::FloatRect tileAbove( playerTileX * TILESIZE, (playerTileY - 1) * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY - 1][playerTileX] == 2 && adjustedBounds.intersects(tileAbove)) {
                 direction.y = 0.f;
             }
         }
         else if (direction.y > 0) {
            
-            sf::FloatRect tileBelow(  playerTileX * tileSize,(playerTileY + 1) * tileSize,tileSize, tileSize  );
+            sf::FloatRect tileBelow(  playerTileX * TILESIZE,(playerTileY + 1) * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY + 1][playerTileX] == 2 && adjustedBounds.intersects(tileBelow)) {
                 direction.y = 0.f;
             }
@@ -532,18 +482,16 @@ void MainGame::handleobjects(sf::Vector2f& direction)
 
 void MainGame::positionzombies()
 {
-    int height = 100;
-    int width = 150;
     for (int i = 0; i < currentZombies; i++)
     {
         int xrand=0, yrand=0;
-        xrand = rand() % width-10 + 10;
-        yrand = rand() % height-10 + 10;
+        xrand = rand() % WIDTH-10 + 10;
+        yrand = rand() % HEIGHT-10 + 10;
         while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
             || map.tileMatrix[yrand][xrand] == 3 || yrand>=149 || xrand>=100)
         {
-            xrand = rand() % width + 1;
-            yrand = rand() % height + 1;
+            xrand = rand() % WIDTH + 1;
+            yrand = rand() % HEIGHT + 1;
 
         }
 
@@ -554,7 +502,7 @@ void MainGame::positionzombies()
 
 
     }
-  //  printf(" FINALL");
+
 
 }
 
@@ -627,20 +575,10 @@ void MainGame::makeMoreZombies()//not used for now
     
 }
 
-void MainGame::updateplayerhealth()//given main game has access to player and ui view, the modif should appear here to the ui
+void MainGame::updateplayerhealth(sf::Time timePerFrame)//given main game has access to player and ui view, the modif should appear here to the ui
 {
-    sf::Time timePerFrame = sf::seconds(1.0f / 60.0f); //get timeperframe as second after
-
-    sf::Vector2f playerPosition = player.getentity().getPosition();
-    sf::FloatRect playerBounds = player.getentity().getGlobalBounds();
-
-    sf::Vector2f playerCenter = sf::Vector2f(
-        playerPosition.x + playerBounds.width / 2,
-        playerPosition.y + playerBounds.height / 2
-    );
-
-    int tilex = playerCenter.x / 32;
-    int tiley = playerCenter.y / 32;
+    int tilex = player.getPlayerCenter().x / 32;
+    int tiley = player.getPlayerCenter().y / 32;
     if (map.tileMatrix[tiley][tilex] == 1)
     {
         player.updatehealthvalue(10, timePerFrame.asSeconds(),true);

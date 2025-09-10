@@ -16,8 +16,7 @@ Player::Player(std::string imagepath)
 	spriteentity = sprite;
 	actionentity = sprite2;
 	baseentity = sprite3;
-	xidle = 0;
-	yidle = 0;
+
 	
 
 }
@@ -27,26 +26,15 @@ void Player::setcharacter(sf::Vector2f dir,float deltaTime)
 	updateentity(dir,deltaTime);
 }
 
-
-void Player::setxidle(int x)
+sf::Vector2f Player::getPlayerCenter()
 {
-	xidle = x;
+    return  this->getentity().getPosition()
+    + sf::Vector2f(this->getentity().getGlobalBounds().width / 2,
+     this->getentity().getGlobalBounds().height / 2);
 }
+ 
 
-void Player::setyidle(int y)
-{
-	yidle = y;
-}
 
-int Player::getxidle()
-{
-	return xidle;
-}
-
-int Player::getyidle()
-{
-	return yidle;
-}
 
 void Player::updatehealthvalue(int damage, float deltaTime, bool isbeingdmg)
 {
@@ -104,10 +92,6 @@ void Player::updatestamina(bool sprint,float deltaTime)
 
 }
 
-int Player::getdepletion()
-{
-	return depletionrate;
-}
 
 int Player::getselectedweap()
 {
@@ -119,20 +103,18 @@ void Player::setselectedweap(int id)
 	selectedweap = id;
 }
 
-void Player::setshooting(float deltaTime)
+void Player::setshooting(float timePerFrame)
 {
 	static float animationTime = 0.f; 
 	const float frameDuration = 0.05f;
-	animationTime += deltaTime;
-//	if (animationTime>=frameDuration)
-	//{
-		//animationTime = 0;
+	animationTime += timePerFrame;
+
 		xshoot = (xshoot + 1) % 4;
 		actiontexture.loadFromFile("assets/images/character/Shoot.png");
 		actionentity.setTexture(actiontexture);
 		actionentity.setTextureRect(sf::IntRect(xshoot * 32, yshoot*32, 32, 26));//last 2 are width, first is the column, second is the row
 		
-	//}
+	
 }
 
 bool& Player::getshooting()
@@ -148,24 +130,17 @@ void Player::sethealth(int health)
 void Player::updateplayertile(int tiles[HEIGHT][WIDTH])
 {
     tiles[playertile.y][playertile.x] = 0;
-
-    float playerCenterX = this->getentity().getGlobalBounds().left + this->getentity().getGlobalBounds().width / 2.0f;
-    float playerCenterY = this->getentity().getGlobalBounds().top + this->getentity().getGlobalBounds().height / 2.0f;
-
-    int playerTileX = static_cast<int>(playerCenterX) / 32;
-    playertile.x = playerTileX;
-    int playerTileY = static_cast<int>(playerCenterY) / 32;
-    playertile.y = playerTileY;
-    tiles[playerTileY][playerTileX] = 4;
-
-   // printf("%d %d %d \n", playerTileX, playerTileY, tiles[playerTileY][playerTileX]);
+    playertile.x = static_cast<int>(this->getPlayerCenter().x) / 32;
+    playertile.y = static_cast<int>(this->getPlayerCenter().y) / 32;
+    tiles[playertile.y][playertile.x] = 4;
+ 
 }
 
 
-void Player::setstabbing(float deltaTime,int position) {//takes 0.8 seconds
-    animationTimer += deltaTime;
+void Player::setstabbing(float timePerFrame,int position) {//takes 0.8 seconds
+    animationTimer += timePerFrame;
     if (isstabbing==true)
-    totaltime += deltaTime;
+    totaltime += timePerFrame;
     if (isstabbing && animationTimer >= 0.2f) {
         
         actiontexture.loadFromFile("assets/images/character/Stab.png");
@@ -191,7 +166,7 @@ bool& Player::getstabbing()
 }
 
 
-void Player::updateentity(sf::Vector2f dir, float deltaTime)
+void Player::updateentity(sf::Vector2f dir, float timePerFrame)
 {
     static float animationTime = 0.f;
     static float idleTime = 0.f;
@@ -211,8 +186,8 @@ void Player::updateentity(sf::Vector2f dir, float deltaTime)
 
    
 
-    animationTime += deltaTime;
-    idleTime += deltaTime;
+    animationTime += timePerFrame;
+    idleTime += timePerFrame;
 
     if (!isstabbing)
 
@@ -236,7 +211,7 @@ void Player::updateentity(sf::Vector2f dir, float deltaTime)
 
                 if (isshooting)
                 {
-                    setshooting(deltaTime);
+                    setshooting(timePerFrame);
                 }
                 
                 else
@@ -275,7 +250,7 @@ void Player::updateentity(sf::Vector2f dir, float deltaTime)
 
                 if (isshooting)
                 {
-                    setshooting(deltaTime);
+                    setshooting(timePerFrame);
                 }
               
                 else
@@ -298,13 +273,4 @@ sf::Sprite& Player::getentity3()
 {
 	return baseentity;
 }
-void Player::setpos2(float x, float y)
-{
-	actionentity.setPosition(x, y);
 
-}
-
-void Player::setpos3(float x, float y)
-{
-	baseentity.setPosition(x, y);
-}

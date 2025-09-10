@@ -19,6 +19,7 @@ public:
 	void drawzombiehp(sf::RenderWindow& window);
 	sf::FloatRect zombiecollision;//used to detect the player's hitbox
 	sf::FloatRect zombieAttackCollision; //used as the 'range' of the attack
+	sf::Vector2f getZombieCenter();
 	void serializeZombieData(std::ofstream& data);
 	void deserializeZombieData(std::ifstream& data);
 
@@ -26,7 +27,7 @@ public:
 	void takeDamage(int amount);//health- call updatezombiehp 
 	void checkforplayer(int tiles[HEIGHT][WIDTH]);
 	float getPlayerZombieAngle(Player& player);
-	void attackPlayer(Player& player,  UIMainGame&   e);
+	void attackPlayer(Player& player,  UIMainGame&   e, sf::Time timeOfFrame);
 	void movez(Player& player,int tiles[HEIGHT][WIDTH]);
 
 	
@@ -36,9 +37,9 @@ public:
 
 	
 	float damageTime = 0.0f;
-
-private:
 	bool ismoving = false;
+private:
+
 	bool isattacking = false; 
 	sf::Texture movetext;
 	int health = 100;
@@ -51,13 +52,13 @@ private:
 		int y=0;
 	}attack;
 	struct move {
-		int x;
-		int y;
+		int x=0;
+		int y=0;
 	}move;
 
 
-	 sf::Time time = sf::seconds(1.0f / 60.0f);
-	int calcangle;
+
+	int calcangle=0;
 
 	sf::RectangleShape healthbehind;
 	sf::RectangleShape healthtop;
@@ -87,20 +88,21 @@ public:
 
 private:
 	struct zombietile {
-		int x;
-		int y;
+		int x=0;
+		int y=0;
 	}ztile;
 	
 
 	struct playertile {
-		int x;
-		int y;
+		int x=0;
+		int y=0;
 	}ptile;
+
 	std::vector<sf::Vector2f> path;
 	int currentPathIndex = 0;
 	bool followingPath = false;
 	
-	bool visited[HEIGHT][WIDTH];
+	bool visited[HEIGHT][WIDTH] = {0};
 	sf::Vector2i parent[HEIGHT][WIDTH];
 	sf::Vector2i finalPath[HEIGHT][WIDTH];
 	

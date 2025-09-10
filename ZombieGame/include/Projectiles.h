@@ -62,7 +62,7 @@ public:
 private:
 	std::vector<Bullet> bullets;
 	std::vector<float> angles;
-	float speed = 0.5f;
+	float speed = 11.5f;
 
 	
 
