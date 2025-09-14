@@ -11,8 +11,8 @@ public:
 	sf::Sprite& getentity();
 
 	void setpos(float x, float y);
-	int getposx();
-	int getposy();
+	float getposx();
+	float getposy();
 
 	void setspeed(float x);
 	float getspeed();
@@ -24,8 +24,6 @@ protected:
 	
 
 	float speed = 151.3f;
-	int posx=0;
-	int posy=0;
 
 };
 

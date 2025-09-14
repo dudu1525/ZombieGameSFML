@@ -101,7 +101,7 @@ void UIMainGame::changestamina(int stamina,int currentstamina, sf::RenderTarget&
 	else
 		finallenstamina = 0;
 
-	staminatop.setSize(sf::Vector2f(finallenstamina, 30));
+	staminatop.setSize(sf::Vector2f((float)finallenstamina, 30));
 
 	detectslots(window);
 	draw(target, states);
@@ -117,7 +117,7 @@ void UIMainGame::changehealth(int health, int maxhealth)
 	}
 	else
 		finalhealth = 0;
-	healthtop.setSize(sf::Vector2f(finalhealth, 30));
+	healthtop.setSize(sf::Vector2f((float)finalhealth, 30));
 
 
 }

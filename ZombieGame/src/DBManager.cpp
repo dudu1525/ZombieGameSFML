@@ -54,8 +54,8 @@ void DatabaseManager::queryData(int v[2]) {
         std::cout << "Querying data..." << std::endl;
         while (sqlite3_step(stmt) == SQLITE_ROW) {
             int id = sqlite3_column_int(stmt, 0);
-            float posx= sqlite3_column_int(stmt, 1);
-            float posy = sqlite3_column_int(stmt, 2);
+            int posx= sqlite3_column_int(stmt, 1);
+            int posy = sqlite3_column_int(stmt, 2);
             v[0] = posx;
             v[1] = posy;
             std::cout << "ID: " << id << ", Name: " << posx << ", Score: " << posy << std::endl;

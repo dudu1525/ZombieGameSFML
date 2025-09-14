@@ -35,8 +35,9 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     map.matrixbuilder();//construct based on rocks and so on
     for (int i = 0; i < currentZombies; i++)//initially set to 30
     {
-        Zombie z(&tm);
-        zombies.push_back(z);
+     //   Zombie z(&tm);  
+      ///  zombies.push_back(z);
+        zombies.emplace_back(&tm);
     }
      positionzombies();//position zombies randomly on the map
 
@@ -44,7 +45,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
      //view related
     gameview = this->game->window.getView();   
-    gameview.zoom(0.3);
+    gameview.zoom(0.3f);
 
    //gameview holds the zoomed in version of the view
 
@@ -75,7 +76,7 @@ void MainGame::serializeData()
     }
    
     data.write(reinterpret_cast<const char*>(&serializedPassedTime), sizeof(float));
-    data.write(reinterpret_cast<const char*>(&currentZombies), sizeof(int));
+    data.write(reinterpret_cast<const char*>(&currentZombies), sizeof(size_t));
     //serialize current nr of zombies   
     //serialize each zombie
     for (int i = 0; i < currentZombies; i++)
@@ -85,7 +86,7 @@ void MainGame::serializeData()
 
 
     data.close();
-    this->game->dm.updatePosition(player.getentity().getPosition().x, player.getentity().getPosition().y);//update location in database
+    this->game->dm.updatePosition(static_cast<int>(player.getentity().getPosition().x), static_cast<int>(player.getentity().getPosition().y));//update location in database
 
 
    std::cout << "data serialized successfully." << std::endl;
@@ -157,7 +158,7 @@ void MainGame::update(sf::Time timePerFrame)
         zombies[i].updateZombieTiles(map.tileMatrix);
         zombies[i].movez(player,map.tileMatrix); //function used by the zombie to move to the player, using a bfs format
         zombies[i].followPath(this->game->timePerFrame);
-
+       
         zombies[i].attackPlayer(player,e,timePerFrame);
     }
 
@@ -235,9 +236,9 @@ void MainGame::handleInputs()
 
 void MainGame::handleResizing(sf::Event& event)//when maximizing, the previous view was 1920x1080, now it becomes 1920x1009(-taskbar size)
 {//so the current view needs to be reset
-    sf::FloatRect visibleArea(0, 0, event.size.width, event.size.height);
+    sf::FloatRect visibleArea(0, 0,static_cast<float> (event.size.width), static_cast<float>(event.size.height));
     gameview=sf::View(visibleArea);
-    gameview.zoom(0.3);
+    gameview.zoom(0.3f);
 }
 
 void MainGame::handleEvents(sf::Event& event)
@@ -442,14 +443,14 @@ void MainGame::handleobjects(sf::Vector2f& direction)
 
     if (direction.x != 0.f) {//left
         if (direction.x < 0) {
-            sf::FloatRect tileLeft( (playerTileX - 1) * TILESIZE,playerTileY * TILESIZE, TILESIZE, TILESIZE);
+            sf::FloatRect tileLeft((float)(playerTileX - 1) * TILESIZE,(float)playerTileY * TILESIZE, TILESIZE, TILESIZE);
 
             if (map.tileMatrix[playerTileY][playerTileX - 1] == 2 && adjustedBounds.intersects(tileLeft)) {
                 direction.x = 0.f;
             }
         }
         else if (direction.x > 0) {//right
-            sf::FloatRect tileRight( (playerTileX + 1) * TILESIZE,playerTileY * TILESIZE, TILESIZE, TILESIZE);
+            sf::FloatRect tileRight((float)(playerTileX + 1) * TILESIZE, (float)playerTileY * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY][playerTileX + 1] == 2 && adjustedBounds.intersects(tileRight)) {
                 direction.x = 0.f;
             }
@@ -459,14 +460,14 @@ void MainGame::handleobjects(sf::Vector2f& direction)
     
     if (direction.y != 0.f) {//up
         if (direction.y < 0) {
-            sf::FloatRect tileAbove( playerTileX * TILESIZE, (playerTileY - 1) * TILESIZE, TILESIZE, TILESIZE);
+            sf::FloatRect tileAbove((float)playerTileX * TILESIZE, (float)(playerTileY - 1) * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY - 1][playerTileX] == 2 && adjustedBounds.intersects(tileAbove)) {
                 direction.y = 0.f;
             }
         }
         else if (direction.y > 0) {
            
-            sf::FloatRect tileBelow(  playerTileX * TILESIZE,(playerTileY + 1) * TILESIZE, TILESIZE, TILESIZE);
+            sf::FloatRect tileBelow((float)playerTileX * TILESIZE, (float)(playerTileY + 1) * TILESIZE, TILESIZE, TILESIZE);
             if (map.tileMatrix[playerTileY + 1][playerTileX] == 2 && adjustedBounds.intersects(tileBelow)) {
                 direction.y = 0.f;
             }
@@ -485,19 +486,19 @@ void MainGame::positionzombies()
     for (int i = 0; i < currentZombies; i++)
     {
         int xrand=0, yrand=0;
-        xrand = rand() % WIDTH-10 + 10;
-        yrand = rand() % HEIGHT-10 + 10;
+        xrand = rand() % WIDTH;
+        yrand = rand() % HEIGHT;
         while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
-            || map.tileMatrix[yrand][xrand] == 3 || yrand>=149 || xrand>=100)
+            || map.tileMatrix[yrand][xrand] == 3)
         {
-            xrand = rand() % WIDTH + 1;
-            yrand = rand() % HEIGHT + 1;
+            xrand = rand() % WIDTH;
+            yrand = rand() % HEIGHT;
 
         }
 
         map.tileMatrix[yrand][xrand] = 3;
         
-        this->zombies[i].setpos(xrand * 32 , yrand * 32 );
+        this->zombies[i].setpos(static_cast<float>(xrand) * 32 , static_cast<float>(yrand) * 32 );
        // printf("zombie %d at:%d x,%d y: \n", i, zombies[i].getposx(), zombies[i].getposy());
 
 
@@ -540,7 +541,7 @@ void MainGame::makeMoreZombies()//not used for now
 
     if (currentZombies == MAXZOMBIES)
         return;
-    timeSinceMadeMoreZombies += 1.0 / 60;
+    timeSinceMadeMoreZombies += 1.0f / 60;
   
     if (timeSinceMadeMoreZombies < 0.99)
         return;
@@ -558,16 +559,14 @@ void MainGame::makeMoreZombies()//not used for now
 
     maxCurrentZombies++;
 
-    int currentZombiesinVector = zombies.size();
+    size_t currentZombiesinVector = zombies.size();
     
 
-    for (int i = currentZombiesinVector; i < maxCurrentZombies; i++)
+    for (size_t i = currentZombiesinVector; i < maxCurrentZombies; i++)
     {
-       
-        Zombie z(&tm);
-        positionZombieOnMap(z);
-        zombies.push_back(z);   
-    
+        zombies.emplace_back(&tm);
+        positionZombieOnMap(zombies.back());
+        
        
 
     }
@@ -577,9 +576,9 @@ void MainGame::makeMoreZombies()//not used for now
 
 void MainGame::updateplayerhealth(sf::Time timePerFrame)//given main game has access to player and ui view, the modif should appear here to the ui
 {
-    int tilex = player.getPlayerCenter().x / 32;
-    int tiley = player.getPlayerCenter().y / 32;
-    if (map.tileMatrix[tiley][tilex] == 1)
+    float tilex = player.getPlayerCenter().x / 32;
+    float tiley = player.getPlayerCenter().y / 32;
+    if (map.tileMatrix[static_cast<int>(tiley)][static_cast<int>(tilex)] == 1)
     {
         player.updatehealthvalue(10, timePerFrame.asSeconds(),true);
         e.changehealth(player.health, 100);//screen health
@@ -595,23 +594,20 @@ void MainGame::positionZombieOnMap(Zombie& zombie)
     xrand = rand() % WIDTH;
     yrand = rand() % HEIGHT;
     
-    int xplayer = player.getposx();
-    int yplayer = player.getposy();
+    float xplayer = player.getposx();
+    float yplayer = player.getposy();
     while (map.tileMatrix[yrand][xrand] == 2 || map.tileMatrix[yrand][xrand] == 4
-        || map.tileMatrix[yrand][xrand] == 3 || yrand >= 149 || xrand >= 100 || (xrand*32<xplayer+32*20 && xrand*32>xplayer-32*20)
+        || map.tileMatrix[yrand][xrand] == 3 || (xrand*32<xplayer+32*20 && xrand*32>xplayer-32*20)
         || (yrand * 32 <yplayer + 32 * 20 && yrand * 32 >yplayer - 32 * 20))
     {
         xrand = rand() % WIDTH;
         yrand = rand() % HEIGHT;
-     //   printf("xrand:%d, yrand:%d, xplayer:%d, yplayer:%d\n",xrand,yrand, xplayer, yplayer);
-       // printf("%d", (xrand<xplayer + 32 * 20 && xrand>xplayer - 32 * 20) || (yrand*32<yplayer + 32 * 20 && yrand * 32>yplayer - 32 * 20));
-
-      
+     
 
     }
     printf("newzombiepos:%d %d\n", xrand * 32, yrand * 32);
     map.tileMatrix[yrand][xrand] = 3;
-    zombie.setpos(xrand * 32, yrand * 32);
+    zombie.setpos(static_cast<float>(xrand) * 32, static_cast<float>(yrand) * 32);
 
 
 }

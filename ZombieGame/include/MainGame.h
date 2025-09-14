@@ -41,8 +41,8 @@ private:
 	Projectile proj;	
 	Sword sword;
 
-	int currentZombies=30;//zombies that are in real time on the map
-	int maxCurrentZombies=30;//total zombies that should be on the map
+	size_t currentZombies=30;//zombies that are in real time on the map
+	size_t maxCurrentZombies=30;//total zombies that should be on the map
 	std::vector<Zombie> zombies; 
 
 	float accumulatedRespawnTime = 0.0f; //local time+serialized time=total in-game time
@@ -84,9 +84,11 @@ private:
 		data.read(reinterpret_cast<char*>(&mg->serializedPassedTime), sizeof(mg->serializedPassedTime));
 		data.read(reinterpret_cast<char*>(&mg->currentZombies), sizeof(mg->currentZombies));
 		mg->zombies.resize(mg->currentZombies);
+			//zombies over 30, wont have a refference
 		for (int i = 0; i < mg->currentZombies; i++)
-		{
+		{			
 			mg->zombies[i].deserializeZombieData(data);
+			mg->zombies[i].setRefference(&(mg->tm));
 		}
 		//update tiles? or updated inside update func
 		//deserialize maxcurrentzombies also

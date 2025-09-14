@@ -7,7 +7,7 @@
 #define TILESIZE 32
 
 #define MAXHP 100
-#define PI 3.14159265
+#define PI 3.1415f
 #define MAXZOMBIES 50
 
 

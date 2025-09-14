@@ -34,6 +34,7 @@ void Zombie::zombieidle(float deltatime )
 	if (currenttime >= totaltime) 
 	{
 		currenttime = 0.0f; 
+		
 		spriteentity.setTexture(textmang->getRef("zombie_idle"));
 		spriteentity.setTextureRect(sf::IntRect(idle.x * 32, idle.y * 32, 32, 32));
 		idle.x = (idle.x + 1) % 5; 
@@ -109,6 +110,8 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 
 void Zombie::serializeZombieData(std::ofstream& data)
 {
+	float posx = this->getposx();
+	float posy = this->getposy();
 	data.write(reinterpret_cast<const char*>(&health), sizeof(health));
 	data.write(reinterpret_cast<const char*>(&posx), sizeof(posx));
 	data.write(reinterpret_cast<const char*>(&posy), sizeof(posy));
@@ -117,6 +120,7 @@ void Zombie::serializeZombieData(std::ofstream& data)
 
 void Zombie::deserializeZombieData(std::ifstream& data)
 {
+	float posx, posy;
 	data.read(reinterpret_cast<char*>(&health), sizeof(health));
 	data.read(reinterpret_cast<char*>(&posx), sizeof(posx));
 	data.read(reinterpret_cast<char*>(&posy), sizeof(posy));
@@ -128,7 +132,7 @@ void Zombie::deserializeZombieData(std::ifstream& data)
 void Zombie::updateZombieHpBar()
 {
 	int x = health * 20 / MAXHP;
-	healthtop.setSize(sf::Vector2f(x, 3));
+	healthtop.setSize(sf::Vector2f((float)x, 3));
 
 }
 
@@ -187,7 +191,7 @@ float Zombie::getPlayerZombieAngle(Player& player)//angle between zombie and pla
 	angle = atan2(player.getPlayerCenter().y - this->getZombieCenter().y,
 		player.getPlayerCenter().x - this->getZombieCenter().x);
 
-	return angle * 180 / PI; //converted to degrees
+	return angle * 180 / (float)PI; //converted to degrees
 }
 
 void Zombie::bfs(int tiles[HEIGHT][WIDTH])//compute x's and y's as usual, but do [y][x] in the matrices [height][width]
@@ -256,7 +260,7 @@ void Zombie::reconstructPath()
 
 	while (parent[current.y][current.x] != sf::Vector2i(-1, -1))
 	{
-		path.push_back(sf::Vector2f(current.x, current.y)); // TILE coords
+		path.push_back(sf::Vector2f((float)current.x, (float)current.y)); // TILE coords
 		current = parent[current.y][current.x];
 	}
 
@@ -287,7 +291,7 @@ void Zombie::followPath(sf::Time deltaTime)
 	if (distance < 1.0f)//if really close, just follow
 	{	
 		
-		float vectnorm = sqrt(pow(this->direction.x, 2) + pow(this->direction.y, 2));
+		float vectnorm =(float) sqrt(pow(this->direction.x, 2) + pow(this->direction.y, 2));
 		sf::Vector2f normdir(this->direction.x / vectnorm, this->direction.y / vectnorm); //get direction between zombie and player
 
 		if (isattacking == true)
@@ -351,6 +355,14 @@ void Zombie::movez(Player& player, int tiles[HEIGHT][WIDTH])//WHEN MOVING, its t
 		reconstructPath();
 		
 	}
+}
+
+
+
+void Zombie::setRefference(TextureManager* tm)
+{
+	if (textmang == nullptr)
+		this->textmang = tm;
 }
 
 bool& Zombie::getisattacking()

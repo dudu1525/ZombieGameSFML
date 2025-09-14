@@ -20,7 +20,7 @@ public:
 class Sword {
 
 public:
-	float getangle();
+	
 	int calculateangle(Player player, sf::RenderWindow& window, sf::View view);
 	void swordHitZombies(std::vector<Zombie>& zombie);
 
@@ -32,13 +32,13 @@ private:
 	sf::FloatRect swordhitbox; //will used to set as damage //used with intersects
 	sf::Sprite hitbox;//sprite to draw the sword
 	sf::Vector2f offset;
-	int  angle;  //1up, 2right, 0down, 3 left
-	bool fadingIn;
-	float alphaValue;
+	int  angle=0;  //1up, 2right, 0down, 3 left
+	bool fadingIn=false;
+	int alphaValue=0;
 
 	sf::Texture text;
 
-	bool isactive;
+	bool isactive=false;
 
 };
 
@@ -56,8 +56,8 @@ public:
 	int getcurrentbullets();
 	float getspeed();
 	void deallocatebullets(sf::View view);//bullets out of view
-	void checkforcollisions(int map[100][150], sf::RenderWindow& window);
-	void collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombie, int nrzombies);
+	void checkforcollisions(int map[HEIGHT][WIDTH], sf::RenderWindow& window);
+	void collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombie, size_t nrzombies);
 	
 private:
 	std::vector<Bullet> bullets;

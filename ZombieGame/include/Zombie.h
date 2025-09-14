@@ -31,7 +31,7 @@ public:
 	void movez(Player& player,int tiles[HEIGHT][WIDTH]);
 
 	
-
+	void setRefference(TextureManager* tm);
 
 	bool& getisattacking();
 

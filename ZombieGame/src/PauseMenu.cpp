@@ -28,7 +28,7 @@ PauseMenu::PauseMenu(Game* game, MainGame* mg)
 
 	//pauseview holds the original view
 	pauseview = this->game->window.getView();
-	pauseview.zoom(3.3333333);
+	pauseview.zoom(static_cast<float>(3.3333333));
 	this->game->window.setView(pauseview);
 
 	//set main game
@@ -60,8 +60,8 @@ void PauseMenu::draw()
 		this->middlerect.setPosition(viewCenter.x - rectSize.x / 2, viewCenter.y - rectSize.y / 2);
 
 		//set button positions
-		float xPos = viewCenter.x - backbtn.getShape().getGlobalBounds().width / 2;
-		float yPos = viewCenter.y + viewSize.y / 2 * 0.058;
+		int xPos =static_cast<int>( viewCenter.x - backbtn.getShape().getGlobalBounds().width / 2);
+		int yPos = static_cast<int>(viewCenter.y + viewSize.y / 2 * static_cast<float>(0.058));
 		backbtn.set_position(xPos, yPos - 250);
 		startbtn.set_position(xPos, yPos + 170);
 		optionsbtn.set_position(xPos, yPos - 30);

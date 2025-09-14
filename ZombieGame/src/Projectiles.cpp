@@ -1,7 +1,7 @@
 #include "../include/Projectiles.h"
 #include <iostream>
 
-#define PI 3.14159265
+
 
 Projectile::Projectile()
 {
@@ -30,14 +30,14 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 		bullets.back().getbullet().setPosition(player.getPlayerCenter());
 
 
-		float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333;
-		float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333;
+		float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * static_cast<float>(3.333);
+		float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 *static_cast<float>( 3.333);
 
 		float playerposx = player.getPlayerCenter().x;
 		float playerposy = player.getPlayerCenter().y;
 
 		angles.push_back(atan2(posmousey - playerposy,posmousex - playerposx));
-		float degrees = angles.back() * 180 / PI;
+		float degrees =static_cast<float>( angles.back() * 180 / PI);
 
 		//add character animation> based on the angles intervals, change its image when shooting, also the position like before, set player texture also
 		if (degrees <= 45 && degrees > -45)//right
@@ -120,14 +120,14 @@ float Projectile::getspeed()
 
 void Projectile::deallocatebullets(sf::View view)
 {//x3,33 because of the zoomed in verison og the gameview
-	int topleftx =( view.getCenter().x - view.getSize().x / 2)*3.33;
-	int toplefty = (view.getCenter().y - view.getSize().y / 2) * 3.33;
-	int toprightx = (view.getCenter().x + view.getSize().x / 2) * 3.33;
-	int toprighty = (view.getCenter().y - view.getSize().y / 2) * 3.33;
-	int bottomleftx =( view.getCenter().x - view.getSize().x / 2) * 3.33;
-	int bottomlefty = (view.getCenter().y + view.getSize().y / 2) * 3.33;
-	int bottomrightx = (view.getCenter().x + view.getSize().x / 2) * 3.33;
-	int bottomrighty = (view.getCenter().y + view.getSize().y / 2) * 3.33;
+	float topleftx =( view.getCenter().x - view.getSize().x / 2)*	3.33f;
+	float toplefty = (view.getCenter().y - view.getSize().y / 2) * 3.33f;
+	float toprightx = (view.getCenter().x + view.getSize().x / 2) * 3.33f;
+	float toprighty = (view.getCenter().y - view.getSize().y / 2) * 3.33f;
+	float bottomleftx =( view.getCenter().x - view.getSize().x / 2) * 3.33f;
+	float bottomlefty = (view.getCenter().y + view.getSize().y / 2) * 3.33f;
+	float bottomrightx = (view.getCenter().x + view.getSize().x / 2) * 3.33f;
+	float bottomrighty = (view.getCenter().y + view.getSize().y / 2) * 3.33f;
 
 	int i = 0;
 	//get the positions of all the bullets and if not in the view, delete them
@@ -135,8 +135,8 @@ void Projectile::deallocatebullets(sf::View view)
 	{
 		Bullet& b = bullets[i];
 		sf::CircleShape cs = b.getbullet();
-		int posx = cs.getPosition().x;
-		int posy = cs.getPosition().y;
+		float posx = cs.getPosition().x;
+		float posy = cs.getPosition().y;
 
 		// If the bullet is out of the view, erase it
 		if (posx < topleftx || posy < toplefty || posx > bottomrightx || posy > bottomrighty)
@@ -160,10 +160,10 @@ void Projectile::checkforcollisions(int map[HEIGHT][WIDTH], sf::RenderWindow& wi
 	{
 		Bullet& b = bullets[i];
 		sf::CircleShape cs = b.getbullet();
-		int posx = cs.getPosition().x;
-		int posy = cs.getPosition().y;
+		float posx = cs.getPosition().x;
+		float posy = cs.getPosition().y;
 
-		if (map[posy / 32][posx / 32] == 2)//if it collides with an object
+		if (map[(int)posy / 32][(int)posx / 32] == 2)//if it collides with an object
 		{
 			bullets.erase(bullets.begin() + i);
 			angles.erase(angles.begin() + i);
@@ -176,7 +176,7 @@ void Projectile::checkforcollisions(int map[HEIGHT][WIDTH], sf::RenderWindow& wi
 
 }
 
-void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombies,int nrzombies)//mnot realiable, cannot know which bullet hit, just pass the zombies array here and the window
+void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& window, std::vector<Zombie>& zombies,size_t nrzombies)//mnot realiable, cannot know which bullet hit, just pass the zombies array here and the window
 {
 
 	for (int i = 0; i < bullets.size(); )
@@ -233,7 +233,7 @@ Bullet::Bullet()
 {
 	this->bullet.setFillColor(sf::Color::Yellow);
 	this->bullet.setOrigin(0, 0);
-	this->bullet.setRadius(1.2);
+	this->bullet.setRadius(1.2f);
 }
 
 //ctrl+k  +c/u
@@ -246,8 +246,8 @@ Bullet::Bullet()
 int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view)
 {
 
-	float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333;
-	float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333;
+	float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333f;
+	float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333f;
 
 	float playerposx = player.getPlayerCenter().x;
 	float playerposy = player.getPlayerCenter().y;
@@ -297,7 +297,7 @@ void Sword::swordHitZombies(std::vector<Zombie>& zombies)
 		
 		if (swordhitbox.intersects(zombieBounds))
 		{
-			z.accumulatedTime += 1.0 / 60;//time accumulated for 1 frame
+			z.accumulatedTime += 1.0f / 60;//time accumulated for 1 frame
 			if (z.accumulatedTime >= z.invincibilityTime)
 			{
 				z.accumulatedTime = 0.0f;
@@ -329,8 +329,8 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 	//set a texture instead of a color with a rotation transform
 
 
-		 hitbox.setOrigin(sf::Vector2f(text.getSize().x / 2, text.getSize().y));
-		 
+		 hitbox.setOrigin(text.getSize().x / 2.0f, static_cast<float>(text.getSize().y));
+		
 
 		sf::Vector2f playerCenter = player.getentity().getPosition() + 
 			sf::Vector2f(player.getentity().getGlobalBounds().width / 2, 0);
@@ -360,7 +360,7 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 			fadingIn = false;
 			alphaValue = static_cast<int>(255 * (1 - ((player.totaltime - 0.8 / 2) / (0.8 / 2))));
 		}
-		alphaValue = std::max(0.0f, std::min(255.0f, alphaValue));
+		alphaValue = std::max(0, std::min(255, alphaValue));
 		sf::Color spriteColor = hitbox.getColor();
 		spriteColor.a = static_cast<sf::Uint8>(alphaValue);  
 		hitbox.setColor(spriteColor);

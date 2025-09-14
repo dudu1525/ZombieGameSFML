@@ -14,12 +14,12 @@ MainMenu::MainMenu(Game* game)
 {       
     this->game = game;
     printf("main menu constructor done");
-    
+        
 
 
-    float xPos = game->getWindowWidth() / 2 - playbtn.getShape().getGlobalBounds().width / 2;
-    float yPos = game->getWindowHeight()*0.28;
-    float exity = game->getWindowHeight()-exitbtn.getShape().getGlobalBounds().height*1.5;
+    int xPos = (int)(game->getWindowWidth() / 2 - playbtn.getShape().getGlobalBounds().width / 2);
+    int yPos = (int)(game->getWindowHeight()*(float)0.28);
+    int exity = (int)(game->getWindowHeight()-exitbtn.getShape().getGlobalBounds().height*(float)1.5);
 
     playbtn.set_position(xPos, yPos);
     loadbtn.set_position(xPos, yPos+250);
@@ -46,7 +46,8 @@ void MainMenu::draw()
    
     if (menuview.getSize().y != this->game->window.getSize().y)
     {
-        sf::FloatRect visibleArea(0, 0, this->game->window.getSize().x, this->game->window.getSize().y);
+        sf::FloatRect visibleArea(0, 0, static_cast<float>(this->game->window.getSize().x), static_cast<float>(this->game->window.getSize().y));
+
         menuview = sf::View(visibleArea);
         printf("cjangeddd");
 
@@ -106,7 +107,7 @@ void MainMenu::set_text()
     MenuText.setFont(font);
     MenuText.setCharacterSize(60); // Optional: set character size
     MenuText.setFillColor(sf::Color::Cyan);
-    MenuText.setPosition(windowWidth/2-MenuText.getGlobalBounds().width / 2, windowHeight/10);
+    MenuText.setPosition(windowWidth/2-MenuText.getGlobalBounds().width / 2,static_cast<float>(windowHeight/10));
 
 
 }

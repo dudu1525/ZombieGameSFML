@@ -4,7 +4,7 @@
 Button::Button(int x, int y, std::string name,int size,sf::Color colour)
 {
 	set_button();
-	button.setSize(sf::Vector2f(x, y));
+	button.setSize(sf::Vector2f((float)x, (float)y));
 	this->button_text.setString(name);
 	this->button_text.setCharacterSize(size);
 	this->button_text.setFillColor(sf::Color::Black);
@@ -36,7 +36,7 @@ const sf::RectangleShape& Button::getShape() const
 
 void Button::set_position(int x,int y)
 {
-	button.setPosition(x, y);
+	button.setPosition((float)x, (float)y);
 	centerText(x,y);
 
 	
