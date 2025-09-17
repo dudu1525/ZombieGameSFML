@@ -49,5 +49,34 @@ private:
 
 
 
+class RespawnState :public States {
+
+	~RespawnState();
+public:
+	RespawnState(Game* game);
+
+	virtual void draw();
+	virtual void update(sf::Time timePerFrame);
+	virtual void handleInputs();
+	virtual void handleResizing(sf::Event& event);
+	virtual void handleEvents(sf::Event& event);
+
+
+private:
+	sf::RectangleShape background; //transparentish black rectangle over what was on the screen
+	sf::Texture backgroundTexture;
+
+	sf::View respawnview;
+
+	Button respawnbtn;
+	Button mainmenubtn;
+	
+
+	
+
+};
+
+
+
 
 #endif

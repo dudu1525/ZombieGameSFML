@@ -109,7 +109,7 @@ void UIMainGame::changestamina(int stamina,int currentstamina, sf::RenderTarget&
 
 }
 void UIMainGame::changehealth(int health, int maxhealth)
-{
+{	
 	int finalhealth = 0;
 	if (health > 0)
 	{//perc not necessary as health is 100, so *100/100 makes no sense

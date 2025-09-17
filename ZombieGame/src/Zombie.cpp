@@ -120,7 +120,7 @@ void Zombie::serializeZombieData(std::ofstream& data)
 
 void Zombie::deserializeZombieData(std::ifstream& data)
 {
-	float posx, posy;
+	float posx=0, posy=0;
 	data.read(reinterpret_cast<char*>(&health), sizeof(health));
 	data.read(reinterpret_cast<char*>(&posx), sizeof(posx));
 	data.read(reinterpret_cast<char*>(&posy), sizeof(posy));

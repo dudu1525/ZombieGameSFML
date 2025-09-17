@@ -12,6 +12,7 @@
 #include "Constants.h"
 #include <vector>
 #include <fstream>
+#include <filesystem>
 //view reseted, zoomed 0.3, not in the upper part of the desktop
 class MainGame:public States {
 
@@ -59,7 +60,7 @@ private:
 	void clearzombies();
 	void deallocateDeadZombies();
 	void makeMoreZombies();
-	void updateplayerhealth(sf::Time timePerFrame);
+	void pushRespawnState();
 	void positionZombieOnMap(Zombie& zombie);
 
 
@@ -93,11 +94,12 @@ private:
 		//update tiles? or updated inside update func
 		//deserialize maxcurrentzombies also
 		std::cout << "data deserialied succesfully" << std::endl;
+		data.close();
 		return mg;
 	}
 	
 };
-static sf::View uiview;
+static sf::View uiview;//(sf::FloatRect({ 0.0f, 0.0f }, { 1920.0f, 1080.0f })); //not initialized, default constructor set to 1000x1000, so its stretched on 1920x1080
 static UIMainGame   e(uiview);
 static bool frompause = 0;
 

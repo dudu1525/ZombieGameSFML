@@ -5,9 +5,11 @@
 #include "../include/MainGame.h"
 #include <map>
 #include <string>
+#include <filesystem>
 
-const std::string DATAFILE= "assets/files/gamedata.dat";
- std::ifstream FILEINPUT("assets/files/gamedata.dat");
+
+
+//std::ifstream FILEINPUT("assets/files/gamedata.dat");
 
 MainMenu::MainMenu(Game* game)
     :playbtn(230, 100, "NEW GAME", 30,sf::Color::Green),exitbtn(200,80,"EXIT",40,sf::Color::Cyan), loadbtn(230,100, "LOAD GAME", 30, sf::Color::Green)
@@ -41,15 +43,14 @@ MainMenu::MainMenu(Game* game)
 }
 void MainMenu::draw()
 {           
-   
-  //  init();
+
    
     if (menuview.getSize().y != this->game->window.getSize().y)
     {
         sf::FloatRect visibleArea(0, 0, static_cast<float>(this->game->window.getSize().x), static_cast<float>(this->game->window.getSize().y));
 
         menuview = sf::View(visibleArea);
-        printf("cjangeddd");
+       
 
     }
 
@@ -60,9 +61,14 @@ void MainMenu::draw()
     
     exitbtn.draw_button(this->game->window);
     playbtn.draw_button(this->game->window);
-
-    if (!is_empty(FILEINPUT))
-    loadbtn.draw_button(this->game->window);
+        
+    std::ifstream data(DATAFILE, std::ios::binary);
+   
+    if (!is_empty(data))
+    {
+        loadbtn.draw_button(this->game->window);
+      
+    }
     
 }
 
@@ -75,8 +81,13 @@ void MainMenu::handleInputs()
 {
     PressedPlay();
     PressedExit();
-    if (!is_empty(FILEINPUT))
+    std::ifstream data(DATAFILE, std::ios::binary);
+
+    if (!is_empty(data))
+    {
         PressedLoad();
+       
+    }
 
 
 
@@ -118,6 +129,20 @@ void MainMenu::PressedPlay()
     if (sf::Mouse::isButtonPressed(sf::Mouse::Button::Left) && playbtn.isMouseIn(this->game->window))
     {
         MainGame* mg = new MainGame(game);
+        try {
+          //  FILEINPUT.close();
+            if (std::filesystem::remove(DATAFILE)) {
+                std::cout << "File deleted\n";
+            }
+            else {
+                std::cout << "File not found\n";
+            }
+        }
+        catch (const std::filesystem::filesystem_error& e) {
+            if (std::remove(DATAFILE.c_str()) != 0) {
+                perror("Error deleting file"); // prints system-level reason (e.g., "Permission denied")
+            }
+        }
         //no deserialization needed
         //player put in a basic location, from the main gmae's constructor
         game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
@@ -145,6 +170,7 @@ void MainMenu::PressedLoad()
         
         MainGame* mg = MainGame::deserializeData(game,DATAFILE);
         mg->loadPlayer();//put the player in the last position
+       // FILEINPUT.close();
         game->pushState(mg);//push the main game as the current state, with the constructor that has as parameter a Game class
     }
 

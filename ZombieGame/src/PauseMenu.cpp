@@ -102,6 +102,8 @@ void PauseMenu::handleInputs()
 
 void PauseMenu::handleResizing(sf::Event& event)
 {
+	sf::FloatRect visibleArea(0, 0, static_cast<float> (event.size.width), static_cast<float>(event.size.height));
+	pauseview = sf::View(visibleArea);
 	
 		
 	
@@ -139,13 +141,9 @@ void PauseMenu::handleEvents(sf::Event& event)
 	else //it tries to execute code after it popped ELSE NECESSARY!!!
 	if (event.type == sf::Event::MouseButtonPressed && savegamebtn.isMouseIn(this->game->window))
 	{
-
-		//SERIALIZE THE MAIN GAME'S COMPONENTS
-		// 
-		// MGREFFERENCE->SERIALIZE
 		
 		mgrefference->serializeData();
-		
+		//make smth appear to confirm
 
 	}
 
@@ -166,5 +164,86 @@ void PauseMenu::PressedBack()
 		this->game->popState();
 	}
 
+
+}
+
+
+//###############################################################################################################################################// Respawn State Functions
+
+RespawnState::~RespawnState()
+{
+
+}
+
+RespawnState::RespawnState(Game* game)
+	:respawnbtn(200, 50, "Respawn", 25, sf::Color::Red),
+	mainmenubtn(200, 50, "Main Menu", 25, sf::Color::Red)
+{	
+	this->game = game;
+	respawnview = game->view;
+	//this works^^
+	// but this: this->game->window>getview, doesent
+	//respawnview.zoom(3.33333f);
+	
+	sf::View defaultView = game->window.getDefaultView(); // unzoomed
+	game->window.setView(respawnview);
+
+	backgroundTexture.loadFromFile("assets/images/respawnScreen.png");
+	this->background.setSize(sf::Vector2f(game->getWindowWidth(), game->getWindowHeight() ) );
+	background.setTexture(&backgroundTexture);
+
+
+
+	int xPos = static_cast<int>(respawnview.getCenter().x - respawnbtn.getShape().getGlobalBounds().width / 2);
+	//int yPos = static_cast<int>(viewCenter.y + viewSize.y / 2 * static_cast<float>(0.058));
+
+	respawnbtn.set_position(xPos, 550);
+	mainmenubtn.set_position(xPos, 700);
+
+
+
+	//this->game->window.setView(respawnview);
+}
+
+void RespawnState::draw()
+{
+	this->game->window.clear();
+	this->game->window.draw(background);
+	mainmenubtn.draw_button(this->game->window);
+	respawnbtn.draw_button(this->game->window);
+
+
+}
+
+void RespawnState::update(sf::Time timePerFrame)
+{
+}
+
+void RespawnState::handleInputs()
+{
+}
+
+void RespawnState::handleResizing(sf::Event& event)
+{
+}
+
+void RespawnState::handleEvents(sf::Event& event)
+{
+
+	if (event.type == sf::Event::MouseButtonPressed && respawnbtn.isMouseIn(this->game->window))
+	{
+
+		
+		this->game->changeState(new MainGame(game) );
+
+
+	}
+	else
+		if (event.type == sf::Event::MouseButtonPressed && mainmenubtn.isMouseIn(this->game->window))
+		{
+
+			this->game->popState();
+
+		}
 
 }

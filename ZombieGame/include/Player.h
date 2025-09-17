@@ -28,6 +28,8 @@ class Player:public Entity
 	void setstabbing(float deltaTime,int position);
 	bool& getstabbing();
 
+	bool isPlayerDead();
+
 
 	//public general information
 

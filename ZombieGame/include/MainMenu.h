@@ -5,6 +5,7 @@
 
 #include "Button.h"
 #include <fstream>
+#include "Constants.h"
 //view here, has zoom 1, set to 0,0, size 1920, 1080
 
 class MainMenu:public States {//extends states
@@ -27,6 +28,7 @@ public:
     sf::View menuview;
 
     MainMenu(Game* game);
+
 private:
     sf::Text MenuText;
     sf::Font font;

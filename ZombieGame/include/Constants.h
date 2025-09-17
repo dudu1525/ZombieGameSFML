@@ -10,5 +10,5 @@
 #define PI 3.1415f
 #define MAXZOMBIES 50
 
-
+const std::string DATAFILE = "assets/files/gamedata.dat";
 #endif

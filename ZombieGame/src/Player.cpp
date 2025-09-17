@@ -165,6 +165,14 @@ bool& Player::getstabbing()
     return isstabbing;
 }
 
+bool Player::isPlayerDead()
+{
+    if (this->health <= 0)
+        return true;
+
+    return false;
+}
+
 
 void Player::updateentity(sf::Vector2f dir, float timePerFrame)
 {

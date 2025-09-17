@@ -15,7 +15,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     tm.loadTexture("zombie_move", "assets/images/Apocalypse Character Pack/Zombie/Walk.png");
     tm.loadTexture("zombie_attack", "assets/images/Apocalypse Character Pack/Zombie/Attack.png");
 
-
+    
     srand(time(NULL));
 	this->game = game;
 	printf(" main game constructor done");
@@ -24,11 +24,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     player.setpos((float)game->getWindowHeight() / 2, (float)game->getWindowWidth() / 2);//basic coords and health
     player.updateplayertile(map.tileMatrix); //update location in the tilemap
    
-   
-  //  int playerTileX = static_cast<int>(playerCenterX) / 32;
-   // int playerTileY = static_cast<int>(playerCenterY) / 32;
-    //map.tileMatrix[playerTileY][playerTileX] = 4; //mark player tile
-
+    e.changehealth(100, 100);
 
 
     map.givepath("assets/images/map/try4.png");//choose image for the main map    
@@ -50,6 +46,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
    //gameview holds the zoomed in version of the view
 
 
+    printf("player hp:%d\n", this->player.health);
     
 
 
@@ -84,7 +81,7 @@ void MainGame::serializeData()
         zombies[i].serializeZombieData(data);
     }
 
-
+    this->game->dm.updateHealthdb(this->player.health);
     data.close();
     this->game->dm.updatePosition(static_cast<int>(player.getentity().getPosition().x), static_cast<int>(player.getentity().getPosition().y));//update location in database
 
@@ -180,7 +177,8 @@ void MainGame::update(sf::Time timePerFrame)
    
     handlemapedges();
     
-    updateplayerhealth(timePerFrame);
+   
+    pushRespawnState();
 
     
     e.updateTimeAliveUI(this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime);
@@ -574,18 +572,23 @@ void MainGame::makeMoreZombies()//not used for now
     
 }
 
-void MainGame::updateplayerhealth(sf::Time timePerFrame)//given main game has access to player and ui view, the modif should appear here to the ui
-{
-    float tilex = player.getPlayerCenter().x / 32;
-    float tiley = player.getPlayerCenter().y / 32;
-    if (map.tileMatrix[static_cast<int>(tiley)][static_cast<int>(tilex)] == 1)
-    {
-        player.updatehealthvalue(10, timePerFrame.asSeconds(),true);
-        e.changehealth(player.health, 100);//screen health
-    }
-    else
-        player.updatehealthvalue(10, timePerFrame.asSeconds(), false);
 
+void MainGame::pushRespawnState()
+{
+    if (!this->player.isPlayerDead())
+        return;
+    
+
+    try {
+            std::filesystem::remove(DATAFILE);
+    }
+    catch (const std::filesystem::filesystem_error & e) {
+        std::cerr << "Filesystem error: " << e.what() << "\n";
+    }
+    this->game->dm.updateHealthdb(100);
+    e.changehealth(100, 100);
+    this->game->changeState(new RespawnState(this->game));//returns pointer to a respawnstate allocated on the heap
+    //push respawn state
 }
 
 void MainGame::positionZombieOnMap(Zombie& zombie)
