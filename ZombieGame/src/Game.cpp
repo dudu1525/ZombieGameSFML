@@ -6,12 +6,13 @@
 #include "../include/MainGame.h"
 #include "../include/PauseMenu.h"
 
-Game::Game() 
-	:view(sf::FloatRect(0, 0,1920, 1080)), dm("gamedb.db")
+Game::Game() :  //:view(sf::FloatRect(0, 0,1920, 1080)),
+dm("gamedb.db")
 {
-	window.setView(view);
-	this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
 
+	//window.setView(view);
+	this->window.create(sf::VideoMode(1920, 1080), "ZombieGame");
+	
 	this->pushState(new MainMenu(this)); //push the main menu state with this as the parameter of the MainMenu constructor
 	printf("constructor game opened");
 	

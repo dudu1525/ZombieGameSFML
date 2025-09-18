@@ -29,17 +29,16 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 
 		bullets.back().getbullet().setPosition(player.getPlayerCenter());
 
-
-		float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * static_cast<float>(3.333);
-		float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 *static_cast<float>( 3.333);
-
 		float playerposx = player.getPlayerCenter().x;
 		float playerposy = player.getPlayerCenter().y;
 
-		angles.push_back(atan2(posmousey - playerposy,posmousex - playerposx));
+
+		sf::Vector2i pixelPosition = sf::Mouse::getPosition(window);
+		sf::Vector2f worldPosition = window.mapPixelToCoords(pixelPosition, view);
+
+		angles.push_back(atan2(worldPosition.y - playerposy,worldPosition.x - playerposx));
 		float degrees =static_cast<float>( angles.back() * 180 / PI);
 
-		//add character animation> based on the angles intervals, change its image when shooting, also the position like before, set player texture also
 		if (degrees <= 45 && degrees > -45)//right
 		{
 			player.yshoot = 2;
@@ -246,13 +245,14 @@ Bullet::Bullet()
 int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view)
 {
 
-	float posmousex = sf::Mouse::getPosition(window).x + view.getCenter().x - view.getSize().x / 2 * 3.333f;
-	float posmousey = sf::Mouse::getPosition(window).y + view.getCenter().y - view.getSize().y / 2 * 3.333f;
+	sf::Vector2i pixelPosition = sf::Mouse::getPosition(window);
+	sf::Vector2f worldPosition = window.mapPixelToCoords(pixelPosition, view);
+
 
 	float playerposx = player.getPlayerCenter().x;
 	float playerposy = player.getPlayerCenter().y;
 
-	float angleinrad= atan2(posmousey - playerposy, posmousex - playerposx);
+	float angleinrad= atan2(worldPosition.y - playerposy, worldPosition.x - playerposx);
 	float degrees = angleinrad* 180 / PI;
 
 	if (degrees <= 45 && degrees > -45)//right

@@ -16,21 +16,18 @@ PauseMenu::PauseMenu(Game* game, MainGame* mg)
 	printf("\nconstructor of pause menu: done\n");
 
 	this->game = game;
+	pauseview = this->game->window.getDefaultView();
 
-	this->background.setSize(sf::Vector2f(static_cast<float> (game->getWindowWidth()), static_cast<float>(game->getWindowHeight()) +70 ));
+	this->background.setSize(sf::Vector2f(game->window.getDefaultView().getSize().x, game->window.getDefaultView().getSize().y));
 	this->background.setFillColor(sf::Color(0, 0, 0, 100));
 
-	sf::Vector2f coords(400, 600);
-	this->middlerect.setSize(coords);
+
+	this->middlerect.setSize(sf::Vector2f(400,600));
 	middlerecttext.setSmooth(1);
 	middlerecttext.loadFromFile("assets/images/menutexture.jpg");
 	middlerect.setTexture(&middlerecttext);
 
-	//pauseview holds the original view
-	pauseview = this->game->window.getView();
-	pauseview.zoom(static_cast<float>(3.3333333));
-	this->game->window.setView(pauseview);
-
+	
 	//set main game
 	this->setMGref(mg);
 }
@@ -44,18 +41,24 @@ void PauseMenu::draw()
 		sf::Vector2f viewCenter = pauseview.getCenter();
 		sf::Vector2f viewSize = pauseview.getSize();
 		
-		//center the background on the view
-		this->background.setPosition(viewCenter.x - viewSize.x / 2, viewCenter.y - viewSize.y / 2);
-		
-
 		this->game->ispaused = 1;
 
-		this->game->window.draw(background);
-		
+		 
 		backgroundTextureimage.create(this->game->window.getSize().x, this->game->window.getSize().y);
 		backgroundTextureimage.update(this->game->window);//set current window as texture
 		backgroundSprite.setTexture(backgroundTextureimage);
-		backgroundSprite.setPosition(viewCenter.x - viewSize.x / 2, viewCenter.y - viewSize.y / 2);
+
+		sf::Vector2f textureSize(backgroundTextureimage.getSize());
+		float scaleX = viewSize.x / textureSize.x;
+		float scaleY = viewSize.y / textureSize.y;
+
+		backgroundSprite.setScale(scaleX, scaleY);
+	
+		//the view is 1920x1080 and even when i scale down the windows, the elements on screen get scaled down
+		//to fit the 1920x1080 virtual camera
+		//this way even if the window is physically suppose 800x600, and i take the ss, it thinkgs im on the 1920x1080 view
+		//even though im not and it further scales down the already 800x600 view to something smaller
+
 		sf::Vector2f rectSize = this->middlerect.getSize();
 		this->middlerect.setPosition(viewCenter.x - rectSize.x / 2, viewCenter.y - rectSize.y / 2);
 
@@ -74,9 +77,12 @@ void PauseMenu::draw()
 		
 		
 		//draw everything instead
-
+		this->game->window.setView(pauseview);
 		this->game->window.clear();
+
+		
 		this->game->window.draw(backgroundSprite);
+		this->game->window.draw(background);
 		this->game->window.draw(middlerect);
 		backbtn.draw_button(this->game->window);
 		optionsbtn.draw_button(this->game->window);
@@ -102,8 +108,8 @@ void PauseMenu::handleInputs()
 
 void PauseMenu::handleResizing(sf::Event& event)
 {
-	sf::FloatRect visibleArea(0, 0, static_cast<float> (event.size.width), static_cast<float>(event.size.height));
-	pauseview = sf::View(visibleArea);
+	//sf::FloatRect visibleArea(0, 0, static_cast<float> (event.size.width), static_cast<float>(event.size.height));
+	//pauseview = sf::View(visibleArea);
 	
 		
 	
@@ -180,13 +186,8 @@ RespawnState::RespawnState(Game* game)
 	mainmenubtn(200, 50, "Main Menu", 25, sf::Color::Red)
 {	
 	this->game = game;
-	respawnview = game->view;
-	//this works^^
-	// but this: this->game->window>getview, doesent
-	//respawnview.zoom(3.33333f);
+	respawnview= game->window.getDefaultView();
 	
-	sf::View defaultView = game->window.getDefaultView(); // unzoomed
-	game->window.setView(respawnview);
 
 	backgroundTexture.loadFromFile("assets/images/respawnScreen.png");
 	this->background.setSize(sf::Vector2f(game->getWindowWidth(), game->getWindowHeight() ) );
@@ -202,11 +203,10 @@ RespawnState::RespawnState(Game* game)
 
 
 
-	//this->game->window.setView(respawnview);
 }
 
 void RespawnState::draw()
-{
+{	this->game->window.setView(respawnview);
 	this->game->window.clear();
 	this->game->window.draw(background);
 	mainmenubtn.draw_button(this->game->window);

@@ -19,7 +19,6 @@ public:
     virtual void handleResizing(sf::Event& event);
     virtual void handleEvents(sf::Event& event);
     
-    void init();
 
     void set_text();
     void PressedPlay();

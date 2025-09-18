@@ -18,7 +18,7 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
     
     srand(time(NULL));
 	this->game = game;
-	printf(" main game constructor done");
+	printf(" main game constructor done\n");
    
 
     player.setpos((float)game->getWindowHeight() / 2, (float)game->getWindowWidth() / 2);//basic coords and health
@@ -40,13 +40,14 @@ MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
 
 
      //view related
-    gameview = this->game->window.getView();   
+    gameview = this->game->window.getDefaultView(); 
+    //set a view here^^^
     gameview.zoom(0.3f);
 
-   //gameview holds the zoomed in version of the view
 
 
-    printf("player hp:%d\n", this->player.health);
+
+   
     
 
 
@@ -233,10 +234,7 @@ void MainGame::handleInputs()
 
 
 void MainGame::handleResizing(sf::Event& event)//when maximizing, the previous view was 1920x1080, now it becomes 1920x1009(-taskbar size)
-{//so the current view needs to be reset
-    sf::FloatRect visibleArea(0, 0,static_cast<float> (event.size.width), static_cast<float>(event.size.height));
-    gameview=sf::View(visibleArea);
-    gameview.zoom(0.3f);
+{
 }
 
 void MainGame::handleEvents(sf::Event& event)
@@ -353,12 +351,12 @@ void MainGame::moveplayerinput(sf::Time deltaTime)
     }
 
     handleobjects(direction);
-   // zombiecollision(direction); further testing
+  
 
     if (player.getstabbing() == true)
         movementSpeed = 0;
 
-    player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());//added *deltatime
+    player.getentity().move(direction * movementSpeed * deltaTime.asSeconds());
     handleplayeredges();
     player.setpos(player.getentity().getPosition().x, player.getentity().getPosition().y);
     //get the position and save it to the other sprite, or call the function 2 times

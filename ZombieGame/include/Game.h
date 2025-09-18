@@ -21,7 +21,7 @@ public:
 	std::stack<States*> states; //stack of states
 
 	sf::RenderWindow window;
-	sf::View view;                  //what do you see on the screen
+	               
 
 	//make a function to get center of view from view
 

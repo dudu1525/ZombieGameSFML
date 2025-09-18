@@ -9,13 +9,14 @@
 
 
 
-//std::ifstream FILEINPUT("assets/files/gamedata.dat");
-
 MainMenu::MainMenu(Game* game)
-    :playbtn(230, 100, "NEW GAME", 30,sf::Color::Green),exitbtn(200,80,"EXIT",40,sf::Color::Cyan), loadbtn(230,100, "LOAD GAME", 30, sf::Color::Green)
+    :playbtn(230, 100, "NEW GAME", 30,sf::Color::Green),
+    exitbtn(200,80,"EXIT",40,sf::Color::Cyan),
+    loadbtn(230,100, "LOAD GAME", 30, sf::Color::Green)
 {       
     this->game = game;
-    printf("main menu constructor done");
+    menuview = this->game->window.getDefaultView(); //defaultl 1920x1080
+    printf("main menu constructor done\n");
         
 
 
@@ -25,7 +26,7 @@ MainMenu::MainMenu(Game* game)
 
     playbtn.set_position(xPos, yPos);
     loadbtn.set_position(xPos, yPos+250);
-    exitbtn.set_position(5,exity);
+    exitbtn.set_position(25,exity-30);
 
     if (!background.loadFromFile("assets/images/map/background_menu.png"))
     {
@@ -38,21 +39,14 @@ MainMenu::MainMenu(Game* game)
 
     this->set_text(); //set main menu text
 
-    menuview = this->game->view;//very initial  view, created in game, the original view
+   
     
 }
 void MainMenu::draw()
 {           
 
    
-    if (menuview.getSize().y != this->game->window.getSize().y)
-    {
-        sf::FloatRect visibleArea(0, 0, static_cast<float>(this->game->window.getSize().x), static_cast<float>(this->game->window.getSize().y));
-
-        menuview = sf::View(visibleArea);
-       
-
-    }
+    
 
     this->game->window.setView(menuview);
 
@@ -95,12 +89,6 @@ void MainMenu::handleInputs()
 }
 
 
-void MainMenu::init()
-{//reset view to initial
-    menuview.setSize(1920, 1080);
-    menuview.setCenter(1920 / 2, 1080 / 2);
-    this->game->window.setView(menuview);
-}
 void MainMenu::set_text()
 {
     
@@ -178,6 +166,11 @@ void MainMenu::PressedLoad()
 
 void MainMenu::handleResizing(sf::Event& event) {
  
+    //menuview = this->game->window.getDefaultView();
+
+ //  menuview.reset(sf::FloatRect(0, 0, event.size.width, event.size.height));
+ 
+   // printf("event size width and height:%d %d\n", event.size.width, event.size.height);
    
 }
 
