@@ -4,4 +4,14 @@
 
 cmake -B Build 
 
-^^inside the main folder
+^^inside the root folder with .git and .gitignore
+
+
+-go into Build and open the ZombieGame.sln
+
+-right click the ZombieGame project and Set Up as Startup Project
+
+-select Release Mode
+
+-right click ZombieGame > Properties, under Configuration Properties>General
+find C++ Language Standard, use ISO C++ 17

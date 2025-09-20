@@ -47,7 +47,7 @@ private:
 	std::vector<Zombie> zombies; 
 
 	float accumulatedRespawnTime = 0.0f; //local time+serialized time=total in-game time
-	float serializedPassedTime;
+	float serializedPassedTime=0;
 	
 
 
@@ -73,7 +73,7 @@ private:
 		static MainGame* deserializeData(Game* game, std::string dataFile)//static cuz you dont need an object to call it
 	{
 
-		printf("deserialized called");
+		printf("deserialized called\n");
 		MainGame* mg=new MainGame(game); //see if player is loaded good
 
 		std::ifstream data(dataFile, std::ios::binary);
@@ -97,10 +97,11 @@ private:
 		data.close();
 		return mg;
 	}
-	
+
+ sf::View uiview;//(sf::FloatRect({ 0.0f, 0.0f }, { 1920.0f, 1080.0f })); //not initialized, default constructor set to 1000x1000, so its stretched on 1920x1080
+UIMainGame   e;
 };
-static sf::View uiview;//(sf::FloatRect({ 0.0f, 0.0f }, { 1920.0f, 1080.0f })); //not initialized, default constructor set to 1000x1000, so its stretched on 1920x1080
-static UIMainGame   e(uiview);
+
 static bool frompause = 0;
 
 

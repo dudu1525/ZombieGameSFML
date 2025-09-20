@@ -65,10 +65,10 @@ private:
 	float speed = 11.5f;
 
 	
-
+	int currentbullets = 18;
 };
 static int maxbullets = 18;
-static int currentbullets = 18;
+
 
 
 #endif

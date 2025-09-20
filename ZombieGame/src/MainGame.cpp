@@ -8,7 +8,8 @@ MainGame::~MainGame()
 }
 
 sf::Clock clock2;
-MainGame::MainGame(Game* game):player("assets/images/character/Idle.png")
+MainGame::MainGame(Game* game):player("assets/images/character/Idle.png"),
+    e(uiview)
 {  
     //initialize textures
     tm.loadTexture("zombie_idle", "assets/images/Apocalypse Character Pack/Zombie/Idle.png");
@@ -94,7 +95,7 @@ void MainGame::serializeData()
 
 void MainGame::draw()
 {
-    
+    this->game->window.clear(sf::Color::Black);
     this->game->window.setView(gameview); //set to default*0.3 view
 
    //draw game ui items
@@ -184,8 +185,7 @@ void MainGame::update(sf::Time timePerFrame)
     
     e.updateTimeAliveUI(this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime);
     accumulatedRespawnTime = this->localPassedTime.getElapsedTime().asSeconds() + serializedPassedTime;
-
-
+   
     if (frompause == 1)
     {
         clearzombies();
@@ -318,7 +318,7 @@ void MainGame::handleEvents(sf::Event& event)
 
 }
 
-void MainGame::setfrompause()
+void MainGame::setfrompause()//function used to pop the main game after pausing
 {
     frompause = 1;
 }

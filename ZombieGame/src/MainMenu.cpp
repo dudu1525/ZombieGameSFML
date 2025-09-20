@@ -44,7 +44,7 @@ MainMenu::MainMenu(Game* game)
 }
 void MainMenu::draw()
 {           
-
+    this->game->window.clear(sf::Color::Black);
    
     
 

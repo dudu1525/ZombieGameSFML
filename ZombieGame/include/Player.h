@@ -75,11 +75,11 @@ private:
 	}playertile;
 	
 
-	
+	int selectedweap = 0;
 
 };
 static int depletionrate=2;
-static int selectedweap = 0; //0-no weap, 1-sword, 2-crossbow
+//0-no weap, 1-sword, 2-crossbow
 static bool isshooting = false;
 static bool isstabbing = false;
 
