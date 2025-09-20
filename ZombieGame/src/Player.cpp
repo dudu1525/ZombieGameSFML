@@ -129,6 +129,7 @@ void Player::sethealth(int health)
 
 void Player::updateplayertile(int tiles[HEIGHT][WIDTH])
 {
+    
     tiles[playertile.y][playertile.x] = 0;
     playertile.x = static_cast<int>(this->getPlayerCenter().x) / 32;
     playertile.y = static_cast<int>(this->getPlayerCenter().y) / 32;

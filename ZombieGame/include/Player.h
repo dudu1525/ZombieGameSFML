@@ -43,7 +43,7 @@ class Player:public Entity
 
 	
 
-	int yshoot;
+	int yshoot=0;
 
 
 	sf::Sprite& getentity2(); //function to display action sprites
@@ -65,13 +65,13 @@ private:
 	int xwalk = 0; //needed for sprint animation
 	int ywalk=0;
 
-	int xshoot; //needed for shooting animation
+	int xshoot=0; //needed for shooting animation
 
-	int xstab, ystab;
+	int xstab=0, ystab=0;
 
 	struct playertile {
-		int x;
-		int y;
+		int x=0;
+		int y=0;
 	}playertile;
 	
 
