@@ -1,0 +1,7 @@
+##############
+
+
+
+cmake -B Build 
+
+^^inside the main folder

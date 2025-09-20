@@ -36,9 +36,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="Source.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\Button.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
@@ -66,9 +63,6 @@
     <ClCompile Include="src\PauseMenu.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
-    <ClCompile Include="sqlite\sqlite3.c">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\DBManager.cpp">
       <Filter>Source Files\src</Filter>
     </ClCompile>
@@ -80,6 +74,12 @@
     </ClCompile>
     <ClCompile Include="src\Zombie.cpp">
       <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="src\Source.cpp">
+      <Filter>Source Files\src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\sqlite\sqlite3.c">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
