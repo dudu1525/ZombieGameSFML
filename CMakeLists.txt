@@ -28,8 +28,31 @@ target_include_directories(ZombieGame PRIVATE
 )
 
 
-set(SFML_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sfml/lib/cmake/SFML")
-find_package(SFML 2 REQUIRED COMPONENTS graphics window system audio)
+
+
+set(SFML_ROOT_DIR "")
+if(MSVC)
+    set(SFML_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sfml/msvc")
+elseif(MINGW)
+    set(SFML_ROOT_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sfml/mingw")
+endif()
+
+
+
+
+
+find_package(SFML REQUIRED COMPONENTS graphics window system audio
+HINTS "${SFML_ROOT_DIR}"    
+)
+
+
+#visual studio setup for windows
+if(MSVC)
+set_target_properties(ZombieGame PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ZombieGame"
+)
+endif()
+
 
 
 target_link_libraries(ZombieGame PRIVATE
@@ -38,16 +61,10 @@ target_link_libraries(ZombieGame PRIVATE
 )
 
 
+if(WIN32)
 
-#visual studio setup for windows
-if(MSVC)
-set_target_properties(ZombieGame PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}/ZombieGame"
-)
+set(SFML_DLL_DIR "${SFML_ROOT_DIR}/bin")
 
-source_group("Header Files" FILES ${GAME_HEADERS})
-source_group("Source Files" FILES ${GAME_SOURCES})
-set(SFML_DLL_DIR "${CMAKE_CURRENT_SOURCE_DIR}/sfml/bin")
 add_custom_command(TARGET ZombieGame POST_BUILD
   
     COMMAND ${CMAKE_COMMAND} -E copy
@@ -67,6 +84,7 @@ add_custom_command(TARGET ZombieGame POST_BUILD
         "${SFML_DLL_DIR}/openal32.dll"
         "$<TARGET_FILE_DIR:ZombieGame>"
 )
+
 endif()
 
 

@@ -1,6 +1,6 @@
 #include "../include/Projectiles.h"
 #include <iostream>
-
+#include <cmath>
 
 
 Projectile::Projectile()
@@ -21,7 +21,7 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 
 	if (animationTime >= delay && currentbullets > 0)
 	{
-	
+
 		currentbullets--;
 		animationTime -= delay;
 		Bullet	b;
@@ -36,7 +36,7 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 		sf::Vector2i pixelPosition = sf::Mouse::getPosition(window);
 		sf::Vector2f worldPosition = window.mapPixelToCoords(pixelPosition, view);
 
-		angles.push_back(atan2(worldPosition.y - playerposy,worldPosition.x - playerposx));
+		angles.push_back(std::atan2(worldPosition.y - playerposy,worldPosition.x - playerposx));
 		float degrees =static_cast<float>( angles.back() * 180 / PI);
 
 		if (degrees <= 45 && degrees > -45)//right
@@ -78,7 +78,7 @@ void Projectile::shoot(Player& player, sf::RenderWindow& window, sf::View view)
 
 
 
-		
+
 	}
 	else if (currentbullets == 0)
 	{
@@ -193,9 +193,9 @@ void Projectile::collisionWithZombies(int map[100][150], sf::RenderWindow& windo
 
 			if (bulletBounds.intersects(zombieBounds))
 			{
-				z.takeDamage(10); 
+				z.takeDamage(10);
 				hit = true;
-				break; 
+				break;
 			}
 		}
 
@@ -260,7 +260,7 @@ int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view
 		offset = sf::Vector2f(20, 0);
 		angle = 2;
 		return 2;
-		
+
 	}
 	else if (degrees <= -45 && degrees > -135)//up
 	{
@@ -283,18 +283,18 @@ int Sword::calculateangle(Player player, sf::RenderWindow& window, sf::View view
 		return 3;
 
 	}
-	
+
 }
 
 void Sword::swordHitZombies(std::vector<Zombie>& zombies)
 {
-		
+
 	for (int i = 0; i < zombies.size();i++)
 	{
 
 		Zombie& z = zombies[i];
 		sf::FloatRect zombieBounds = z.getentity().getGlobalBounds();
-		
+
 		if (swordhitbox.intersects(zombieBounds))
 		{
 			z.accumulatedTime += 1.0f / 60;//time accumulated for 1 frame
@@ -309,8 +309,8 @@ void Sword::swordHitZombies(std::vector<Zombie>& zombies)
 				z.takeDamage(50);
 				z.takingDamagefromSword = true;
 			}
-			
-		
+
+
 		}
 	}
 }
@@ -322,7 +322,7 @@ bool& Sword::getactivesword()
 
 void Sword::setposition(Player player)//controlling where sword hitscan its seen
 {
-	
+
 	text.loadFromFile("assets/images/character/swing2.png");
 	//need to calculate based on angle;if angle== .....
 		 this->hitbox.setTexture(text);
@@ -330,9 +330,9 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 
 
 		 hitbox.setOrigin(text.getSize().x / 2.0f, static_cast<float>(text.getSize().y));
-		
 
-		sf::Vector2f playerCenter = player.getentity().getPosition() + 
+
+		sf::Vector2f playerCenter = player.getentity().getPosition() +
 			sf::Vector2f(player.getentity().getGlobalBounds().width / 2, 0);
 
 		if (angle == 2) {  // Right
@@ -362,14 +362,14 @@ void Sword::setposition(Player player)//controlling where sword hitscan its seen
 		}
 		alphaValue = std::max(0, std::min(255, alphaValue));
 		sf::Color spriteColor = hitbox.getColor();
-		spriteColor.a = static_cast<sf::Uint8>(alphaValue);  
+		spriteColor.a = static_cast<sf::Uint8>(alphaValue);
 		hitbox.setColor(spriteColor);
 
 		sf::FloatRect temprect = hitbox.getGlobalBounds();
 		swordhitbox = temprect;
-	
+
 		this->hitbox.setPosition(playerCenter + offset);
-		
+
 }
 
 sf::Sprite& Sword::getfrect()

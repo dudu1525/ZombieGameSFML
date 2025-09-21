@@ -1,7 +1,8 @@
 #include "../include/Zombie.h"
 
 #include <stdexcept>
-//make the movement so that it follow the player, but if 
+#include <cmath>
+//make the movement so that it follow the player, but if
 //theres something on the map, it must avoid it, so it checks the tilematrix somehow
 Zombie::Zombie()
 {
@@ -9,11 +10,11 @@ Zombie::Zombie()
 }
 
 Zombie::Zombie(TextureManager* tm)
-{	
+{
 	this->speed = 160;
 	textmang = tm;
 	spriteentity.setTexture(tm->getRef("zombie_idle"));
-	
+
 	spriteentity.setTextureRect(sf::IntRect(0, 0, 32, 32));
 
 
@@ -28,32 +29,32 @@ Zombie::Zombie(TextureManager* tm)
 
 void Zombie::zombieidle(float deltatime )
 {
-	float totaltime = 0.25f; 
+	float totaltime = 0.25f;
 
-	currenttime += deltatime; 
-	if (currenttime >= totaltime) 
+	currenttime += deltatime;
+	if (currenttime >= totaltime)
 	{
-		currenttime = 0.0f; 
-		
+		currenttime = 0.0f;
+
 		spriteentity.setTexture(textmang->getRef("zombie_idle"));
 		spriteentity.setTextureRect(sf::IntRect(idle.x * 32, idle.y * 32, 32, 32));
-		idle.x = (idle.x + 1) % 5; 
+		idle.x = (idle.x + 1) % 5;
 	}
 }
 
 void Zombie::zombieattacking(float deltatime, int angle)
 {
-	float totaltime = 0.15f; 
-	accumulatedtime += deltatime; 
+	float totaltime = 0.15f;
+	accumulatedtime += deltatime;
 	attackcurrenttime += deltatime;
 	if (attackcurrenttime >= totaltime)
 	{
 		attackcurrenttime = 0.0f;
 		spriteentity.setTexture(textmang->getRef("zombie_attack"));
 		spriteentity.setTextureRect(sf::IntRect(attack.x * 32, angle * 32, 32, 32));
-		attack.x = (attack.x + 1) % 5; 
+		attack.x = (attack.x + 1) % 5;
 	}
-	if (accumulatedtime >= 0.75f) 
+	if (accumulatedtime >= 0.75f)
 	{
 		accumulatedtime = 0.0f;
 		isattacking = false;
@@ -100,12 +101,12 @@ void Zombie::drawzombiehp(sf::RenderWindow& window)
 {
 	healthbehind.setPosition(this->getposx() + 6, this->getposy());
 	healthtop.setPosition(this->getposx() + 6, this->getposy());
-	
+
 	if (health > 0) {
 		window.draw(healthbehind);
 		window.draw(healthtop);
 	}
-	
+
 }
 
 void Zombie::serializeZombieData(std::ofstream& data)
@@ -141,7 +142,7 @@ void Zombie::takeDamage(int amount)
 	health = health - amount;
 		updateZombieHpBar();
 
-	
+
 }
 
 void Zombie::checkforplayer(int tiles[HEIGHT][WIDTH])
@@ -152,21 +153,21 @@ void Zombie::checkforplayer(int tiles[HEIGHT][WIDTH])
 	followingPath = false;
 	for (int i = -5; i <= 5; i++) { //-3, 3
 		for (int j = -5; j <= 5; j++) {
-			int newx = ztile.x + i;  
-			int newy = ztile.y + j;  
+			int newx = ztile.x + i;
+			int newy = ztile.y + j;
 
-			
+
 			if (newx >= 0 && newx< WIDTH-5 && newy >= 0 && newy < HEIGHT-5) {
-			
+
 				if (tiles[newy][newx] == 4) {
 
 					ismoving = 1;
 
-					
+
 				}
-				
+
 			}
-			
+
 		}
 
 		if (ismoving)
@@ -188,16 +189,16 @@ float Zombie::getPlayerZombieAngle(Player& player)//angle between zombie and pla
 	this->direction = sf::Vector2f(player.getPlayerCenter().x - this->getZombieCenter().x,
 		player.getPlayerCenter().y - this->getZombieCenter().y);//direction between zombie and player
 
-	angle = atan2(player.getPlayerCenter().y - this->getZombieCenter().y,
+	angle = std::atan2(player.getPlayerCenter().y - this->getZombieCenter().y,
 		player.getPlayerCenter().x - this->getZombieCenter().x);
 
 	return angle * 180 / (float)PI; //converted to degrees
 }
 
 void Zombie::bfs(int tiles[HEIGHT][WIDTH])//compute x's and y's as usual, but do [y][x] in the matrices [height][width]
-{		
+{
 	std::queue<sf::Vector2i> q;
-	
+
 	for (int i=0;i<HEIGHT;i++)
 		for (int j = 0; j < WIDTH; j++)
 		{
@@ -235,7 +236,7 @@ void Zombie::bfs(int tiles[HEIGHT][WIDTH])//compute x's and y's as usual, but do
 				parent[current.y + vy[i]][current.x + vx[i]] = sf::Vector2i(current.x,current.y);
 				q.push(sf::Vector2i(current.x + vx[i], current.y + vy[i]));
 				if (current.y + vy[i] == ptile.y && current.x + vx[i] == ptile.x)//if player was found
-				{	
+				{
 
 					return;
 				}
@@ -266,7 +267,7 @@ void Zombie::reconstructPath()
 
 	std::reverse(path.begin(), path.end());
 
-	
+
 }
 
 void Zombie::followPath(sf::Time deltaTime)
@@ -279,31 +280,31 @@ void Zombie::followPath(sf::Time deltaTime)
 	if (currentPathIndex >= path.size())
 		return;
 
-	
+
 	sf::Vector2f targetTile = path[currentPathIndex];
-	sf::Vector2f targetPos = sf::Vector2f(targetTile.x * 32, targetTile.y * 32 ); 
+	sf::Vector2f targetPos = sf::Vector2f(targetTile.x * 32, targetTile.y * 32 );
 	sf::Vector2f currentPos = this->getentity().getPosition();
 
 	//removed calc angle?
 	sf::Vector2f adirection = targetPos - currentPos;
 	float distance = std::sqrt(adirection.x * adirection.x + adirection.y * adirection.y);
-	
+
 	if (distance < 1.0f)//if really close, just follow
-	{	
-		
+	{
+
 		float vectnorm =(float) sqrt(pow(this->direction.x, 2) + pow(this->direction.y, 2));
 		sf::Vector2f normdir(this->direction.x / vectnorm, this->direction.y / vectnorm); //get direction between zombie and player
 
 		if (isattacking == true)
 		{
 			normdir = sf::Vector2f(0, 0);
-			
+
 
 		}
 
 		this->getentity().move(normdir * this->speed );
 		this->setpos(this->getentity().getPosition().x, this->getentity().getPosition().y);
-		
+
 	}
 
 	sf::Vector2f normalized;
@@ -330,7 +331,7 @@ void Zombie::updateZombieTiles(int tiles[HEIGHT][WIDTH])
 		ztile.x = newtilex;
 		ztile.y = newtiley;
 	}
-	
+
 }
 
 int Zombie::getHealth()
@@ -341,19 +342,19 @@ int Zombie::getHealth()
 
 void Zombie::movez(Player& player, int tiles[HEIGHT][WIDTH])//WHEN MOVING, its tile needs to be updated. collisions need to be checked, and so on, tielmatrix and player pos must be given
 {
-	
+
 	if (ismoving==1)
 	{
-		//make the bfs and construct the parent matrix, 
-		//after having the parents matrix, get the middle of the tiles and make the zombie go to each middle of tile and just keep updating 
+		//make the bfs and construct the parent matrix,
+		//after having the parents matrix, get the middle of the tiles and make the zombie go to each middle of tile and just keep updating
 
 		//update player tile before each iteration
 		ptile.x = static_cast<int> (player.getPlayerCenter().x)/32;
 		ptile.y= static_cast<int> (player.getPlayerCenter().y)/32;
-		
+
 		bfs(tiles);
 		reconstructPath();
-		
+
 	}
 }
 
@@ -401,7 +402,7 @@ void Zombie::attackPlayer(Player& player, UIMainGame& e, sf::Time timeOfFrame)
 
 	if (inCloseRange)//register as player is in the range
 	{
-		this->isattacking = true; 
+		this->isattacking = true;
 		accumulatedtime = 0.0f;
 	}
 
@@ -423,7 +424,7 @@ void Zombie::attackPlayer(Player& player, UIMainGame& e, sf::Time timeOfFrame)
 	}
 	else
 	{
-		this->damageTime = 0.0f; 
+		this->damageTime = 0.0f;
 		player.updatehealthvalue(10, timeOfFrame.asSeconds(), false);
 	}
 

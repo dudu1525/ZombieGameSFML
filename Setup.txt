@@ -1,8 +1,8 @@
-##############
 
+Visual Studio 2017 -msvc
+------------------------------
 
-
-cmake -B Build 
+cmake -B Build/msvc
 
 ^^inside the root folder with .git and .gitignore
 
@@ -10,5 +10,24 @@ cmake -B Build
 -go into Build and open the ZombieGame.sln
 
 -right click the ZombieGame project and Set Up as Startup Project
-
 -start
+or
+- run: cmake --build . --config Release/Debug //(your choice)
+
+
+########################################################
+
+Codeblocks -mingw
+-----------------------------
+
+-In order to not confuze build files, create a folder mingw inside a Build folder
+
+-CMD into that folder (cd .path_to_folder)
+
+-command: cmake -G "CodeBlocks - MinGW Makefiles" ../.. -D CMAKE_BUILD_TYPE=Debug
+
+-Build from Codeblocks itself 
+or
+-call mingw32-make
+
+--assets folder must also be moved to the bin folder of the mingw build

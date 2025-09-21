@@ -7,7 +7,7 @@
 #include "../include/PauseMenu.h"
 
 Game::Game() :  //:view(sf::FloatRect(0, 0,1920, 1080)),
-dm("gamedb.db")
+dm("assets/gamedb.db") //initialize the database
 {
 
 	//window.setView(view);
