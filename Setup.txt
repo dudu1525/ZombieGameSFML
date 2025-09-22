@@ -19,6 +19,7 @@ or
 
 Codeblocks -mingw
 -----------------------------
+->as the tutorial for the 2.6 SFML version says on the site, MINGW version 13.1.0 is required
 
 -In order to not confuze build files, create a folder mingw inside a Build folder
 
