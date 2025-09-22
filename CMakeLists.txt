@@ -1,4 +1,4 @@
-cmake_minimum_required(VERSION 4.1.1)
+cmake_minimum_required(VERSION 3.22)
 project(ZombieGame)
 
 
@@ -92,34 +92,45 @@ endif()
 
 if(UNIX AND NOT APPLE)
 
-    set(CMAKE_INSTALL_RPATH "$ORIGIN")
-    set(CMAKE_BUILD_WITH_INSTALL_RPATH TRUE)
-
-    set(SFML_SO_DIR "${SFML_ROOT_DIR}/lib")
-    set(ASSETS_SRC_DIR "${CMAKE_CURRENT_SOURCE_DIR}/ZombieGame/assets")
-    set(ASSETS_DEST_DIR "$<TARGET_FILE_DIR:ZombieGame>/assets")
+set_target_properties(ZombieGame PROPERTIES
+        INSTALL_RPATH "$ORIGIN"
+        BUILD_WITH_INSTALL_RPATH TRUE
+    )
 
     add_custom_command(TARGET ZombieGame POST_BUILD
-
+        
         COMMAND ${CMAKE_COMMAND} -E copy_directory_if_different
-            "${ASSETS_SRC_DIR}"
-            "${ASSETS_DEST_DIR}"
+            "${CMAKE_CURRENT_SOURCE_DIR}/ZombieGame/assets"
+            "$<TARGET_FILE_DIR:ZombieGame>/assets"
+            
+    COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-graphics$<IF:$<CONFIG:Debug>,-d,>.so" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-graphics$<IF:$<CONFIG:Debug>,-d,>.so.2.6" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-graphics$<IF:$<CONFIG:Debug>,-d,>.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>" # Adjust version if needed
 
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SFML_SO_DIR}/libsfml-graphics.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
+            "${SFML_ROOT_DIR}/lib/libsfml-window$<IF:$<CONFIG:Debug>,-d,>.so" "$<TARGET_FILE_DIR:ZombieGame>"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SFML_SO_DIR}/libsfml-window.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
+            "${SFML_ROOT_DIR}/lib/libsfml-window$<IF:$<CONFIG:Debug>,-d,>.so.2.6" "$<TARGET_FILE_DIR:ZombieGame>"
         COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SFML_SO_DIR}/libsfml-system.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
-        COMMAND ${CMAKE_COMMAND} -E copy_if_different
-            "${SFML_SO_DIR}/libsfml-audio.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
+            "${SFML_ROOT_DIR}/lib/libsfml-window$<IF:$<CONFIG:Debug>,-d,>.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
 
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libsfml-graphics.so.2.6.1 libsfml-graphics.so
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libsfml-window.so.2.6.1 libsfml-window.so
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libsfml-system.so.2.6.1 libsfml-system.so
-        COMMAND ${CMAKE_COMMAND} -E create_symlink libsfml-audio.so.2.6.1 libsfml-audio.so
-    )
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-system$<IF:$<CONFIG:Debug>,-d,>.so" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-system$<IF:$<CONFIG:Debug>,-d,>.so.2.6" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-system$<IF:$<CONFIG:Debug>,-d,>.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
+            
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-audio$<IF:$<CONFIG:Debug>,-d,>.so" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-audio$<IF:$<CONFIG:Debug>,-d,>.so.2.6" "$<TARGET_FILE_DIR:ZombieGame>"
+        COMMAND ${CMAKE_COMMAND} -E copy_if_different
+            "${SFML_ROOT_DIR}/lib/libsfml-audio$<IF:$<CONFIG:Debug>,-d,>.so.2.6.1" "$<TARGET_FILE_DIR:ZombieGame>"
+            )
 endif()
-
 
 

@@ -32,3 +32,14 @@ or
 -call mingw32-make
 
 --assets folder must also be moved to the bin folder of the mingw build
+
+
+
+Linux
+
+->unzip the zip folder inside SFML/linux
+->run cmake from inside a build folder
+->run make anywhere inside the project
+-> ./ZombieGame
+
+if some error regarding uiMainGame Header is present, theres a slight change in syntax between the include in the src file with the name of the include itself, match them and it should be good
